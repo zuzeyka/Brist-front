@@ -1,10 +1,16 @@
 import React from "react";
 
-const App: React.FC = () => {
+interface AppProps {
+	greet: string;
+}
+
+const App: React.FC<AppProps> = (props) => {
+	const [count, setCount] = React.useState<number>(0);
 	return (
 		<div>
-			<h1>Hello, React with TypeScript!</h1>
-			<p>This is a simple React app using TSX.</p>
+			<h1>{props.greet}</h1>
+			<p>Count: {count}</p>
+			<button onClick={() => setCount(count + 1)}>Increment</button>
 		</div>
 	);
 };
