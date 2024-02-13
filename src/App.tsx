@@ -1,10 +1,24 @@
 import React from "react";
 
-const App: React.FC = () => {
+interface AppProps {
+	greet: string;
+}
+
+const App: React.FC<AppProps> = (props) => {
+	const [count, setCount] = React.useState<number>(0);
+	const handleIncrement = () => {
+		setCount(count + 1);
+	};
+
+	const handleReset = () => {
+		setCount(0);
+	};
 	return (
 		<div>
-			<h1>Hello, React with TypeScript!</h1>
-			<p>This is a simple React app using TSX.</p>
+			<h1>{props.greet}</h1>
+			<p>Count: {count}</p>
+			<button onClick={handleIncrement}>Increment</button>
+			<button onClick={handleReset}>Reset</button>
 		</div>
 	);
 };
