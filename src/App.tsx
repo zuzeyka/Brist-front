@@ -1,12 +1,10 @@
 import React from "react";
-import Counter from "./components/Counter";
-import ParentComponent from "./components/ParentComponent";
+import Test from "./components/Test";
 
 const App: React.FC = () => {
 	return (
 		<div>
-			<Counter initialValue={0} />
-			<ParentComponent />
+			<Test />
 		</div>
 	);
 };
