@@ -1,10 +1,10 @@
+import Main from "./components/main/Main";
 import React from "react";
-import Test from "./components/Test";
 
 const App: React.FC = () => {
 	return (
 		<div>
-			<Test />
+			<Main />
 		</div>
 	);
 };
