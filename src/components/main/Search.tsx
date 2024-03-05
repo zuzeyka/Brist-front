@@ -1,4 +1,4 @@
-import Input from "../ui/avatar/Input";
+import Input from "../ui/SearchInput";
 import { HeartIcon, ShoppingCartIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
