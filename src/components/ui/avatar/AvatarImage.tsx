@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 interface AvatarImageProps {
 	alt: string;
 	src: string;
@@ -5,11 +7,16 @@ interface AvatarImageProps {
 
 const AvatarImage: React.FC<AvatarImageProps> = ({ alt, src }) => {
 	return (
-		<img
-			className="rounded-full w-10 h-10 object-cover"
-			alt={alt}
-			src={src}
-		/>
+		<Link
+			className="rounded-full bg-gray-200 text-gray-400 text-xl w-10 h-10 flex items-center justify-center"
+			to="/profile"
+		>
+			<img
+				className="rounded-full w-10 h-10 object-cover"
+				alt={alt}
+				src={src}
+			/>
+		</Link>
 	);
 };
 

@@ -2,12 +2,12 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 const Slider: React.FC = () => {
 	return (
-		<div className="bg-[#E5E5E5] min-h-screen">
+		<div className="bg-[#E5E5E5]">
 			<div className="max-w-7xl mx-auto py-4 px-6">
 				<div className="mt-6 flex justify-between items-center">
 					<ChevronLeftIcon className="h-8 w-8 text-gray-400" />
 					<div className="flex-grow mx-4 bg-[#C4C4C4] rounded-lg p-6 text-center">
-						<h2 className="text-lg font-semibold mb-2">Ігра1</h2>
+						<h2 className="text-lg font-semibold mb-2">Lorem</h2>
 						<p className="text-sm">
 							Lorem ipsum dolor sit amet consectetur. Sit lectus a
 							lorem vulputate morbi tortor.

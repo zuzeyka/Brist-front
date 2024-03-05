@@ -1,36 +1,39 @@
 import Avatar from "../ui/avatar/Avatar";
 import { BellIcon, SettingsIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Head: React.FC = () => {
 	return (
 		<header className="bg-[#333333] py-4">
 			<div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-				<h1 className="text-white font-bold text-xl">Brirst</h1>
+				<Link to="/">
+					<h1 className="text-white font-bold text-xl">Brirst</h1>
+				</Link>
 				<nav>
 					<ul className="flex space-x-8">
 						<li>
-							<a
+							<Link
 								className="text-white text-sm hover:text-gray-300"
-								href="#"
+								to="/store"
 							>
 								Крамниця
-							</a>
+							</Link>
 						</li>
 						<li>
-							<a
+							<Link
 								className="text-white text-sm hover:text-gray-300"
-								href="#"
+								to="/library"
 							>
 								Бібліотека
-							</a>
+							</Link>
 						</li>
 						<li>
-							<a
+							<Link
 								className="text-white text-sm hover:text-gray-300"
-								href="#"
+								to="/downloads"
 							>
 								Завантаження
-							</a>
+							</Link>
 						</li>
 					</ul>
 				</nav>

@@ -2,7 +2,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 const SliderCategories: React.FC = () => {
 	return (
-		<div className="flex flex-col space-y-10">
+		<div className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
 			<div>
 				<h2 className="text-lg font-semibold mb-4">Категория</h2>
 				<div className="flex items-center space-x-4">
