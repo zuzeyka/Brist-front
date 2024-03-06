@@ -1,15 +1,16 @@
-import Input from "../ui/avatar/Input";
-import { HeartIcon, Link, ShoppingCartIcon } from "lucide-react";
+import Input from "../ui/SearchInput";
+import { HeartIcon, ShoppingCartIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Search: React.FC = () => {
 	return (
 		<div className="flex justify-between items-center">
 			<Input className="flex-grow mr-4" placeholder="Пошук" />
 			<nav className="flex space-x-4">
-				<Link className="block" href="#">
+				<Link className="block" to="/catalog">
 					Каталог
 				</Link>
-				<Link className="block" href="#">
+				<Link className="block" to="/news">
 					Новини
 				</Link>
 			</nav>
