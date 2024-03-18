@@ -3,7 +3,7 @@ import Login from './components/Authorization/Login';
 import Register from './components/Authorization/Register';
 import Main from './components/main/Main';
 import React from 'react';
-import { BrowserRouter, Routes, Route, RouterProvider } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const App: React.FC = () => {
   return (
