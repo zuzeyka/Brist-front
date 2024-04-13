@@ -24,7 +24,7 @@ const Test: React.FC = () => {
       setIsLoading(true);
 
       try {
-        const response = await fetch('/gamesInShop'); // Use the correct URL
+        const response = await fetch('http://localhost:5049/api/GamesInShop'); // Use the correct URL
         if (!response.ok) {
           throw new Error(`Network response was not ok - ${response.status}`);
         }
@@ -45,6 +45,8 @@ const Test: React.FC = () => {
   return (
       <>
         <h1>Games</h1>
+        {isLoading && <p>Loading...</p>}
+        {error && <p>{error}</p>}
         <ul>
           {games.map((game) => (
             <li key={game.id}>
