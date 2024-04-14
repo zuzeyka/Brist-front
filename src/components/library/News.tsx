@@ -1,3 +1,5 @@
+import { Card, CardContent } from "../ui/Сard";
+
 const News: React.FC = () => {
   return (
     <>
