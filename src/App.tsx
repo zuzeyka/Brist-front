@@ -1,4 +1,3 @@
-import Test from './components/Test';
 import EmailConfirmation from './components/authorization/EmailConfirmation';
 import Login from './components/authorization/Login';
 import Register from './components/authorization/Register';
@@ -18,7 +17,6 @@ const App: React.FC = () => {
         <Route path="/email_confirm" element={<EmailConfirmation />} />
         <Route path="/store" element={<Store />} />
         <Route path="/library" element={<Library />} />
-        <Route path="/test" element={<Test />} />
       </Routes>
     </BrowserRouter>
   );
