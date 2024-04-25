@@ -1,9 +1,11 @@
-import EmailConfirmation from './components/Authorization/EmailConfirmation';
-import Login from './components/Authorization/Login';
-import Register from './components/Authorization/Register';
+import EmailConfirmation from './components/authorization/EmailConfirmation';
+import Login from './components/authorization/Login';
+import Register from './components/authorization/Register';
+import Library from './components/library/Library';
 import Main from './components/main/Main';
+import Store from './components/shop/Store';
 import React from 'react';
-import { BrowserRouter, Routes, Route, RouterProvider } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const App: React.FC = () => {
   return (
@@ -13,6 +15,8 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/email_confirm" element={<EmailConfirmation />} />
+        <Route path="/store" element={<Store />} />
+        <Route path="/library" element={<Library />} />
       </Routes>
     </BrowserRouter>
   );
