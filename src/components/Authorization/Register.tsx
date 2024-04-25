@@ -4,38 +4,41 @@ import { InputField } from "../ui/InputField";
 import { Link } from "react-router-dom";
 
 const Register: React.FC = () => {
-	return (
-		<div className="min-h-screen bg-gray-100 flex justify-center items-center">
-			<div className="bg-white p-8 shadow-lg w-[400px]">
-				<h1 className="text-2xl font-semibold mb-6">
-					Створити новий акаунт
-				</h1>
-				<form>
-					<div className="flex flex-col space-y-4 mb-4">
-						<InputField placeholder="Логін" type="text" />
-						<InputField placeholder="E-mail" type="email" />
-						<InputField placeholder="Пароль" type="password" />
-						<InputField
-							placeholder="Повторити пароль"
-							type="password"
-						/>
-					</div>
-					<div className="flex items-center space-x-2 mb-6">
-						<Checkbox id="terms" />
-						<label className="text-sm" htmlFor="terms">
-							Я погоджуюсь з Умовами використання
-						</label>
-					</div>
-					<Button className="w-full">Продовжити</Button>
-				</form>
-				<div className="mt-4 text-center">
-					<span className="text-sm">Маєте акаунт? </span>
-					<Link className="text-sm text-blue-600" to="/login">
-						Авторизуйтесь
-					</Link>
-				</div>
-			</div>
-		</div>
-	);
+    return (
+        <div className="min-h-screen bg-gray-white flex justify-center items-center">
+            <div className="bg-white p-8 shadow-lg w-[400px]">
+                <div className="flex justify-between items-start">
+                    <h1 className="text-2xl font-semibold mb-6">
+                        Створити новий акаунт
+                    </h1>
+                    <button className="text-lg leading-none">×</button>
+                </div>
+                <form>
+                    <div className="flex flex-col space-y-4 mb-4">
+                        <InputField placeholder="Логін" type="text" className="rounded-full" />
+                        <InputField placeholder="E-mail" type="email" className="rounded-full" />
+                        <InputField placeholder="Пароль" type="password" className="rounded-full" />
+                        <InputField
+                            placeholder="Повторити пароль"
+                            type="password" className="rounded-full"
+                        />
+                    </div>
+                    <div className="flex items-center space-x-2 mb-6">
+                        <Checkbox id="terms" />
+                        <Link className="text-sm" to="/terms">
+                            Я погоджуюсь з <u>Умовами використання</u>
+                        </Link>
+                    </div>
+                    <Button className="w-full rounded-full">Продовжити</Button>
+                </form>
+                <div className="mt-4 text-center">
+                    <span className="text-sm">Маєте акаунт? </span>
+                    <Link className="text-sm" to="/login">
+                        <u>Авторизуйтесь</u>
+                    </Link>
+                </div>
+            </div>
+        </div>
+    );
 };
 export default Register;
