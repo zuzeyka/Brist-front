@@ -1,6 +1,6 @@
 import { HeartIcon, MessageSquareIcon } from 'lucide-react';
 import { Button } from '../ui/Button';
-import { Card, CardContent } from '../ui/Сard';
+import { Card, CardContent } from '../ui/Card';
 
 const Community: React.FC = () => {
     return (
