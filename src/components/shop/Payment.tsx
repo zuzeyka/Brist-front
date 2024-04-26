@@ -9,7 +9,7 @@ const Payment: React.FC<PaymentProps> = (props) => {
     return (
         <>
             <div>
-                <div className={'flex items-center mb-4' + (props.className || '')}>
+                <div className={'flex items-center mb-4' + props.className}>
                     <span className="text-3xl font-bold mr-2">4.1</span>
                     <div className="flex">
                         <StarIcon className="text-yellow-400 w-5 h-5" />
@@ -26,9 +26,9 @@ const Payment: React.FC<PaymentProps> = (props) => {
                     </div>
                     <div className="text-sm">Знижка до 30.02.2023 10:00</div>
                 </div>
-                <Button className="w-full mb-2 bg-black text-white">Купити</Button>
-                <Button className="w-full mb-2">Додати у кошик</Button>
-                <Button className="w-full">Додати у Wish list</Button>
+                <Button className="w-full mb-2 bg-black text-white rounded-full">Купити</Button>
+                <Button className="w-full mb-2 rounded-full">Додати у кошик</Button>
+                <Button className="w-full rounded-full">Додати у Wish list</Button>
                 <div className="flex items-center justify-between mt-4">
                     <ShareIcon className="text-gray-600 w-6 h-6" />
                     <HeartIcon className="text-gray-600 w-6 h-6" />

@@ -1,5 +1,5 @@
 import React from 'react';
-import Avatar from '../ui/avatar/Avatar';
+import Avatar from '../../ui/avatar/Avatar';
 import { HeartIcon, StarIcon } from 'lucide-react';
 
 interface ReviewCardProps {
