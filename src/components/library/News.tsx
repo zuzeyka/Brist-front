@@ -1,4 +1,5 @@
-import { Card, CardContent } from "../ui/Сard";
+import { Card, CardContent } from "../ui/Card";
+
 
 const News: React.FC = () => {
     return (
