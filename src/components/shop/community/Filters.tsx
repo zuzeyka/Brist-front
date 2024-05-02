@@ -8,19 +8,22 @@ interface FiltersProps {
 const Filters: React.FC<FiltersProps> = (props) => {
     return (
         <>
-            <div className={"bg-white p-4 rounded-lg shadow max-w-sm" + props.className}>
-                <div className="bg-gray-100 p-4 rounded-lg mb-4">
-                    <Select>
-                        <SelectTrigger className="w-full" id="sort">
-                            <SelectValue placeholder="Сортування: Популярні" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="popular">Популярні</SelectItem>
-                            <SelectItem value="recent">Недавні</SelectItem>
-                            <SelectItem value="commented">Найбільш коментовані</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <Input className="mt-2" placeholder="Пошук: Новини" />
+            <div className={"bg-gray-200 p-4 rounded-lg shadow max-w-sm" + props.className}>
+                <div className="rounded-lg mb-4">
+                    <div className='flex space-x-2 items-center'>
+                        <div className="text-gray-500">Сортування:</div>
+                        <Select>
+                            <SelectTrigger className="w-full" id="sort">
+                                <SelectValue placeholder="Популярні" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="popular">Популярні</SelectItem>
+                                <SelectItem value="recent">Недавні</SelectItem>
+                                <SelectItem value="commented">Найбільш коментовані</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <Input className="mt-2 bg-[#333333] text-black" placeholder="Пошук: Новини" />
                 </div>
                 <div>
                     <h3 className="font-bold mb-2">Усі розділи</h3>
