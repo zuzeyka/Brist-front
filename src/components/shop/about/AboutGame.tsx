@@ -148,7 +148,7 @@ const AboutGame: React.FC<AboutGameProps> = (props) => {
         setIsChevronUp(!isChevronUp);
     };
     return (
-        <div className={'col-span-2 flex justify-between mx-auto py-4' + ' ' + props.className}>
+        <div className={'col-span-2 flex justify-between mx-auto py-4' + (props.className ? ' ' + props.className : '')}>
             <div>
                 <div className='grid grid-cols-3 gap-4'>
                     <div className="col-span-3">

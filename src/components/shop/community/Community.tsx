@@ -13,7 +13,7 @@ interface CommunityProps {
 }
 const Community: React.FC<CommunityProps> = (props) => {
     return (
-        <div className={'max-w-7xl mx-auto py-10 px-4' + props.className}>
+        <div className={'max-w-7xl mx-auto py-4' + (props.className ? ' ' + props.className : '')}>
             <div className="col-span-2 flex justify-between">
                 <div className='flex flex-col mr-4'>
                     <div className='flex flex-col'>

@@ -12,7 +12,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = (props) => {
     const isVideo = currentMedia.match(/\.(mp4|webm)$/i);
 
     return (
-        <div className={'max-w-7xl my-4 flex flex-col' + " " + props.className}>
+        <div className={'max-w-7xl my-4 flex flex-col' + (props.className ? ' ' + props.className : '')}>
             {isVideo ? (
                 <video
                     className="mb-4 h-96 w-full rounded-2xl"

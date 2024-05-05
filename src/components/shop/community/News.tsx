@@ -5,7 +5,7 @@ import PostHeader from './PostHeader';
 
 const News: React.FC<PostProps> = (props) => {
     return (
-        <div className={'max-w-7xl my-4 flex flex-col' + " " + props.className}>
+        <div className={'max-w-7xl my-4 flex flex-col' + (props.className ? ' ' + props.className : '')}>
             <img className='w-auto h-auto rounded-t-md' src={props.postMediaUrl} alt="Game screenshot"></img>
             <div className='w-auto h-full bg-gray-100 rounded-b-md'>
                 <div className='flex flex-col space-y-3 p-4'>

@@ -10,7 +10,7 @@ interface PaymentProps {
 }
 const Payment: React.FC<PaymentProps> = (props) => {
     return (
-        <div className={'pl-0' + " " + props.className}>
+        <div className={'pl-0' + (props.className ? ' ' + props.className : '')}>
             <div className='flex items-center justify-end mb-4'>
                 <span className="text-3xl mr-2">4.1</span>
                 <div className="flex">

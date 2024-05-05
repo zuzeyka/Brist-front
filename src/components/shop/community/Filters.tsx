@@ -8,7 +8,7 @@ interface FiltersProps {
 const Filters: React.FC<FiltersProps> = (props) => {
     return (
         <>
-            <div className={"bg-gray-200 p-4 rounded-lg shadow max-w-sm" + props.className}>
+            <div className={"bg-gray-200 p-4 rounded-lg shadow max-w-sm" + (props.className ? ' ' + props.className : '')}>
                 <div className="rounded-lg mb-4">
                     <div className='flex space-x-2 items-center'>
                         <div className="text-gray-500">Сортування:</div>
