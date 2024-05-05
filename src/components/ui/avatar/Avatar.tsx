@@ -9,7 +9,7 @@ interface AvatarProps {
 
 const Avatar: React.FC<AvatarProps> = (props) => {
     return (
-        <div className={'relative' + (props.className || '')}>{props.src ? <AvatarImage alt={props.alt} src={props.src} /> : <AvatarFallback />}</div>
+        <div className={'relative' + (props.className || '')}>{props.src ? <AvatarImage alt={props.alt} src={props.src} className={props.className ? props.className : ''} /> : <AvatarFallback className={props.className ? props.className : ''} />}</div>
     );
 };
 
