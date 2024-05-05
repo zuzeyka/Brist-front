@@ -7,9 +7,9 @@ const Media: React.FC<PostProps> = (props) => {
     const extensions = props.postMediaUrl?.split('.').pop()?.toLowerCase();
     let media;
     if (extensions === 'jpg' || extensions === 'jpeg' || extensions === 'png') {
-        media = <img className='w-full h-72 rounded-md' src={props.postMediaUrl} alt="Game screenshot"></img>;
+        media = <img className='w-full h-auto rounded-md' src={props.postMediaUrl} alt="Game screenshot"></img>;
     } else if (extensions === 'mp4' || extensions === 'webm') {
-        media = <video className='w-full h-72 rounded-md' src={props.postMediaUrl} controls></video>;
+        media = <video className='w-full h-auto rounded-md' src={props.postMediaUrl} controls></video>;
     }
 
     return (

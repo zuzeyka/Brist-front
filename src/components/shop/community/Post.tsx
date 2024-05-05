@@ -20,7 +20,7 @@ const Post: React.FC<PostProps> = (props) => {
             <div className='pr-4 space-y-3'>
                 <b>{props.postTitle}</b>
                 <p>{props.postText}</p>
-                {props.postMediaUrl ? <img className='w-full h-72 rounded-md' src={props.postMediaUrl} alt="Game screenshot"></img> : null}
+                {props.postMediaUrl ? <img className='w-full h-auto rounded-md' src={props.postMediaUrl} alt="Game screenshot"></img> : null}
             </div>
             <PostFooter data={{ ...props }}></PostFooter>
         </div>
