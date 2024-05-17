@@ -195,7 +195,7 @@ const AboutGame: React.FC<AboutGameProps> = (props) => {
             </div>
             <div className='flex-1 pl-4'>
                 <div className='sticky top-20 z-9'>
-                    <Payment previewUrl={'https://i.imgur.com/3KkJhjG.png'} price={props.price} discount={props.discount} ></Payment>
+                    <Payment previewUrl={'https://i.imgur.com/H7tjPO2.png'} price={props.price} discount={props.discount} ></Payment>
                     <div className='bg-gray-100 p-4 mt-4 rounded-2xl'>
                         <span className='font-semibold'>Друзів бажають цю гру: {friends.length}</span>
                         {friends.map((friend, index) => (

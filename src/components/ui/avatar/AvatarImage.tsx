@@ -6,16 +6,16 @@ interface AvatarImageProps {
     className?: string;
 }
 
-const AvatarImage: React.FC<AvatarImageProps> = ({ alt, src }) => {
+const AvatarImage: React.FC<AvatarImageProps> = (props) => {
     return (
         <Link
-            className="rounded-full bg-gray-200 text-gray-400 text-xl w-10 h-10 flex items-center justify-center"
+            className={"rounded-full" + (props.className ? ' ' + props.className : '')}
             to="/profile"
         >
             <img
-                className="rounded-full w-10 h-10 object-cover"
-                alt={alt}
-                src={src}
+                className={"rounded-full object-cover" + (props.className ? ' ' + props.className : '')}
+                alt={props.alt}
+                src={props.src}
             />
         </Link>
     );
