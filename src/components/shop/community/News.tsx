@@ -9,10 +9,10 @@ const News: React.FC<PostProps> = (props) => {
             <img className='w-auto h-auto rounded-t-md' src={props.postMediaUrl} alt="Game screenshot"></img>
             <div className='w-auto h-full bg-gray-100 rounded-b-md'>
                 <div className='flex flex-col space-y-3 p-4'>
-                    <PostHeader data={{ ...props }}></PostHeader>
+                    <PostHeader postInfo={props.postAuthor} postDate={props.postDate} imgUrl='' isUser={true}></PostHeader>
                     <h2 className='font-bold'>{props.postTitle}</h2>
                     <p>{props.postText}</p>
-                    <PostFooter data={{ ...props }}></PostFooter>
+                    <PostFooter postLikes={props.postLikes} postComments={props.postComments} isShared={true}></PostFooter>
                 </div>
             </div>
         </div>

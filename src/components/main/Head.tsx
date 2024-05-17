@@ -30,9 +30,9 @@ const Head: React.FC = () => {
                         <li>
                             <Link
                                 className="text-white text-sm hover:text-gray-300"
-                                to="/downloads"
+                                to="/chat"
                             >
-                                Завантаження
+                                Чат
                             </Link>
                         </li>
                     </ul>
