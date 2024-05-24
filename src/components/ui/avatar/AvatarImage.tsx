@@ -9,7 +9,7 @@ interface AvatarImageProps {
 const AvatarImage: React.FC<AvatarImageProps> = (props) => {
     return (
         <Link
-            className={"rounded-full" + (props.className ? ' ' + props.className : '')}
+            className={"rounded-full flex" + (props.className ? ' ' + props.className : '')}
             to="/profile"
         >
             <img

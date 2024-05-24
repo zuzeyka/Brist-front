@@ -11,7 +11,7 @@ interface GameProps{
 
 const AllGames: React.FC<GameProps> = (props) => {
     return props.list ? (
-        <div className="flex flex-col justify-start max-w-7xl space-y-4 my-4">
+        <div className="flex flex-col justify-start max-w-7xl space-y-4 m-2">
             {Array.from({ length: props.gameImages.length }).map((_, index) => (
                 <div className="bg-gray-100 dark:bg-gray-800 rounded-lg flex justify-between">
                     <img src={props.gameImages[index]} className="h-36 rounded-l-lg w-60 object-cover" alt="game-image" />

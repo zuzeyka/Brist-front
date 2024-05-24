@@ -1,4 +1,3 @@
-import { DownloadIcon } from "lucide-react";
 
 interface CollectionsProps {
     className?: string;
@@ -7,7 +6,7 @@ interface CollectionsProps {
 
 const Collections: React.FC<CollectionsProps> = (props) => {
     return (
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 mt-4">
                 <button className="text-gray-500 dark:text-gray-400">All games</button>
                 <button className="text-gray-500 dark:text-gray-400">Favorites</button>
                 {props.collectionsNames.map((name) => (

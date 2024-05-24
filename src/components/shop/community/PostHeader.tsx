@@ -14,7 +14,7 @@ const PostHeader: React.FC<PostHeaderProps> = (props) => {
     return props.isUser ? (
         <div className={'flex items-center justify-between' + (props.className ? ' ' + props.className : '')}>
             <div className='flex items-center space-x-4'>
-                <div className='flex space-x-4 items-center bg-gray-200 p-4 pl-0 rounded-full h-1'>
+                <div className='flex space-x-4 items-center bg-gray-300 p-4 pl-0 rounded-full h-1'>
                     <Avatar src={props.imgUrl} alt={props.isUser ? 'User avatar' : 'Game image'} className='w-7 h-7'></Avatar>
                     <p className='text-xs tracking-widest'>{props.postInfo}</p>
                 </div>
