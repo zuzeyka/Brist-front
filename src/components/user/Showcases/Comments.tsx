@@ -10,7 +10,7 @@ interface CommentsProps {
 }
 
 
-const Comments: React.FC<{comment: CommentsProps[]}> = ({comment}) => {
+const Comments: React.FC<{ comment: CommentsProps[] }> = ({ comment }) => {
     return (
         <div className="flex flex-col space-y-4">
             <Input className="w-full bg-[#333333]" placeholder="Написати коментар"></Input>

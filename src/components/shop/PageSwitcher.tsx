@@ -22,7 +22,7 @@ const PageSwitcher: React.FC<PageSwitcherProps> = (props) => {
     const activePage = props.pages[activePageIndex];
     const pageContent = (<>{activePage.content}</>);
     useEffect(() => {
-    props.onMoveContentToParent(props.pages[activePageIndex].content);
+        props.onMoveContentToParent(props.pages[activePageIndex].content);
     }, [activePageIndex, props.onMoveContentToParent]);
     return (
         <div>

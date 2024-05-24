@@ -13,10 +13,10 @@ interface Guide {
     guidePictureUrl: string;
 }
 
-const Guides: React.FC<{guides: Guide[]}> = ({guides}) => {
+const Guides: React.FC<{ guides: Guide[] }> = ({ guides }) => {
     if (guides.length >= 1) {
-    return (
-        <div className="bg-gray-200 rounded-2xl w-full p-4">
+        return (
+            <div className="bg-gray-200 rounded-2xl w-full p-4">
                 <div className="flex flex-col">
                     <h2 className="text-lg font-semibold">Галерея гайдів</h2>
                     {guides.slice(0, 2).map((guide, index) => (
@@ -26,9 +26,9 @@ const Guides: React.FC<{guides: Guide[]}> = ({guides}) => {
                         </div>
                     ))}
                 </div>
-        </div>
-    );
-}
+            </div>
+        );
+    }
 };
 
 export default Guides;

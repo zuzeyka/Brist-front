@@ -16,7 +16,7 @@ interface LevelProps {
 
 
 const Level: React.FC<LevelProps> = (props) => {
-    
+
     if (props.achievements.length >= 1) {
         return (
             <div className="bg-gray-200 rounded-2xl w-full p-4">
@@ -34,9 +34,9 @@ const Level: React.FC<LevelProps> = (props) => {
                                 <p className="bg-[#333333] text-white rounded-full h-8 w-8 text-center p-1">{Math.floor((props.points + 100) / 100)}</p>
                             </div>
                         </div>
-                        
+
                     </div>
-                        
+
                 </div>
             </div>
         );

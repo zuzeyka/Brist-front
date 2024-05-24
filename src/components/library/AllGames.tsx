@@ -1,7 +1,7 @@
 import { CircleEllipsisIcon, StarIcon } from "lucide-react"
 import { Button } from "../ui/Button"
 
-interface GameProps{
+interface GameProps {
     className?: string
     gameNames: string[]
     gameSizes: string[]
@@ -38,7 +38,7 @@ const AllGames: React.FC<GameProps> = (props) => {
                     className="h-60 w-44 rounded-lg bg-gray-100 dark:bg-gray-800 flitems-center justify-center aspect-square group"
                 >
                     <img src={props.gameImages[index]} className="h-full rounded-lg w-full object-cover" alt="game-image" />
-                    
+
 
                     <div className="relative bottom-60 px-2">
                         <h2 className="text-transparent group-hover:text-white font-bold mb-28">{props.gameNames[index]}</h2>
@@ -48,10 +48,10 @@ const AllGames: React.FC<GameProps> = (props) => {
                         </div>
                         <div className="flex justify-between">
                             <Button className="bg-transparent text-transparent group-hover:bg-white group-hover:text-black">Скачать</Button>
-                        <Button className="bg-transparent text-xl text-transparent group-hover:bg-white group-hover:text-black">...</Button>
+                            <Button className="bg-transparent text-xl text-transparent group-hover:bg-white group-hover:text-black">...</Button>
                         </div>
                     </div>
-                    
+
                 </div>
             ))}
         </div>
