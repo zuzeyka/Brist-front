@@ -4,7 +4,6 @@ import DlcList from './DlcList';
 import Payment from '../Payment';
 import MediaPlayer from './MediaPlayer';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { UserData } from '../Store';
 import Avatar from '@/components/ui/avatar/Avatar';
 import ReviewList from './ReviewList';
 import BundleList from './BundleList';
@@ -13,6 +12,10 @@ export interface DlcInfo {
     name: string;
     price: number;
     discount?: number;
+}
+interface UserData {
+    name: string;
+    avatarUrl?: string;
 }
 interface AboutGameProps {
     gameName: string;
@@ -148,7 +151,7 @@ const AboutGame: React.FC<AboutGameProps> = (props) => {
         setIsChevronUp(!isChevronUp);
     };
     return (
-        <div className={'col-span-2 flex justify-between mx-auto py-4' + (props.className ? ' ' + props.className : '')}>
+        <div className={'flex justify-between mx-auto py-4' + (props.className ? ' ' + props.className : '')}>
             <div>
                 <div className='grid grid-cols-3 gap-4'>
                     <div className="col-span-3">
@@ -195,7 +198,7 @@ const AboutGame: React.FC<AboutGameProps> = (props) => {
             </div>
             <div className='flex-1 pl-4'>
                 <div className='sticky top-20 z-9'>
-                    <Payment previewUrl={'https://i.imgur.com/H7tjPO2.png'} price={props.price} discount={props.discount} ></Payment>
+                    <Payment previewUrl={'https://i.imgur.com/hNIw75C.png'} price={props.price} discount={props.discount} ></Payment>
                     <div className='bg-gray-100 p-4 mt-4 rounded-2xl'>
                         <span className='font-semibold'>Друзів бажають цю гру: {friends.length}</span>
                         {friends.map((friend, index) => (
@@ -215,9 +218,6 @@ const AboutGame: React.FC<AboutGameProps> = (props) => {
                         ))}
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     );

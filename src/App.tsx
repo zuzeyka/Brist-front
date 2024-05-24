@@ -6,6 +6,8 @@ import Main from './components/main/Main';
 import Store from './components/shop/Store';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import UserProfile from './components/user/UserProfile';
+import AdminPanel from './components/admin/AdminPanel';
 
 const App: React.FC = () => {
     return (
@@ -17,6 +19,8 @@ const App: React.FC = () => {
                 <Route path="/email_confirm" element={<EmailConfirmation />} />
                 <Route path="/store" element={<Store />} />
                 <Route path="/library" element={<Library />} />
+                <Route path="/user" element={<UserProfile />} />
+                <Route path="/admin_panel" element={<AdminPanel />} />
             </Routes>
         </BrowserRouter>
     );

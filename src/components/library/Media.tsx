@@ -27,7 +27,7 @@ const Media: React.FC<MediaProps> = (props) => {
 
     return (
         <div className={'max-w-7xl my-4 flex flex-col h-full pb-4' + (props.className ? ' ' + props.className : '')}>
-            
+
             <div className={'w-auto h-full bg-gray-100 rounded-md'}>
                 <div className='flex flex-col h-full p-4'>
                     <PostHeader postInfo={props.gameName} postDate={props.postDate} imgUrl={props.postGameImageUrl} isUser={false}></PostHeader>
