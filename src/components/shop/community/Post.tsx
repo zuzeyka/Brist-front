@@ -15,8 +15,8 @@ export interface PostProps {
 }
 const Post: React.FC<PostProps> = (props) => {
     return (
-        <div className={'max-w-7xl space-y-3 p-4 flex bg-gray-100 rounded-md flex-col' + (props.className ? ' ' + props.className : '')}>
-            <PostHeader postInfo={props.postAuthor} postDate={props.postDate} imgUrl='' isUser={true}></PostHeader>
+        <div className={'max-w-7xl space-y-3 p-4 flex bg-gray-100 rounded-2xl flex-col' + (props.className ? ' ' + props.className : '')}>
+            <PostHeader postInfo={props.postAuthor} postDate={props.postDate} imgUrl={props.postMediaUrl ? props.postMediaUrl : ''} isUser={true}></PostHeader>
             <div className='pr-4 space-y-3'>
                 <b>{props.postTitle}</b>
                 <p>{props.postText}</p>

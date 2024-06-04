@@ -1,6 +1,6 @@
 import React from 'react';
 import { GameBundle } from './AboutGame';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 
 interface BundleProps {
     className?: string

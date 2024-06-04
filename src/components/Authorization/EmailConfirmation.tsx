@@ -1,6 +1,6 @@
-import { Button } from "../ui/Button";
-import { InputField } from "../ui/InputField";
+import { Button } from "@/components/ui/button";
 import { XIcon } from "lucide-react";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 
 const EmailConfirmation: React.FC = () => {
     return (
@@ -15,12 +15,15 @@ const EmailConfirmation: React.FC = () => {
                 <p className="text-sm mb-4">
                     На ваш e-mail був надісланий 5-значний код
                 </p>
-                <div className="flex justify-between mb-6">
-                    <InputField className="w-12 h-16 text-center bg-gray-200 rounded-2xl" />
-                    <InputField className="w-12 h-16 text-center bg-gray-200 rounded-2xl" />
-                    <InputField className="w-12 h-16 text-center bg-gray-200 rounded-2xl" />
-                    <InputField className="w-12 h-16 text-center bg-gray-200 rounded-2xl" />
-                    <InputField className="w-12 h-16 text-center bg-gray-200 rounded-2xl" />
+                <div className="flex justify-center mb-6 w-full">
+                    <InputOTP maxLength={6}>
+                        <InputOTPGroup><InputOTPSlot index={0} /></InputOTPGroup>
+                        <InputOTPGroup><InputOTPSlot index={1} /></InputOTPGroup>
+                        <InputOTPGroup><InputOTPSlot index={2} /></InputOTPGroup>
+                        <InputOTPGroup><InputOTPSlot index={3} /></InputOTPGroup>
+                        <InputOTPGroup><InputOTPSlot index={4} /></InputOTPGroup>
+                        <InputOTPGroup><InputOTPSlot index={5} /></InputOTPGroup>
+                    </InputOTP>
                 </div>
                 <Button className="w-full rounded-full">Продовжити</Button>
             </div>

@@ -1,9 +1,16 @@
-import { Button } from "../ui/Button";
-import { Checkbox } from "../ui/Checkbox";
-import { InputField } from "../ui/InputField";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { InputField } from "@/components/ui/input-field";
 import { Link } from "react-router-dom";
+import { useAuth } from './AuthContext';
 
 const Login: React.FC = () => {
+    const { login } = useAuth();
+
+    const handleLogin = () => {
+        // Здесь можно добавить логику аутентификации (например, запрос к серверу)
+        login();
+    };
     return (
         <div className="flex justify-center bg-gray-white items-center min-h-screen">
             <div className="bg-white rounded-lg p-8 max-w-md mx-auto shadow-lg w-[400px]">
@@ -31,7 +38,7 @@ const Login: React.FC = () => {
                                 Не пам'ятаю пароль
                             </Link>
                         </div>
-                        <Button className="mt-4 rounded-full">Увійти</Button>
+                        <Button onClick={handleLogin} className="mt-4 rounded-full">Увійти</Button>
                     </div>
                 </form>
                 <div className="mt-4 text-center">

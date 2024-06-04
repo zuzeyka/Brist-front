@@ -8,21 +8,28 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UserProfile from './components/user/UserProfile';
 import AdminPanel from './components/admin/AdminPanel';
+import { AuthProvider } from './components/authorization/AuthContext';
+import Settings from './components/settings/Settings';
+import Test from './components/popups/Test';
 
 const App: React.FC = () => {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Main />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/email_confirm" element={<EmailConfirmation />} />
-                <Route path="/store" element={<Store />} />
-                <Route path="/library" element={<Library />} />
-                <Route path="/user" element={<UserProfile />} />
-                <Route path="/admin_panel" element={<AdminPanel />} />
-            </Routes>
-        </BrowserRouter>
+        <AuthProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Main />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/email_confirm" element={<EmailConfirmation />} />
+                    <Route path="/store" element={<Store />} />
+                    <Route path="/library" element={<Library />} />
+                    <Route path="/user" element={<UserProfile />} />
+                    <Route path="/admin_panel" element={<AdminPanel />} />
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/testing" element={<Test />} />
+                </Routes>
+            </BrowserRouter>
+        </AuthProvider>
     );
 };
 

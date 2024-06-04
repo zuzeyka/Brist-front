@@ -1,6 +1,7 @@
 import React from 'react';
 import Avatar from '@/components/ui/avatar/Avatar';
 import { CircleEllipsisIcon } from 'lucide-react';
+import { useAuth } from '@/components/authorization/AuthContext';
 
 interface PostHeaderProps {
     postInfo: string;
@@ -11,6 +12,7 @@ interface PostHeaderProps {
 }
 
 const PostHeader: React.FC<PostHeaderProps> = (props) => {
+    const isAuthenticated = useAuth();
     return props.isUser ? (
         <div className={'flex items-center justify-between' + (props.className ? ' ' + props.className : '')}>
             <div className='flex items-center space-x-4'>
@@ -18,9 +20,9 @@ const PostHeader: React.FC<PostHeaderProps> = (props) => {
                     <Avatar src={props.imgUrl} alt={props.isUser ? 'User avatar' : 'Game image'} className='w-7 h-7'></Avatar>
                     <p className='text-xs tracking-widest'>{props.postInfo}</p>
                 </div>
-                <p>{props.postDate}</p>
+                {isAuthenticated.isAuthenticated ? <p>{props.postDate}</p> : null}
             </div>
-            <CircleEllipsisIcon></CircleEllipsisIcon>
+            {isAuthenticated.isAuthenticated ? <CircleEllipsisIcon></CircleEllipsisIcon> : <p>{props.postDate}</p>}
         </div>
     ) : (
         <div className={'flex items-center justify-between' + (props.className ? ' ' + props.className : '')}>

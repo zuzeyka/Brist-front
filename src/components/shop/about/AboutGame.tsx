@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '../../ui/Button';
+import { Button } from '@/components/ui/button';
 import DlcList from './DlcList';
 import Payment from '../Payment';
 import MediaPlayer from './MediaPlayer';
@@ -13,7 +13,7 @@ export interface DlcInfo {
     price: number;
     discount?: number;
 }
-interface UserData {
+export interface UserData {
     name: string;
     avatarUrl?: string;
 }

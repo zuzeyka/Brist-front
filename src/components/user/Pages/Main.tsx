@@ -11,7 +11,7 @@ import Comments from "../Showcases/Comments";
 const Main: React.FC = () => {
     const images: string[] = ["https://i.imgur.com/ufBjnf8.png", "https://i.imgur.com/5Hds4bh.png", "https://i.imgur.com/oh4wspW.png", "https://i.imgur.com/NvDm7W1.png", "https://i.imgur.com/hNIw75C.png"]
     return (
-        <div className="flex flex-col space-y-4 my-4">
+        <div className="flex flex-col space-y-4">
             <Badge bagesimageUrl={images}></Badge>
             <Games contentUrl={images} wishesCount={120} gameCount={540} dlcCount={110}></Games>
             <Screenshots screenshotsUrl={images}></Screenshots>

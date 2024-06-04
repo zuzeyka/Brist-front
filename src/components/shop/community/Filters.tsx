@@ -1,5 +1,5 @@
-import Input from '@/components/ui/SearchInput';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
+import Input from '@/components/ui/search-input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import React from 'react';
 
 interface FiltersProps {

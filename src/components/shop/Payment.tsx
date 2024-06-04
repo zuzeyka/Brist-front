@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '../ui/Button';
+import { Button } from '@/components/ui/button';
 import { AlertOctagonIcon, FuelIcon, Gamepad2Icon, GamepadIcon, HeartIcon, ShareIcon, StarIcon } from 'lucide-react';
 
 interface PaymentProps {

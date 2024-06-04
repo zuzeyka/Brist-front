@@ -1,6 +1,6 @@
 import React from 'react';
 import Filters from './Filters';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import { BellPlusIcon, CircleEllipsisIcon } from 'lucide-react';
 import News from './News';
 import Guide from './Guide';
