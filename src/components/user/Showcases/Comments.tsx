@@ -1,6 +1,6 @@
 import React from "react";
 import PostHeader from "../../shop/community/PostHeader";
-import Input from "@/components/ui/SearchInput";
+import Input from "@/components/ui/search-input";
 
 interface CommentsProps {
     userName: string;
