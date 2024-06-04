@@ -1,6 +1,6 @@
 import { ChevronRightIcon } from 'lucide-react';
-import { Button } from '../ui/Button';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/Carousel';
+import { Button } from '@/components/ui/button';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 interface CommunityListProps {
     className?: string;

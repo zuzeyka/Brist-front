@@ -1,8 +1,8 @@
 import React from 'react';
 import Payment from '../Payment';
 import Avatar from '@/components/ui/avatar/Avatar';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
-import { UserData } from '../Store';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { UserData } from '../about/AboutGame';
 import CharacteristicsList from './CharacteristicsList';
 
 export interface Characteristics {

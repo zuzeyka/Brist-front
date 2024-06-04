@@ -1,9 +1,9 @@
 import React from 'react';
-import Avatar from '../../ui/avatar/Avatar';
+import Avatar from '@/components/ui/avatar/Avatar';
 import { ChevronDown, HeartIcon, MessageSquareIcon, StarIcon } from 'lucide-react';
 import { ReviewInfo } from './AboutGame';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
-import { Button } from '@/components/ui/Button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 
 interface ReviewListProps {
     className?: string;

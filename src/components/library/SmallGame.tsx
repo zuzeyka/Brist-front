@@ -1,4 +1,4 @@
-import Avatar from "../ui/avatar/Avatar";
+import Avatar from "@/components/ui/avatar/Avatar";
 
 export interface GameInfo {
     key: number | null

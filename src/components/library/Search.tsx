@@ -1,6 +1,6 @@
 import { FilterIcon, LayoutGridIcon, ListIcon, MoreVerticalIcon } from 'lucide-react';
-import { Button } from '../ui/Button';
-import Input from '../ui/SearchInput';
+import { Button } from '@/components/ui/button';
+import Input from '@/components/ui/search-input';
 import React from 'react';
 
 interface SearchProps {

@@ -1,9 +1,16 @@
-import { Button } from "../ui/Button";
-import { Checkbox } from "../ui/Checkbox";
-import { InputField } from "../ui/InputField";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { InputField } from "@/components/ui/input-field";
 import { Link } from "react-router-dom";
+import { useAuth } from './AuthContext';
 
 const Register: React.FC = () => {
+    const { logout } = useAuth();
+
+    const handleLogout = () => {
+        // Здесь можно добавить логику аутентификации (например, запрос к серверу)
+        logout();
+    };
     return (
         <div className="min-h-screen bg-gray-white flex justify-center items-center">
             <div className="bg-white p-8 shadow-lg w-[400px]">
@@ -29,7 +36,7 @@ const Register: React.FC = () => {
                             Я погоджуюсь з <u>Умовами використання</u>
                         </Link>
                     </div>
-                    <Button className="w-full rounded-full">Продовжити</Button>
+                    <Button onClick={handleLogout} className="w-full rounded-full">Продовжити</Button>
                 </form>
                 <div className="mt-4 text-center">
                     <span className="text-sm">Маєте акаунт? </span>

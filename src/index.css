@@ -40,6 +40,14 @@
         --background: 224 71% 4%;
         --foreground: 213 31% 91%;
 
+        --night-background: 201 100% 6%;
+        --night-card-1: 194 100% 12%;
+        --night-card-2: 192 100% 16%;
+        --night-card-3: 191 93% 24%;
+        --night-secondary: 191 93% 24%;
+        --night-secondary-hover: 191 93% 24%;
+        --night-primary: 191 100% 18%;
+
         --muted: 223 47% 11%;
         --muted-foreground: 215.4 16.3% 56.9%;
 
