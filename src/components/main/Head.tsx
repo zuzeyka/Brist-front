@@ -1,4 +1,4 @@
-import Avatar from "../ui/avatar/Avatar";
+import Avatar from "@/components/ui/avatar/Avatar";
 import { BellIcon, SettingsIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -7,7 +7,7 @@ const Head: React.FC = () => {
         <header className="bg-[#333333] py-4">
             <div className="max-w-7xl mx-auto flex justify-between items-center">
                 <Link to="/">
-                    <h1 className="text-white font-bold text-xl">Brirst</h1>
+                    <h1 className="text-white font-bold text-xl">Slush</h1>
                 </Link>
                 <nav>
                     <ul className="flex space-x-8">
@@ -38,9 +38,16 @@ const Head: React.FC = () => {
                     </ul>
                 </nav>
                 <div className="flex items-center space-x-4">
-                    <SettingsIcon className="text-white h-6 w-6" />
-                    <BellIcon className="text-white h-6 w-6" />
-                    <Avatar alt="User Avatar" src="" className="w-8 h-8"></Avatar>
+                    <Link
+                        className="bg-gray-400 rounded-2xl p-2 w-10 h-10 text-white text-sm hover:text-gray-300"
+                        to="/settings"
+                    >
+                        <SettingsIcon className="text-white h-6 w-6" />
+                    </Link>
+                    <div className="bg-gray-400 rounded-2xl p-2 w-10 h-10 text-white text-sm hover:text-gray-300">
+                        <BellIcon className="text-white h-6 w-6" />
+                    </div>
+                    <Avatar alt="User Avatar" src="" className="w-10 h-10"></Avatar>
                 </div>
             </div>
         </header>
