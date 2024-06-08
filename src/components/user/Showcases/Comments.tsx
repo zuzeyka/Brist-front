@@ -15,14 +15,14 @@ const Comments: React.FC<{ comment: CommentsProps[] }> = ({ comment }) => {
         <div className="flex flex-col space-y-4">
             <Input className="w-full bg-[#333333]" placeholder="Написати коментар"></Input>
             {comment.map((comment) => (
-                <div className="flex flex-col space-y-4 bg-gray-200 rounded-2xl p-4">
+                <div className="flex flex-col space-y-4 bg-card1 rounded-2xl p-4">
                     <PostHeader
                         postInfo={comment.userName}
                         postDate={comment.date}
                         imgUrl={comment.userAvatar}
                         isUser={true}
                     />
-                    <p>{comment.text}</p>
+                    <p className="text-typographySecondary text-block-2">{comment.text}</p>
                 </div>
             ))}
         </div>

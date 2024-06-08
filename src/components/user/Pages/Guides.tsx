@@ -15,7 +15,7 @@ const Guides: React.FC<{ guides: PostProps[] }> = ({ guides }) => {
     const guidesToShow = guides.slice(0, visibleCount);
 
     return (
-        <div className="flex flex-col p-5 rounded-3xl bg-zinc-300">
+        <div className="flex flex-col p-5 rounded-3xl bg-card2">
             <div className="flex gap-5 justify-between w-full text-base max-md:flex-wrap max-md:max-w-full">
                 <InputField placeholder="Пошук за назвою гри" type="text" className="justify-center items-start px-3.5 py-2.5 my-auto rounded-3xl bg-[#C0C0C0] border-none w-96 text-black placeholder:text-black max-md:pr-5" />
                 <div className="flex gap-5 justify-between">

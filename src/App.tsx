@@ -11,6 +11,7 @@ import AdminPanel from './components/admin/AdminPanel';
 import { AuthProvider } from './components/authorization/AuthContext';
 import Settings from './components/settings/Settings';
 import Test from './components/popups/Test';
+import Chat from './components/chat/Chat';
 
 const App: React.FC = () => {
     return (
@@ -27,6 +28,7 @@ const App: React.FC = () => {
                     <Route path="/admin_panel" element={<AdminPanel />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/testing" element={<Test />} />
+                    <Route path="/chat" element={<Chat />} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>

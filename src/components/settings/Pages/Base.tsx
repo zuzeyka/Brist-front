@@ -25,7 +25,7 @@ const Base: React.FC<BaseProps> = (props) => {
         setBackgroundUrl(fileUrl);
     };
     return (
-        <div className="bg-gray-200 rounded-2xl w-full p-4">
+        <div className="bg-background dark:bg-zinc-800 rounded-2xl w-full p-4">
             <div className="flex flex-col pb-6 rounded-3xl bg-zinc-300">
                 <label htmlFor="background-upload" className="relative w-full h-72 bg-gradient-to-br from-gray-500 via-gray-700 to-gray-900 rounded-t-2xl flex items-center justify-center cursor-pointer">
                     {backgroundUrl ? (

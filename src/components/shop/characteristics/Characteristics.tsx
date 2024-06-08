@@ -4,6 +4,7 @@ import Avatar from '@/components/ui/avatar/Avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { UserData } from '../about/AboutGame';
 import CharacteristicsList from './CharacteristicsList';
+import { FuelIcon, Gamepad2Icon, GamepadIcon } from 'lucide-react';
 
 export interface Characteristics {
     system: string;
@@ -25,6 +26,11 @@ interface CharacteristicsProps {
     gameName: string;
     price: number;
     discount?: number;
+    endDate?: string;
+    rate: number;
+    releaseDate: string;
+    developer: string;
+    publisher: string;
     className?: string;
 }
 
@@ -115,17 +121,17 @@ const Characteristics: React.FC<CharacteristicsProps> = (props) => {
     return (
         <div className={'col-span-2 flex' + (props.className ? ' ' + props.className : '')}>
             <div className='flex flex-col flex-grow py-4'>
-                <h1 className='font-bold text-3xl'>{props.gameName}</h1>
+                <h1 className='text-heading-1 font-bold text-typography'>{props.gameName}</h1>
                 <div>
                     <Select onValueChange={(characteristic) => {
                         if (characteristic) {
                             setSelectedCharacteristic(characteristic);
                         }
                     }}>
-                        <SelectContent>
+                        <SelectContent className='!bg-secondary'>
                             {characteristics.map(c => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}
                         </SelectContent>
-                        <SelectTrigger className="w-96 my-4" id="sort">
+                        <SelectTrigger className="w-96 my-4 !bg-cardLight12 rounded-2xl" id="sort">
                             <SelectValue placeholder={characteristics[0].name} />
                         </SelectTrigger>
                     </Select>
@@ -135,22 +141,22 @@ const Characteristics: React.FC<CharacteristicsProps> = (props) => {
             </div>
             <div className='flex-1 pl-4 py-4'>
                 <div className='sticky top-20 z-9'>
-                    <Payment previewUrl={'https://i.imgur.com/3KkJhjG.png'} price={props.price} discount={props.discount} ></Payment>
-                    <div className='bg-gray-100 p-4 mt-4 rounded-2xl'>
-                        <span className='font-semibold'>Друзів бажають цю гру: {friends.length}</span>
+                    <Payment platforms={[<GamepadIcon />, <Gamepad2Icon />, <FuelIcon />]} developer={props.developer} publisher={props.publisher} releaseDate={props.releaseDate} previewUrl={'https://i.imgur.com/hNIw75C.png'} price={props.price} discount={props.discount} rate={props.rate} endDate={props.endDate}></Payment>
+                    <div className='bg-card1 p-4 mt-4 rounded-2xl font-artifakt text-typography'>
+                        <span className='font-semibold text-typography'>Друзів бажають цю гру: {friends.length}</span>
                         {friends.map((friend, index) => (
-                            <div key={index} className='flex items-center my-2 space-x-2'>
+                            <div key={index} className='flex items-center my-2 space-x-2 bg-card2 rounded-2xl'>
                                 <Avatar src={friend.avatarUrl} alt='Avatar' className='w-8 h-8'></Avatar>
-                                <span>{friend.name}</span>
+                                <span className='font-bold text-sign-2'>{friend.name}</span>
                             </div>
                         ))}
                     </div>
-                    <div className='bg-gray-100 p-4 mt-4 rounded-2xl'>
-                        <span className='font-semibold'>Друзів мають цю гру: {friends.length}</span>
+                    <div className='bg-card1 p-4 mt-4 rounded-2xl font-artifakt text-typography'>
+                        <span className='font-semibold text-typography'>Друзів мають цю гру: {friends.length}</span>
                         {friends.map((friend, index) => (
-                            <div key={index} className='flex items-center my-2 space-x-2'>
+                            <div key={index} className='flex items-center my-2 space-x-2 bg-card2 rounded-2xl'>
                                 <Avatar src={friend.avatarUrl} alt='Avatar' className='w-8 h-8'></Avatar>
-                                <span>{friend.name}</span>
+                                <span className='font-bold text-sign-2'>{friend.name}</span>
                             </div>
                         ))}
                     </div>

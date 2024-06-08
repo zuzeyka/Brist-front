@@ -14,8 +14,8 @@ const UserProfile: React.FC = () => {
     return (
         <>
             <Head></Head>
-            <div className="max-w-7xl mx-auto bg-white grid grid-cols-4 grid-rows-2">
-                {userBackgroundUrl ? <img src={userBackgroundUrl} alt="User background" className="w-full h-full object-cover col-span-4" /> : <div className="w-full h-full bg-gradient-to-br from-gray-500 via-gray-700 to-gray-900 col-span-4"></div>}
+            <div className="max-w-7xl mx-auto bg-background grid grid-cols-4 grid-rows-2">
+                {userBackgroundUrl ? <img src={userBackgroundUrl} alt="User background" className="w-full h-full object-cover col-span-4 rounded-br-md" /> : <div className="w-full h-full bg-gradient-to-br from-primary via-negative to-accent col-span-4 rounded-br-md"></div>}
                 <UserHeader className='col-span-3 h-40' userAvatarUrl='https://i.pravatar.cc/600' userName='test username' isOnline={true} about='lorem ipsum dolor sit amet consectetur.'></UserHeader>
                 <div className='py-4 pl-4 row-span-12'>
                     <div className='sticky top-1 z-9'>
