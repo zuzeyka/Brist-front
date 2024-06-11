@@ -2,17 +2,17 @@ import React from "react";
 
 const Catalog: React.FC = () => {
     return (
-        <div className="px-8 pt-5 pb-6 rounded-3xl bg-neutral-100 max-md:px-5">
+        <div className="px-8 pt-5 pb-6 rounded-3xl bg-card2 max-md:px-5 max-w-auto">
             <div className="flex gap-5 max-md:flex-col max-md:gap-0">
                 <div className="flex flex-col w-[77%] max-md:ml-0 max-md:w-full">
                     <div className="flex flex-col grow max-md:mt-10 max-md:max-w-full">
-                        <div className="text-xl font-medium leading-7 text-black max-md:max-w-full">
+                        <div className="text-heading-3 font-bold font-manrope leading-7 max-md:max-w-full">
                             Жанри
                         </div>
                         <div className="mt-2 max-md:max-w-full">
                             <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-                                <div className="flex flex-col w-[33%] max-md:ml-0 max-md:w-full">
-                                    <div className="text-base leading-7 text-black max-md:mt-5">
+                                <div className="flex flex-col w-full max-md:ml-0 max-md:w-full">
+                                    <div className="text-block-2 leading-7 max-md:mt-5">
                                         Рольові
                                         <br />
                                         Групові ігри
@@ -46,8 +46,8 @@ const Catalog: React.FC = () => {
                                         Хобі та робота
                                     </div>
                                 </div>
-                                <div className="flex flex-col ml-5 w-[33%] max-md:ml-0 max-md:w-full">
-                                    <div className="text-base leading-7 text-black max-md:mt-5">
+                                <div className="flex flex-col ml-5 w-full max-md:ml-0 max-md:w-full">
+                                    <div className="text-block-2 leading-7 text-black max-md:mt-5">
                                         Стратегії
                                         <br />
                                         Військові стратегії
@@ -81,8 +81,8 @@ const Catalog: React.FC = () => {
                                         Спортивні симулятори
                                     </div>
                                 </div>
-                                <div className="flex flex-col ml-5 w-[33%] max-md:ml-0 max-md:w-full">
-                                    <div className="text-base leading-7 text-black max-md:mt-5">
+                                <div className="flex flex-col ml-5 w-full max-md:ml-0 max-md:w-full">
+                                    <div className="text-block-2 leading-7 text-black max-md:mt-5">
                                         Бойовики
                                         <br />
                                         Аркади й ритм-ігри
@@ -122,8 +122,8 @@ const Catalog: React.FC = () => {
                 </div>
                 <div className="flex flex-col ml-5 w-[23%] max-md:ml-0 max-md:w-full">
                     <div className="flex flex-col text-black max-md:mt-10">
-                        <div className="text-xl font-medium leading-7">Користувачі</div>
-                        <div className="mt-2 text-base leading-7">
+                        <div className="text-heading-3 font-bold font-manrope leading-7">Користувачі</div>
+                        <div className="mt-2 text-block-2 leading-7">
                             Багатокористувацькі
                             <br />
                             Кооперативні

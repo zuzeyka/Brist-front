@@ -7,7 +7,7 @@ const Head: React.FC = () => {
         <header className="bg-card1 py-4">
             <div className="max-w-7xl mx-auto flex justify-between items-center">
                 <Link to="/">
-                    <h1 className="text-white font-bold text-xl">Slush</h1>
+                    <img src={document.documentElement.classList.contains('dark') ? "/src/assets/svg/logoDecorativeDark.svg" : "/src/assets/svg/logoDecorativeWhite.svg"} alt="logo" />
                 </Link>
                 <nav>
                     <ul className="flex space-x-8">

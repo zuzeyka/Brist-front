@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
         <footer className="bg-card1 text-typography py-6">
             <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
                 <div>
-                    <h2 className="text-3xl font-semibold uppercase text-sign-1">Slush</h2>
+                    <h2 className="text-3xl font-semibold uppercase text-sign-1 text-primary">Slush</h2>
                     <p className="text-block-2 font-artifakt text-typographySecondary mt-4">
                         © 2024, Zubatik inc, Inc. All rights reserved. Zubatik inc, Zubatik inc, the Zubatik inc logo, Fortnite, the Fortnite logo, Unreal,
                         Unreal Engine, the Unreal Engine logo, Unreal Tournament, and the Unreal Tournament logo are trademarks or registered trademarks of
@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
                         <Link className="text-button-2 font-artifakt text-typography hover:underline" to="/privacy">
                             Privacy Policy
                         </Link>
-                        <Link className="text-button-2 font-artifakt text-typography hover:underline" to="/policy">
+                        <Link className="text-button-2 font-artifakt text-typography hover:underline" to="/refund">
                             Store Refund Policy
                         </Link>
                     </div>

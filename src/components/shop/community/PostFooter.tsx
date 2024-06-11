@@ -11,7 +11,7 @@ interface PostFooterProps {
 
 const PostFooter: React.FC<PostFooterProps> = (props) => {
     return (
-        <div className={'flex space-x-4 mt-4 items-center' + (props.isShared ? '' : ' justify-between') + (props.className ? ' ' + props.className : '')}>
+        <div className={'flex space-x-4 mt-4 items-center text-typography' + (props.isShared ? '' : ' justify-between') + (props.className ? ' ' + props.className : '')}>
             <div className='flex space-x-2'>
                 <div className='flex items-center space-x-2 bg-cardLight12 p-2 rounded-md w-16 justify-center'>
                     <HeartIcon></HeartIcon>
@@ -25,7 +25,7 @@ const PostFooter: React.FC<PostFooterProps> = (props) => {
             {props.isShared ? (<div className='flex space-x-2'>
                 <Share2Icon></Share2Icon>
                 <p className='cursor-pointer'>Поділитись</p>
-            </div>) : <p>{props.postDate}</p>}
+            </div>) : <p className='text-typographySecondary'>{props.postDate}</p>}
         </div>
     );
 };

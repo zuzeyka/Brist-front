@@ -74,7 +74,7 @@ module.exports = {
                 },
             },
             backgroundImage: {
-                'level': "url('/src/assets/svg/Polygon6.svg')",
+                'level1': "url('/src/assets/svg/Polygon1-19.svg')",
             },
             borderRadius: {
                 lg: `var(--radius)`,

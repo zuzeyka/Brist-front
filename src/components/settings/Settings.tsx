@@ -51,7 +51,7 @@ const Settings: React.FC = () => {
             <div className="max-w-7xl mx-auto flex">
                 <div className="w-1/4 bg-background rounded-2xl mt-5 h-1/4 p-5 sticky top-5">
                     <Command>
-                        <CommandInput placeholder="Пошук налаштувань" />
+                        <CommandInput className='bg-secondary' placeholder="Пошук налаштувань" />
                         <CommandList>
                             <CommandEmpty>Нічого не знайдено</CommandEmpty>
                             <CommandItem>
@@ -60,7 +60,7 @@ const Settings: React.FC = () => {
                                         <SunMoon className='w-5 h-5' />
                                         <div>Темна тема</div>
                                     </div>
-                                    <Switch checked={theme === 'dark'} onClick={toggleTheme} />
+                                    <Switch className='!bg-background40' checked={theme === 'dark'} onClick={toggleTheme} />
                                 </div>
                             </CommandItem>
                             {pages.map((page, index) => (

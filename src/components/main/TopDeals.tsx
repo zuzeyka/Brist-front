@@ -35,7 +35,7 @@ const TopDeals: React.FC<{ games: DealProps[] }> = ({ games }) => {
                             <div className="flex flex-col my-auto">
                                 {games[activeIndex].discount ? (
                                     <div className="flex space-x-2">
-                                        <Badge className="px-4 text-background bg-accent hover:bg-accentHover">-{games[activeIndex].discount}%</Badge>
+                                        <Badge className="px-4 text-background bg-accent border-0 hover:bg-accentHover">-{games[activeIndex].discount}%</Badge>
                                         <p className="line-through text-heading-1 text-typographySecondary">{games[activeIndex].price}₴</p>
                                         <p className="text-heading-1 text-typography">{games[activeIndex].price - games[activeIndex].price * games[activeIndex].discount / 100}₴</p>
                                     </div>) : <p>{games[activeIndex].price}</p>}

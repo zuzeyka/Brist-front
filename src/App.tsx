@@ -12,6 +12,10 @@ import { AuthProvider } from './components/authorization/AuthContext';
 import Settings from './components/settings/Settings';
 import Test from './components/popups/Test';
 import Chat from './components/chat/Chat';
+import ForgotPassword from './components/authorization/ForgotPassword';
+import Terms from './components/credentials/Terms';
+import Privacy from './components/credentials/Privacy';
+import Refund from './components/credentials/Refund';
 
 const App: React.FC = () => {
     return (
@@ -29,6 +33,10 @@ const App: React.FC = () => {
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/testing" element={<Test />} />
                     <Route path="/chat" element={<Chat />} />
+                    <Route path="/reset_password" element={<ForgotPassword />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/refund" element={<Refund />} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>

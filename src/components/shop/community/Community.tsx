@@ -1,7 +1,7 @@
 import React from 'react';
 import Filters from './Filters';
 import { Button } from '@/components/ui/button';
-import { BellPlusIcon, CircleEllipsisIcon } from 'lucide-react';
+import { BellPlusIcon, CircleEllipsisIcon, PlusIcon } from 'lucide-react';
 import News from './News';
 import Guide from './Guide';
 import Post from './Post';
@@ -29,8 +29,8 @@ const Community: React.FC<CommunityProps> = (props) => {
                         </div>
                     </div>
 
-                    <News gameName={props.gameName} postTitle='Интересный заголовок новости' postText='Lorem ipsum dolor sit amet consectetur. Amet nulla in risus commodo in in. Massa risus aliquet ut justo mauris blandit massa dolor vulputate. Pretium sit ullamcorper cursus cursus amet quis duis.' postDate='25.02.2024' postAuthor='Автор' postComments={54} postLikes={12} postMediaUrl='https://i.imgur.com/ufBjnf8.png'></News>
-                    <Guide gameName={props.gameName} postTitle='Интересный заголовок гайда' postText='Lorem ipsum dolor sit amet consectetur. Amet nulla in risus commodo in in. Massa risus aliquet ut justo mauris blandit massa dolor vulputate. Pretium sit ullamcorper cursus cursus amet quis duis.' postDate='25.02.2024' postAuthor='Автор' postComments={54} postLikes={12} postMediaUrl='https://i.imgur.com/5Hds4bh.png'></Guide>
+                    <News className='mt-4' gameName={props.gameName} postTitle='Интересный заголовок новости' postText='Lorem ipsum dolor sit amet consectetur. Amet nulla in risus commodo in in. Massa risus aliquet ut justo mauris blandit massa dolor vulputate. Pretium sit ullamcorper cursus cursus amet quis duis.' postDate='25.02.2024' postAuthor='Автор' postComments={54} postLikes={12} postMediaUrl='https://i.imgur.com/ufBjnf8.png'></News>
+                    <Guide className='bg-card1 mb-4' gameName={props.gameName} postTitle='Интересный заголовок гайда' postText='Lorem ipsum dolor sit amet consectetur. Amet nulla in risus commodo in in. Massa risus aliquet ut justo mauris blandit massa dolor vulputate. Pretium sit ullamcorper cursus cursus amet quis duis.' postDate='25.02.2024' postAuthor='Автор' postComments={54} postLikes={12} postMediaUrl='https://i.imgur.com/5Hds4bh.png'></Guide>
                     <Post gameName={props.gameName} postTitle='Интересный заголовок поста' postText='Lorem ipsum dolor sit amet consectetur. Amet nulla in risus commodo in in. Massa risus aliquet ut justo mauris blandit massa dolor vulputate. Pretium sit ullamcorper cursus cursus amet quis duis.' postDate='25.02.2024' postAuthor='Автор' postComments={54} postLikes={12}></Post>
                     <Media gameName={props.gameName} postTitle='Интересный заголовок' postText='Lorem ipsum dolor sit amet consectetur. Amet nulla in risus commodo in in. Massa risus aliquet ut justo mauris blandit massa dolor vulputate. Pretium sit ullamcorper cursus cursus amet quis duis.' postDate='25.02.2024' postAuthor='Автор' postComments={54} postLikes={12} postMediaUrl='https://i.imgur.com/XrUH10g.mp4'></Media>
                     <Post gameName={props.gameName} postTitle='Интересный заголовок поста' postText='Lorem ipsum dolor sit amet consectetur. Amet nulla in risus commodo in in. Massa risus aliquet ut justo mauris blandit massa dolor vulputate. Pretium sit ullamcorper cursus cursus amet quis duis.' postDate='25.02.2024' postAuthor='Автор' postComments={54} postLikes={12} postMediaUrl='https://i.imgur.com/oh4wspW.png'></Post>
@@ -39,7 +39,10 @@ const Community: React.FC<CommunityProps> = (props) => {
                 <div className='flex flex-col mt-2'>
                     <div className='sticky top-24 z-9'>
                         <div className="flex justify-between items-center mb-4 space-x-4">
-                            <Button className="w-full rounded-2xl bg-primary hover:bg-secondaryHover text-typography text-button-1 border-0 mr-5 font-artifakt">Створити пост</Button>
+                            <Button className="w-full rounded-2xl bg-primary hover:bg-secondaryHover !text-background text-button-1 border-0 font-artifakt">
+                                <PlusIcon />
+                                <p>Створити пост</p>
+                            </Button>
                             <div className="flex space-x-2">
                                 <Button className="bg-secondary hover:bg-secondaryHover text-typography text-button-1 border-0 font-artifakt p-2 rounded-2xl">
                                     <BellPlusIcon className="text-black" />

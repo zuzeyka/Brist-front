@@ -13,7 +13,7 @@ const Media: React.FC<PostProps> = (props) => {
     }
 
     return (
-        <div className={'max-w-7xl space-y-3 p-4 flex bg-card2 rounded-2xl flex-col my-4' + (props.className ? ' ' + props.className : '')}>
+        <div className={'max-w-7xl space-y-3 p-4 flex bg-card1 rounded-2xl flex-col my-4' + (props.className ? ' ' + props.className : '')}>
             <PostHeader postInfo={props.postAuthor} postDate={props.postDate} imgUrl='' isUser={true}></PostHeader>
             <div className='pr-4 space-y-3'>
                 {media}
