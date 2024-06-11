@@ -10,6 +10,7 @@ import Media from "./Pages/Media";
 import Guides from "./Pages/Guides";
 import Reviews from "./Pages/Reviews";
 import Wished, { GameProps } from "./Pages/Wished";
+import LevelIcon from "./Elements/LevelIcon";
 
 interface UserMenuProps {
     levelPoints: number;
@@ -28,7 +29,7 @@ interface Friend {
     name: string;
     avatarUrl?: string;
     isOnline: boolean;
-    level: number;
+    levelPoints: number;
 }
 
 export interface ReviewProps extends ReviewInfo {
@@ -104,9 +105,7 @@ const UserMenu: React.FC<UserMenuProps> = (props) => {
             <div className="flex flex-col bg-card2 p-4 rounded-2xl">
                 <div className="flex space-x-4 items-center mb-4">
                     <p className="text-heading-2 font-manrope font-bold">Рівень</p>
-                    <div className="bg-level w-11 h-12 bg-center bg-cover bg-no-repeat flex justify-center items-center" >
-                        <span>{Math.floor(props.levelPoints / 100)}</span>
-                    </div>
+                    <LevelIcon levelPoints={props.levelPoints}></LevelIcon>
                 </div>
                 <div className="flex justify-between">
                     <PageSwitcher onMoveContentToParent={props.onMoveContentToParent} vertical={true} pages={pages}></PageSwitcher>
@@ -135,7 +134,7 @@ const UserMenu: React.FC<UserMenuProps> = (props) => {
                                     <Avatar online={friend.isOnline} src={friend.avatarUrl} alt={friend.name} className="w-12 h-12 rounded"></Avatar>
                                     <p className="text-subheading-2 font-bold">{friend.name}</p>
                                 </div>
-                                <p className="bg-[#333333] text-white rounded-full h-8 w-8 text-center p-1">{friend.level}</p>
+                                <LevelIcon levelPoints={friend.levelPoints} small={true}></LevelIcon>
                             </div>
                         ))}
                     </div>

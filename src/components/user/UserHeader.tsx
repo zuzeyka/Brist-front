@@ -26,7 +26,7 @@ const UserHeader: React.FC<UserHeaderProps> = (props) => {
                             <Button className="w-2xl rounded-2xl bg-primary text-black border border-black mx-2">Видалити з друзів</Button>
                             <Button className="w-full rounded-2xl bg-gray-100 text-black border border-black mx-2"><MailIcon /></Button>
                             <Button className="w-full rounded-2xl bg-gray-100 text-black border border-black"><CircleEllipsisIcon /></Button>
-                        </div>) : (<Button className="w-2xl rounded-2xl bg-card3 text-typography border border-black mx-2 space-x-2"><PencilLineIcon></PencilLineIcon><span>Редагувати профіль</span></Button>)}
+                        </div>) : (<Button className="w-2xl rounded-2xl bg-card3 text-typography hover:bg-cardLight12 mx-2 space-x-2"><PencilLineIcon></PencilLineIcon><span>Редагувати профіль</span></Button>)}
                     </div>
                 </div>
             </div>
