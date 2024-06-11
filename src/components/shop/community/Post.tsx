@@ -15,11 +15,11 @@ export interface PostProps {
 }
 const Post: React.FC<PostProps> = (props) => {
     return (
-        <div className={'max-w-7xl space-y-3 p-4 flex bg-gray-100 rounded-2xl flex-col' + (props.className ? ' ' + props.className : '')}>
+        <div className={'max-w-7xl space-y-3 p-4 flex bg-card1 rounded-2xl flex-col' + (props.className ? ' ' + props.className : '')}>
             <PostHeader postInfo={props.postAuthor} postDate={props.postDate} imgUrl={props.postMediaUrl ? props.postMediaUrl : ''} isUser={true}></PostHeader>
             <div className='pr-4 space-y-3'>
-                <b>{props.postTitle}</b>
-                <p>{props.postText}</p>
+                <h2 className='font-bold text-heading-3 text-typography'>{props.postTitle}</h2>
+                <p className='text-typographySecondary text-block-2 font-artifakt'>{props.postText}</p>
                 {props.postMediaUrl ? <img className='w-full h-auto rounded-md' src={props.postMediaUrl} alt="Game screenshot"></img> : null}
             </div>
             <PostFooter postLikes={props.postLikes} postComments={props.postComments} isShared={true}></PostFooter>

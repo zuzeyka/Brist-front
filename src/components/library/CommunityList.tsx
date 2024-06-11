@@ -11,8 +11,8 @@ const CommunityList: React.FC<CommunityListProps> = (props) => {
     return (
         <>
             <div className={"flex items-center justify-between" + (props.className ? ' ' + props.className : '')}>
-                <h2 className="text-xl font-bold">Цікаве від Спільноти</h2>
-                <Button className="bg-transparent hover:bg-transparent text-black">Моя стрічка<ChevronRightIcon className="w-5 h-5" /></Button>
+                <h2 className="text-heading-2 font-bold px-2">Цікаве від Спільноти</h2>
+                <Button className="bg-transparent hover:bg-transparent text-button-1 font-artifakt p-0 px-2">Моя стрічка<ChevronRightIcon className="w-5 h-5" /></Button>
             </div>
             <Carousel className="w-full" opts={{
                 align: "start",
@@ -25,8 +25,8 @@ const CommunityList: React.FC<CommunityListProps> = (props) => {
                         </CarouselItem>
                     ))}
                 </CarouselContent>
-                <CarouselNext className='right-0 text-black'></CarouselNext>
-                <CarouselPrevious className='left-0 text-black'></CarouselPrevious>
+                <CarouselNext className='-right-3 text-black'></CarouselNext>
+                <CarouselPrevious className='-left-3 text-black'></CarouselPrevious>
             </Carousel>
         </>
     );

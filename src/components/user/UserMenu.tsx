@@ -10,6 +10,7 @@ import Media from "./Pages/Media";
 import Guides from "./Pages/Guides";
 import Reviews from "./Pages/Reviews";
 import Wished, { GameProps } from "./Pages/Wished";
+import LevelIcon from "./Elements/LevelIcon";
 
 interface UserMenuProps {
     levelPoints: number;
@@ -28,7 +29,7 @@ interface Friend {
     name: string;
     avatarUrl?: string;
     isOnline: boolean;
-    level: number;
+    levelPoints: number;
 }
 
 export interface ReviewProps extends ReviewInfo {
@@ -101,39 +102,39 @@ const UserMenu: React.FC<UserMenuProps> = (props) => {
     ], []);
     return (
         <div className="flex flex-col space-y-4">
-            <div className="flex flex-col bg-gray-100 p-4 rounded-2xl">
+            <div className="flex flex-col bg-card2 p-4 rounded-2xl">
                 <div className="flex space-x-4 items-center mb-4">
-                    <p>Рівень: </p>
-                    <p className="bg-[#333333] text-white rounded-full px-2 h-10 w-10 text-center pt-2">{Math.floor(props.levelPoints / 100)}</p>
+                    <p className="text-heading-2 font-manrope font-bold">Рівень</p>
+                    <LevelIcon levelPoints={props.levelPoints}></LevelIcon>
                 </div>
                 <div className="flex justify-between">
                     <PageSwitcher onMoveContentToParent={props.onMoveContentToParent} vertical={true} pages={pages}></PageSwitcher>
                     <ul className="flex flex-col space-y-2 mt-8 text-gray-500">
-                        <li>{props.whishesCount}</li>
-                        <li>{props.bagesCount}</li>
-                        <li>{props.gamesCount}</li>
-                        <li>{props.screenshotsCount}</li>
-                        <li>{props.videosCount}</li>
-                        <li>{props.guidesCount}</li>
-                        <li>{props.reviewsCount}</li>
+                        <li className="bg-card3 px-4 rounded-2xl">{props.whishesCount}</li>
+                        <li className="bg-card3 px-4 rounded-2xl">{props.bagesCount}</li>
+                        <li className="bg-card3 px-4 rounded-2xl">{props.gamesCount}</li>
+                        <li className="bg-card3 px-4 rounded-2xl">{props.screenshotsCount}</li>
+                        <li className="bg-card3 px-4 rounded-2xl">{props.videosCount}</li>
+                        <li className="bg-card3 px-4 rounded-2xl">{props.guidesCount}</li>
+                        <li className="bg-card3 px-4 rounded-2xl">{props.reviewsCount}</li>
                     </ul>
                 </div>
 
             </div>
             {props.friends ? (
-                <div className="flex flex-col bg-gray-100 p-4 rounded-2xl">
+                <div className="flex flex-col bg-card2 p-4 rounded-2xl">
                     <div className="flex justify-between">
-                        <p>Друзі: </p>
-                        <p className="text-gray-500 pr-5">{props.friends.length}</p>
+                        <p className="text-subheading-1 font-bold">Друзі</p>
+                        <p className="text-typographySecondary text-sign-2 font-bold px-3 bg-card3 flex justify-center items-center rounded-2xl">{props.friends.length}</p>
                     </div>
                     <div>
                         {props.friends.slice(0, 5).map((friend) => (
                             <div className="flex space-x-4 items-center my-4 justify-between">
                                 <div className="flex space-x-4 items-center">
                                     <Avatar online={friend.isOnline} src={friend.avatarUrl} alt={friend.name} className="w-12 h-12 rounded"></Avatar>
-                                    <p>{friend.name}</p>
+                                    <p className="text-subheading-2 font-bold">{friend.name}</p>
                                 </div>
-                                <p className="bg-[#333333] text-white rounded-full h-8 w-8 text-center p-1">{friend.level}</p>
+                                <LevelIcon levelPoints={friend.levelPoints} small={true}></LevelIcon>
                             </div>
                         ))}
                     </div>

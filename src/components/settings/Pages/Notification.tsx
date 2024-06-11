@@ -23,57 +23,57 @@ const Notification: React.FC<NotificationProps> = (props) => {
     const [isNewMessageSound, setIsNewMessageSound] = useState(props.isNewMessageSound);
 
     return (
-        <div className="bg-gray-200 rounded-2xl w-full p-4">
-            <div className="flex flex-col items-start p-8 rounded-3xl bg-zinc-300 max-md:px-5">
-                <div className="text-xl font-semibold text-black max-md:max-w-full">
-                    “Тихі” сповіщення
+        <div className="bg-card1 rounded-2xl w-full p-4">
+            <div className="flex flex-col items-start p-8 rounded-3xl bg-card1 max-md:px-5">
+                <div className="text-heading-3 font-manrope font-bold max-md:max-w-full">
+                    Беззвучні сповіщення
                 </div>
                 <div className="flex gap-5 justify-between pr-20 mt-5 max-w-full w-[701px] max-md:flex-wrap max-md:pr-5">
-                    <div className="text-base text-black">Великий розпродаж</div>
+                    <div className="text-block-2">Великий розпродаж</div>
                     <div className="flex flex-col justify-center items-start px-5 fill-neutral-400">
                         <Switch checked={isBigSale} onClick={() => setIsBigSale(!isBigSale)} />
                     </div>
                 </div>
                 <div className="flex gap-5 justify-between pr-20 mt-6 max-w-full w-[701px] max-md:flex-wrap max-md:pr-5">
-                    <div className="text-base text-black">Знижка на ігри з мого Бажаного</div>
+                    <div className="text-block-2">Знижка на ігри з мого Бажаного</div>
                     <div className="flex flex-col justify-center items-start px-5 fill-neutral-400">
                         <Switch checked={isWishSale} onClick={() => setIsWishSale(!isWishSale)} />
                     </div>
                 </div>
                 <div className="flex gap-5 justify-between pr-20 mt-6 max-w-full w-[701px] max-md:flex-wrap max-md:pr-5">
-                    <div className="text-base text-black">Новий коментар під моїм профілем</div>
+                    <div className="text-block-2">Новий коментар під моїм профілем</div>
                     <div className="flex flex-col justify-center items-start px-5 fill-neutral-400">
                         <Switch checked={isNewComment} onClick={() => setIsNewComment(!isNewComment)} />
                     </div>
                 </div>
                 <div className="flex gap-5 justify-between pr-20 mt-6 max-w-full w-[701px] max-md:flex-wrap max-md:pr-5">
-                    <div className="text-base text-black">Новий запит на дружбу</div>
+                    <div className="text-block-2">Новий запит на дружбу</div>
                     <div className="flex flex-col justify-center items-start px-5 fill-neutral-400">
                         <Switch checked={isNewFriendRequest} onClick={() => setIsNewFriendRequest(!isNewFriendRequest)} />
                     </div>
                 </div>
                 <div className="flex gap-5 justify-between pr-20 mt-6 max-w-full w-[701px] max-md:flex-wrap max-md:pr-5">
-                    <div className="text-base text-black">Мій запит на дружбу прийнято</div>
+                    <div className="text-block-2">Мій запит на дружбу прийнято</div>
                     <div className="flex flex-col justify-center items-start px-5 fill-neutral-400">
                         <Switch checked={isAcceptFriendRequest} onClick={() => setIsAcceptFriendRequest(!isAcceptFriendRequest)} />
                     </div>
                 </div>
                 <div className="flex gap-5 justify-between pr-20 mt-6 max-w-full w-[701px] max-md:flex-wrap max-md:pr-5">
-                    <div className="text-base text-black">Мій запит на дружбу відхилено</div>
+                    <div className="text-block-2">Мій запит на дружбу відхилено</div>
                     <div className="flex flex-col justify-center items-start px-5 fill-neutral-400">
                         <Switch checked={isDeclineFriendRequest} onClick={() => setIsDeclineFriendRequest(!isDeclineFriendRequest)} />
                     </div>
                 </div>
-                <div className="mt-20 text-xl font-semibold text-black max-md:mt-10 max-md:max-w-full">
+                <div className="mt-20 text-heading-3 font-manrope font-bold max-md:mt-10 max-md:max-w-full">
                     Чат
                 </div>
                 <div className="flex gap-5 justify-between mt-2.5 max-w-full w-[701px] max-md:flex-wrap">
-                    <div className="self-end mt-8 text-base text-black">
+                    <div className="self-end mt-8 text-block-2">
                         Нове повідомлення у чаті
                     </div>
                     <div className="flex gap-5 justify-between">
                         <div className="flex flex-col">
-                            <div className="text-base font-semibold text-center text-black">
+                            <div className="text-subheading-2 font-bold text-center">
                                 Сповіщення
                             </div>
                             <div className="flex flex-col justify-center items-center self-center px-5 mt-3 w-10 fill-neutral-400">
@@ -81,7 +81,7 @@ const Notification: React.FC<NotificationProps> = (props) => {
                             </div>
                         </div>
                         <div className="flex flex-col">
-                            <div className="text-base font-semibold text-center text-black">
+                            <div className="text-subheading-2 font-bold text-center">
                                 Звук
                             </div>
                             <div className="flex flex-col justify-center items-center px-5 mt-3 fill-neutral-400">

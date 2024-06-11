@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Head from '../main/Head';
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Bell, DollarSign, LockKeyhole, SunMoon, UserRoundCog, UserRoundX } from 'lucide-react';
@@ -17,10 +17,23 @@ interface PageContent {
 
 
 const Settings: React.FC = () => {
+    const [theme, setTheme] = useState(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
     const [selectedPage, setSelectedPage] = useState<PageContent | null>(null);
 
     const handleSelectPage = (page: PageContent) => {
         setSelectedPage(page);
+    };
+
+    useEffect(() => {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme(theme === 'light' ? 'dark' : 'light');
     };
 
 
@@ -36,9 +49,9 @@ const Settings: React.FC = () => {
         <>
             <Head></Head>
             <div className="max-w-7xl mx-auto flex">
-                <div className="w-1/4 bg-gray-100 rounded-2xl mt-5 h-1/4 p-5 sticky top-5">
+                <div className="w-1/4 bg-background rounded-2xl mt-5 h-1/4 p-5 sticky top-5">
                     <Command>
-                        <CommandInput placeholder="Пошук налаштувань" />
+                        <CommandInput className='bg-secondary' placeholder="Пошук налаштувань" />
                         <CommandList>
                             <CommandEmpty>Нічого не знайдено</CommandEmpty>
                             <CommandItem>
@@ -47,7 +60,7 @@ const Settings: React.FC = () => {
                                         <SunMoon className='w-5 h-5' />
                                         <div>Темна тема</div>
                                     </div>
-                                    <Switch />
+                                    <Switch className='!bg-background40' checked={theme === 'dark'} onClick={toggleTheme} />
                                 </div>
                             </CommandItem>
                             {pages.map((page, index) => (
@@ -70,7 +83,7 @@ const Settings: React.FC = () => {
                     </Command>
                 </div>
                 <div className="w-11/12">
-                    <div className="h-full bg-white p-5">
+                    <div className="h-full bg-background p-5">
                         {selectedPage && selectedPage.content && <div>{selectedPage.content}</div>}
                     </div>
                 </div>
@@ -80,6 +93,3 @@ const Settings: React.FC = () => {
 };
 
 export default Settings;
-
-
-

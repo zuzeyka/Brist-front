@@ -1,6 +1,7 @@
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import React, { useState } from "react";
+import LevelIcon from "../Elements/LevelIcon";
 
 interface Achievement {
     name: string;
@@ -17,7 +18,6 @@ interface LevelProps {
 
 const Level: React.FC<LevelProps> = (props) => {
     const [filter, setFilter] = useState("all");
-    const [visibleCount, setVisibleCount] = useState(4);
 
     const filteredAchievements = props.achievements.filter((achievement) => {
         if (filter === "achieved") {
@@ -28,61 +28,54 @@ const Level: React.FC<LevelProps> = (props) => {
         return true;
     });
 
-    const handleLoadMore = () => {
-        setVisibleCount(prevCount => prevCount + 2);
-    };
-
     if (props.achievements.length >= 1) {
         return (
-            <div className="bg-gray-200 rounded-2xl w-full p-4">
+            <div className="bg-card2 rounded-2xl w-full p-4">
                 <div className="flex flex-col space-y-4">
                     <Progress minValue={Math.floor(props.points - (props.points % 100))} maxValue={Math.floor((props.points + 100) - (props.points % 100))} value={props.points} />
                     <div className="flex justify-between">
-                        <div className="flex space-x-2 items-center">
-                            <p className="bg-[#333333] text-white rounded-full h-8 w-8 text-center p-1">{Math.floor(props.points / 100)}</p>
+                        <div className="flex space-x-2 items-center text-typographySecondary">
+                            <LevelIcon levelPoints={props.points} />
                             <p className="text-gray-500">{Math.floor(props.points - (props.points % 100))} очок</p>
                         </div>
                         <p>{props.points}</p>
-                        <div className="flex space-x-2 items-center">
+                        <div className="flex space-x-2 items-center text-typographySecondary">
                             <p className="text-gray-500">{Math.floor((props.points + 100) - (props.points % 100))} очок</p>
-                            <p className="bg-[#333333] text-white rounded-full h-8 w-8 text-center p-1">{Math.floor((props.points + 100) / 100)}</p>
+                            <LevelIcon levelPoints={props.points + 100} />
                         </div>
                     </div>
-                    <div className='flex justify-start items-center space-x-2'>
-                        <span className='text-gray-500'>Сортування:</span>
-                        <Select onValueChange={(value) => setFilter(value)}>
-                            <SelectTrigger className="w-1/5" id="sort">
-                                <SelectValue placeholder="Отримані" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="achieved">Отримані</SelectItem>
-                                <SelectItem value="notAchieved">Не отримані</SelectItem>
-                                <SelectItem value="all">Усі</SelectItem>
-                            </SelectContent>
-                        </Select>
+                    <div className="rounded-lg mb-4">
+                        <div className='flex space-x-2 items-center'>
+                            <div className="text-typographySecondary">Сортування:</div>
+                            <Select onValueChange={(value) => setFilter(value)}>
+                                <SelectTrigger className="w-full !bg-transparent border-0 !text-typography !text-button-2 !font-artifakt justify-start space-x-2 p-0" id="sort">
+                                    <SelectValue placeholder="Отримані" />
+                                </SelectTrigger>
+                                <SelectContent className='!bg-card2 !text-typography !font-artifakt w-1/3'>
+                                    <SelectItem value="achieved">Отримані</SelectItem>
+                                    <SelectItem value="notAchieved">Не отримані</SelectItem>
+                                    <SelectItem value="all">Усі</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
-                        {filteredAchievements.slice(0, visibleCount).map((achievement, index) => (
-                            <div key={index} className="flex space-x-4 items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
-                                <img src={achievement.imageUrl} alt={achievement.name} className="h-32 w-32 rounded-xl" />
+                        {filteredAchievements.map((achievement, index) => (
+                            <div key={index} className="flex space-x-4 items-center bg-card1 rounded-lg p-4">
+                                <img src={achievement.imageUrl} alt={achievement.name} className="h-32 w-32 rounded-xl object-cover" />
                                 <div className="flex flex-col h-full justify-between w-full">
                                     <div className="flex flex-col space-y-2 text-lg">
-                                        <p className="font-bold">{achievement.name}</p>
-                                        <p className="font-semibold">{achievement.description}</p>
+                                        <p className="font-bold text-heading-3 font-manrope">{achievement.name}</p>
+                                        <p className="text-block-2">{achievement.description}</p>
                                     </div>
-                                    <div className="flex justify-between w-full">
-                                        <p className="text-gray-500">{achievement.points} очок</p>
-                                        {achievement.complitionDate && <p className="text-gray-500">{achievement.complitionDate}</p>}
+                                    <div className="flex justify-between w-full text-typographySecondary text-sign-2">
+                                        <p>{achievement.points} очок</p>
+                                        {achievement.complitionDate && <p>{achievement.complitionDate}</p>}
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
-                    {visibleCount < filteredAchievements.length && (
-                        <button className="mt-4 px-4 py-2 justify-center px-6 py-3 text-white rounded-3xl bg-zinc-800 max-md:px-5" onClick={handleLoadMore}>
-                            Показати більше
-                        </button>
-                    )}
                 </div>
             </div>
         );

@@ -4,8 +4,39 @@
 
 @layer base {
     :root {
-        --background: 0 0% 100%;
+        --accent: 344 91% 61%;
+        --accent-hover: 344 92% 53%;
+        --accent-foreground: 222.2 47.4% 11.2%;
+
+        --background: 196 100% 98%;
         --foreground: 222.2 47.4% 11.2%;
+
+        --card-1: 184 70% 87%;
+        --card-2: 185 70% 74%;
+        --card-3: 184 74% 62%;
+        --card-light-25: 187 100% 36% / 30%;
+        --card-light-12: 187 100% 36% / 18%;
+
+        --background-40: 196 100% 98% / 40%;
+        --primary-20: 176 100% 49% / 45%;
+        --accent-25: 344 91% 61% / 28%;
+
+        --typography: 201 100% 6%;
+        --typography-secondary: 201 100% 6% / 65%;
+
+        --negative: 7 100% 80%;
+        --positive: 108 76% 63%;
+
+        --level-1-19: 151 87% 40%;
+        --level-20-39: 68 100% 72%;
+        --level-40-59: 32 100% 72%;
+        --level-60-69: 0 100% 72%;
+        --level-70-79: 313 100% 72%;
+        --level-80-89: 274 100% 72%;
+        --level-90-99: 223 100% 72%;
+        --level-100-1: 199, 100%, 50%;
+        --level-100-2: 11, 100%, 50%;
+        --level-100-3: 33, 100%, 50%;
 
         --muted: 210 40% 96.1%;
         --muted-foreground: 215.4 16.3% 46.9%;
@@ -19,14 +50,13 @@
         --card: 0 0% 100%;
         --card-foreground: 222.2 47.4% 11.2%;
 
-        --primary: 222.2 47.4% 11.2%;
+        --primary: 176 100% 23%;
+        --primary-hover: 176 100% 19%;
         --primary-foreground: 210 40% 98%;
 
-        --secondary: 210 40% 96.1%;
+        --secondary: 184 74% 62%;
+        --secondary-hover: 184 78% 78%;
         --secondary-foreground: 222.2 47.4% 11.2%;
-
-        --accent: 210 40% 96.1%;
-        --accent-foreground: 222.2 47.4% 11.2%;
 
         --destructive: 0 100% 50%;
         --destructive-foreground: 210 40% 98%;
@@ -37,22 +67,43 @@
     }
 
     .dark {
-        --background: 224 71% 4%;
         --foreground: 213 31% 91%;
+        --background: 202 100% 6%;
+        --card-1: 194 100% 12%;
+        --card-2: 192 100% 16%;
+        --card-3: 191 93% 24%;
+        --secondary: 191 93% 24%;
+        --secondary-foreground: 210 40% 98%;
+        --secondary-hover: 191 93% 24%;
+        --primary: 169 79% 52%;
+        --primary-foreground: 222.2 47.4% 1.2%;
+        --primary-hover: 169 100% 64%;
+        --accent: 344 100% 72%;
+        --accent-hover: 344 100% 81%;
+        --accent-foreground: 210 40% 98%;
+        --typography: 189 100% 97%;
+        --typography-secondary: 189 100% 90% / 65%;
+        --negative: 7 100% 80%;
+        --positive: 108 100% 72%;
+        --card-light-25: 198 100% 61% / 25%;
+        --card-light-12: 198 100% 61% / 12%;
+        --background-40: 202 100% 6% / 40%;
+        --primary-20: 169 79% 52% / 20%;
+        --accent-25: 344 100% 72% / 25%;
 
-        --night-background: 201 100% 6%;
-        --night-card-1: 194 100% 12%;
-        --night-card-2: 192 100% 16%;
-        --night-card-3: 191 93% 24%;
-        --night-secondary: 191 93% 24%;
-        --night-secondary-hover: 191 93% 24%;
-        --night-primary: 191 100% 18%;
+        --level-1-19: 151 100% 72%;
+        --level-20-39: 68 100% 72%;
+        --level-40-59: 32 100% 72%;
+        --level-60-69: 0 100% 72%;
+        --level-70-79: 313 100% 72%;
+        --level-80-89: 274 100% 72%;
+        --level-90-99: 223 100% 72%;
+        --level-100-1: 199, 100%, 50%;
+        --level-100-2: 11, 100%, 50%;
+        --level-100-3: 33, 100%, 50%;
 
         --muted: 223 47% 11%;
         --muted-foreground: 215.4 16.3% 56.9%;
-
-        --accent: 216 34% 17%;
-        --accent-foreground: 210 40% 98%;
 
         --popover: 224 71% 4%;
         --popover-foreground: 215 20.2% 65.1%;
@@ -62,12 +113,6 @@
 
         --card: 224 71% 4%;
         --card-foreground: 213 31% 91%;
-
-        --primary: 210 40% 98%;
-        --primary-foreground: 222.2 47.4% 1.2%;
-
-        --secondary: 222.2 47.4% 11.2%;
-        --secondary-foreground: 210 40% 98%;
 
         --destructive: 0 63% 31%;
         --destructive-foreground: 210 40% 98%;
@@ -83,9 +128,24 @@
         @apply border-border;
     }
     body {
-        @apply bg-background text-foreground;
+        @apply bg-background text-typography;
+        font-family: "Artifakt Element", sans-serif;
         font-feature-settings:
             "rlig" 1,
             "calt" 1;
     }
+}
+
+@font-face {
+    font-family: "Artifakt Element";
+    font-style: normal;
+    font-weight: 400;
+    src: url("/fonts/Artifakt Element.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Manrope-VariableFont_wght";
+    font-style: normal;
+    font-weight: 400;
+    src: url("/fonts/Manrope-VariableFont_wght.ttf") format("truetype");
 }

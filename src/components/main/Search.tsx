@@ -1,27 +1,36 @@
 import Input from '@/components/ui/search-input';
 import { HeartIcon, ShoppingCartIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import Catalog from '../popups/Catalog';
 
 const Search: React.FC<{ className?: string }> = ({ className }) => {
     return (
-        <div className={"flex justify-between items-center max-w-7xl mx-auto py-4 sticky top-0 z-10 space-x-4" + (className ? ' ' + className : '')}>
-            <div className='flex border border-gray-300 rounded-full p-2 items-center justify-between w-11/12'>
-                <Input className="flex-grow mr-4 rounded-full bg-[#333333] max-w-md" placeholder="Пошук" />
-                <nav className="flex space-x-4 mr-4">
-                    <Link className="block" to="/catalog">
-                        Каталог
-                    </Link>
-                    <Link className="block" to="/news">
+        <div className={"flex justify-between items-center max-w-7xl mx-auto py-4 sticky top-0 z-20 space-x-4" + (className ? ' ' + className : '')}>
+            <div className='flex rounded-3xl p-2 bg-secondary items-center justify-between w-11/12'>
+                <Input className="flex-grow mr-4 bg-background40 max-w-md placeholder:text-typographySecondary placeholder:font-artifakt border-0" placeholder="Пошук" />
+                <nav className="flex space-x-4 justify-center items-center mr-4">
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button className='block bg-transparent hover:bg-transparent border-0 p-0 text-typography font-bold font-artifakt' variant="outline">Каталог</Button>
+                        </DialogTrigger>
+                        <DialogContent className="w-auto">
+                            <Catalog />
+                        </DialogContent>
+                    </Dialog>
+                    <Link className="text-typography font-bold" to="/news">
                         Новини
                     </Link>
                 </nav>
             </div>
             <div className="flex items-center space-x-4">
-                <div className='bg-gray-200 h-14 w-14 rounded-2xl flex justify-center items-center'>
-                    <HeartIcon className="h-6 w-6" />
+                <div className='bg-secondary h-14 w-14 rounded-2xl flex justify-center items-center'>
+                    <HeartIcon className="h-6 w-6 text-typography" />
                 </div>
-                <div className='bg-gray-200 h-14 w-14 rounded-2xl flex justify-center items-center'>
-                    <ShoppingCartIcon className="h-6 w-6" />
+                <div className='bg-secondary h-14 w-14 rounded-2xl flex justify-center items-center'>
+                    <ShoppingCartIcon className="h-6 w-6 text-typography" />
                 </div>
             </div>
         </div>

@@ -35,21 +35,21 @@ const TopDeals: React.FC<{ games: DealProps[] }> = ({ games }) => {
                             <div className="flex flex-col my-auto">
                                 {games[activeIndex].discount ? (
                                     <div className="flex space-x-2">
-                                        <Badge>{games[activeIndex].discount}%</Badge>
-                                        <p className="line-through text-cyan-100">{games[activeIndex].price}₴</p>
-                                        <p className="text-sky-50">{games[activeIndex].price - games[activeIndex].price * games[activeIndex].discount / 100}₴</p>
+                                        <Badge className="px-4 text-background bg-accent border-0 hover:bg-accentHover">-{games[activeIndex].discount}%</Badge>
+                                        <p className="line-through text-heading-1 text-typographySecondary">{games[activeIndex].price}₴</p>
+                                        <p className="text-heading-1 text-typography">{games[activeIndex].price - games[activeIndex].price * games[activeIndex].discount / 100}₴</p>
                                     </div>) : <p>{games[activeIndex].price}</p>}
                                 {games[activeIndex].discountEnd ? (
-                                    <div className="mt-1 text-sm text-white">
+                                    <div className="mt-1 text-sign-2 text-typographySecondary">
                                         Знижка діє до {games[activeIndex].discountEnd}
                                     </div>
                                 ) : null}
                             </div>
                             <div className="flex flex-col text-right max-md:max-w-full">
-                                <div className="text-2xl font-bold leading-7 text-sky-50 max-md:max-w-full">
+                                <div className="text-heading-2 text-typography font-bold max-md:max-w-full">
                                     {games[activeIndex].gameName}
                                 </div>
-                                <div className="mt-3.5 text-base tracking-normal leading-6 text-white max-md:max-w-full">
+                                <div className="mt-3.5 text-block-2 tracking-normal text-typography max-md:max-w-full">
                                     {games[activeIndex].aboutGame}
                                 </div>
                             </div>

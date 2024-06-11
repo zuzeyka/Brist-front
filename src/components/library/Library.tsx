@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Footer from '../main/Footer';
 import Head from '../main/Head';
-import Collections from './Collections';
 import CommunityList from './CommunityList';
 import NewsList from './NewsList';
 import Search from './Search';
@@ -12,6 +11,8 @@ import Post from './Post';
 import Guide from './Guide';
 import Media from './Media';
 import AllGames from './AllGames';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface LibraryData {
     gamesGuides: GameGuide[];
@@ -20,6 +21,8 @@ interface LibraryData {
     gamesMedia: Screenshot[];
     games: GameInShop[];
 }
+
+const collections: string[] = ['Test collection 1', 'Test collection 2', 'Test collection 3'];
 
 const Library: React.FC = () => {
     const [games, setGames] = useState<GameInShop[]>([]);
@@ -124,15 +127,34 @@ const Library: React.FC = () => {
     return (
         <>
             <Head></Head>
-            <div className="bg-white flex">
-                <ListOfSmallGames games={error ? gamesInfo : [{ key: null, name: 'Test game', image: '' }]} />
-                <div className="flex flex-col p-5 max-w-7xl mx-auto py-4">
-                    <Search isFilter={isFilter} onFilterChange={handleFilterChange}></Search>
-                    <NewsList gameName='test' gameNews={data.gamesNews ? data.gamesNews : []}></NewsList>
-                    <CommunityList comunityContent={posts}></CommunityList>
-                    <Collections collectionsNames={['Test collection 1', 'Test collection 2', 'Test collection 3']}></Collections>
-                    <AllGames list={isFilter} gameImages={['https://i.imgur.com/ufBjnf8.png', 'https://i.imgur.com/ufBjnf8.png', 'https://i.imgur.com/ufBjnf8.png']} gameNames={['Test game 1', 'Test game 2', 'Test game 3']} gameSizes={['10mb', '20mb', '30mb']}></AllGames>
-                </div>
+            <div className="bg-background flex">
+                <ResizablePanelGroup
+                    direction="horizontal"
+                    className="flex h-full w-full">
+                    <ResizablePanel defaultSize={25}>
+                        <ListOfSmallGames games={error ? gamesInfo : [{ key: null, name: 'Test game', image: '' }]} />
+                    </ResizablePanel>
+                    <ResizableHandle />
+                    <ResizablePanel defaultSize={75}>
+                        <div className="flex flex-col p-5 text-typography">
+                            <Search isFilter={isFilter} onFilterChange={handleFilterChange}></Search>
+                            <NewsList gameName='test' gameNews={data.gamesNews ? data.gamesNews : []}></NewsList>
+                            <CommunityList comunityContent={posts}></CommunityList>
+                            <Tabs defaultValue="account" className="w-full mt-5">
+                                <TabsList className='ml-2 bg-transparent'>
+                                    <TabsTrigger className='bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=inactive]:text-typographySecondary data-[state=active]:underline !text-heading-2' value="all">All games</TabsTrigger>
+                                    <TabsTrigger className='data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=inactive]:text-typographySecondary data-[state=active]:underline !text-heading-2 ' value="favorites">Favorites</TabsTrigger>
+                                    {collections.map((collection) => (
+                                        <TabsTrigger className='data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=inactive]:text-typographySecondary data-[state=active]:underline !text-heading-2' key={collection} value={collection}>{collection}</TabsTrigger>
+                                    ))}
+                                </TabsList>
+                                <TabsContent value="all"><AllGames list={isFilter} gameImages={['https://i.imgur.com/ufBjnf8.png', 'https://i.imgur.com/ufBjnf8.png', 'https://i.imgur.com/ufBjnf8.png']} gameNames={['Test game 1', 'Test game 2', 'Test game 3']} gameSizes={['10mb', '20mb', '30mb']}></AllGames></TabsContent>
+                                <TabsContent value="favorites"><AllGames list={isFilter} gameImages={['https://i.imgur.com/ufBjnf8.png', 'https://i.imgur.com/ufBjnf8.png']} gameNames={['Test game 1', 'Test game 2']} gameSizes={['10mb', '20mb']}></AllGames></TabsContent>
+                            </Tabs>
+
+                        </div>
+                    </ResizablePanel>
+                </ResizablePanelGroup>
             </div>
             <Footer></Footer>
         </>

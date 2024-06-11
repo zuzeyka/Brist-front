@@ -1,6 +1,7 @@
 import React from 'react';
 import { GameBundle } from './AboutGame';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 interface BundleProps {
     className?: string
@@ -10,16 +11,18 @@ interface BundleProps {
 const BundleList: React.FC<BundleProps> = (props) => {
     return (
         <div>
-            <span className='font-semibold'>Комплекти:</span>
+            <span className='font-bold text-typography text-heading-1'>Комплекти:</span>
             {props.bundles.map((bundle) => (
-                <div key={bundle.name} className="flex flex-col space-x-2 bg-gray-100 text-gray-700 px-4 py-3 my-4 rounded-2xl font-semibold">
-                    <div className='mb-2'>{bundle.name}</div>
-                    <div className='flex flex-col bg-gray-200 rounded-2xl px-2'>
-                        {bundle.description}
-                        <span className='font-semibold text-gray-400 mt-2'>Вміст:</span>
+                <div key={bundle.name} className="flex flex-col space-x-2 bg-card1 text-typography px-4 py-3 my-4 rounded-2xl font-semibold">
+                    <div className='mb-2 font-bold text-typography text-heading-2'>{bundle.name}</div>
+                    <div className='flex flex-col bg-card2 rounded-2xl p-4'>
+                        <div className='text-typography text-block-1 font-artifakt'>
+                            {bundle.description}
+                        </div>
+                        <span className='text-typographySecondary text-block-1 font-artifakt my-2'>Вміст:</span>
                         <ul className='list-disc list-inside mb-2'>
                             {bundle.elements.map((element) => (
-                                <li key={element}>{element}</li>
+                                <li className='text-typography text-block-1 font-artifakt' key={element}>{element}</li>
                             ))}
                         </ul>
                     </div>
@@ -27,17 +30,17 @@ const BundleList: React.FC<BundleProps> = (props) => {
 
                         {bundle.discount ? (
                             <div className="flex flex-col items-end">
-                                <div>
-                                    <span className='bg-gray-200 px-2 py-1 rounded-full text-xs mr-2'>-{bundle.discount}%</span>
-                                    <span className="font-bold text-black mr-2">{bundle.price - bundle.price * bundle.discount / 100}₴</span>
-                                    <span className="line-through text-gray-500">{bundle.price}₴</span>
+                                <div className='flex space-x-2'>
+                                    <Badge className="text-background bg-accent hover:bg-accentHover font-artifakt">-{bundle.discount}%</Badge>
+                                    <p className="line-through text-sign-1 text-typographySecondary font-artifakt">{bundle.price}₴</p>
+                                    <p className="text-sign-1 text-typography font-artifakt">{bundle.price - bundle.price * bundle.discount / 100}₴</p>
                                 </div>
-                                <span className='text-gray-500 text-xs'>Знижка діє до 30.02.2023 10:00</span>
+                                <span className='text-sign-2 text-typographySecondary'>Знижка діє до {bundle.endDate}</span>
                             </div>
                         ) : (
-                            <span className="font-bold text-black">{bundle.price}₴</span>
+                            <p className="text-sign-1 font-artifakt text-typography">{bundle.price}₴</p>
                         )}
-                        <Button className='bg-[#333333] hover:bg-transparent text-white rounded-2xl'>У кошик</Button>
+                        <Button className='bg-primary hover:bg-primaryHover !text-background rounded-3xl text-button-1 font-artifakt'>У кошик</Button>
                     </div>
                 </div>
             ))}

@@ -30,8 +30,8 @@ const PageSwitcher: React.FC<PageSwitcherProps> = (props) => {
                 {props.pages.map((page, index) => (
                     <li key={index}>
                         <button
-                            className={`page-button text-black ${activePageIndex === index ? 'active underline' : ''
-                                }`}
+                            className={`page-button text-heading-2 hover:text-typography ${activePageIndex === index ? 'active underline text-primary' : 'text-typographySecondary'
+                                }` + (props.className ? ' ' + props.className : '')}
                             onClick={() => handleClick(index)}
                         >
                             {page.title}
