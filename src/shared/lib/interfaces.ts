@@ -7,6 +7,7 @@ export interface Categories {
 
 export interface CategoryByAuthor {
     id: string;
+    authorId: string;
     name: string;
     description: string;
     image: string;
@@ -15,6 +16,7 @@ export interface CategoryByAuthor {
 
 export interface CategoryByUser {
     id: string;
+    authorId: string;
     name: string;
     description: string;
     createdAt: string;
@@ -24,6 +26,21 @@ export interface CategoryForGame {
     id: string;
     gameId: string;
     categoryId: string;
+    createdAt: string;
+}
+
+export interface Chat {
+    id: string;
+    firstUser: string;
+    secondUser: string;
+    createdAt: string;
+}
+
+export interface Message {
+    id: string;
+    chatId: string;
+    senderId: string;
+    content: string;
     createdAt: string;
 }
 
@@ -165,6 +182,13 @@ export interface Language {
     createdAt: string;
 }
 
+export interface CategoryByUserForGame {
+    id: string;
+    name: string;
+    image: string;
+    createdAt: string;
+}
+
 export interface Friends {
     id: string;
     userId: string;
@@ -191,6 +215,14 @@ export interface Screenshot {
     createdAt: string;
 }
 
+export interface UserCategory {
+    id: string;
+    userId: string;
+    ownedGameId: string;
+    categoryId: string;
+    createdAt: string;
+}
+
 export interface UserComment {
     id: string;
     userId: string;
@@ -214,7 +246,6 @@ export interface Video {
     title?: string;
     description?: string;
     likesCount: number;
-    discussionId: string;
     gameId: string;
     authorId: string;
     videoUrl: string;
@@ -274,5 +305,14 @@ export interface GameInShop {
     developerId: string;
     publisherId: string;
     urlForContent: string;
+    createdAt: string;
+}
+
+export interface Discussion {
+    id: string;
+    authorId: string;
+    attachedId: string;
+    content: string;
+    likesCount: string;
     createdAt: string;
 }

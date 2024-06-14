@@ -1,12 +1,13 @@
 import Input from '@/components/ui/search-input';
 import { HeartIcon, ShoppingCartIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import Catalog from '../popups/Catalog';
+import { useAuth } from '@/components/authorization/AuthContext';
 
 const Search: React.FC<{ className?: string }> = ({ className }) => {
+    const { isAuthenticated } = useAuth();
     return (
         <div className={"flex justify-between items-center max-w-7xl mx-auto py-4 sticky top-0 z-20 space-x-4" + (className ? ' ' + className : '')}>
             <div className='flex rounded-3xl p-2 bg-secondary items-center justify-between w-11/12'>
@@ -26,12 +27,12 @@ const Search: React.FC<{ className?: string }> = ({ className }) => {
                 </nav>
             </div>
             <div className="flex items-center space-x-4">
-                <div className='bg-secondary h-14 w-14 rounded-2xl flex justify-center items-center'>
+                <Link to={isAuthenticated ? "/wishlist" : "/login"} className='bg-secondary h-14 w-14 rounded-2xl flex justify-center items-center'>
                     <HeartIcon className="h-6 w-6 text-typography" />
-                </div>
-                <div className='bg-secondary h-14 w-14 rounded-2xl flex justify-center items-center'>
+                </Link>
+                <Link to="/card" className='bg-secondary h-14 w-14 rounded-2xl flex justify-center items-center'>
                     <ShoppingCartIcon className="h-6 w-6 text-typography" />
-                </div>
+                </Link>
             </div>
         </div>
     );

@@ -206,7 +206,7 @@ const AboutGame: React.FC<AboutGameProps> = (props) => {
             </div>
             <div className='flex-1 pl-4'>
                 <div className='sticky top-20 z-9'>
-                    <Payment platforms={[<GamepadIcon />, <Gamepad2Icon />, <FuelIcon />]} developer={props.developer} publisher={props.publisher} releaseDate={props.releaseDate} previewUrl={'https://i.imgur.com/hNIw75C.png'} price={props.price} discount={props.discount} rate={props.rate} endDate={props.endDate}></Payment>
+                    <Payment gameName={props.gameName} platforms={[<GamepadIcon />, <Gamepad2Icon />, <FuelIcon />]} developer={props.developer} publisher={props.publisher} releaseDate={props.releaseDate} previewUrl={'https://i.imgur.com/hNIw75C.png'} price={props.price} discount={props.discount} rate={props.rate} endDate={props.endDate}></Payment>
                     <div className='bg-card1 p-4 mt-4 rounded-2xl font-artifakt text-typography'>
                         <span className='font-semibold text-typography'>Друзів бажають цю гру: {friends.length}</span>
                         {friends.map((friend, index) => (

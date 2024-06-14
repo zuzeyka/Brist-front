@@ -4,8 +4,30 @@ import Head from "./Head";
 import Search from "./Search";
 import TopDeals from "./TopDeals";
 import SliderCategories from "./SliderCategories";
+import { useEffect, useState } from "react";
+import { GameInShop } from "@/shared/lib/interfaces";
+
 
 const Main: React.FC = () => {
+
+    const [games, setGames] = useState<GameInShop[]>([]);
+    useEffect(() => {
+        const fetchGames = async () => {
+            try {
+                const response = await fetch('http://localhost:5049/api/GamesInShop');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const gamesData: GameInShop[] = await response.json();
+                setGames(gamesData);
+                console.log('Games:', gamesData);
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+            }
+        };
+
+        fetchGames();
+    }, []);
     const cards = [];
     const deals = [];
     for (let i = 0; i < 10; i++) {

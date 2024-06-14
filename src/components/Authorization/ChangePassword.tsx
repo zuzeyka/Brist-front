@@ -17,6 +17,7 @@ const ChangePassword: React.FC = () => {
             <div className="min-h-screen bg-background flex justify-center items-center">
                 <img className="absolute top-15 left-0 w-full h-full z-0" src="/src/assets/svg/authorizationBG.svg" alt="Background"></img>
                 <img className="absolute top-15 left-0 w-full h-full z-0" src="/src/assets/svg/authorizationBG2.svg" alt="Background"></img>
+                <img className="absolute top-15 left-0 w-full h-full z-0" src="/src/assets/blobs-no-bg.png" alt="Background"></img>
                 <div className="bg-card1 p-8 shadow-lg w-1/3 z-10 rounded-2xl">
                     <h1 className="text-heading-2 font-manrope font-bold mb-6 text-center">
                         Придумайте новий пароль
