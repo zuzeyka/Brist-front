@@ -11,7 +11,7 @@ export interface ChatPrevievProps {
 const ChatPreviev: React.FC<ChatPrevievProps> = (props) => {
     return (
         <div className="flex flex-col mx-auto h-full w-full">
-            <div className="flex gap-3 mt-5">
+            <div className="flex gap-3">
                 <Avatar
                     src={props.avatar}
                     alt="User avatar"
@@ -19,17 +19,14 @@ const ChatPreviev: React.FC<ChatPrevievProps> = (props) => {
                 />
                 <div className="flex flex-col flex-1 justify-center">
                     <div className="flex gap-1.5 justify-between">
-                        <div className="text-typography font-bold">{props.name}</div>
-                        <div className="my-auto text-xs text-typographySecondary tracking-normal leading-4">
+                        <div className="text-subheading-2 font-bold">{props.name}</div>
+                        <div className="my-auto text-sign-4 text-typographySecondary tracking-normal leading-4">
                             {props.time}
                         </div>
                     </div>
                     <div className="flex gap-1.5 mt-1.5 leading-[120%]">
-                        <div className="flex-1 my-auto text-xs tracking-normal text-typographySecondary text-ellipsis">
+                        <div className="flex-1 my-auto text-sign-4 tracking-normal text-typographySecondary text-ellipsis">
                             {props.text}
-                        </div>
-                        <div className="justify-center items-center px-1.5 py-0.5 w-5 h-5 text-xs tracking-normal whitespace-nowrap bg-rose-400 rounded-3xl text-typographySecondary">
-                            2
                         </div>
                     </div>
                 </div>

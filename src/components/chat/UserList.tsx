@@ -2,8 +2,11 @@ import React from "react";
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import ChatPreviev, { ChatPrevievProps } from "./elements/ChatPreviev";
 
+interface UserListProps {
+    onSelectChat: (userName: string) => void;
+}
 
-const UserList: React.FC = () => {
+const UserList: React.FC<UserListProps> = ({ onSelectChat }) => {
     const chats: ChatPrevievProps[] = [];
     for (let i = 0; i < 10; i++) {
         chats.push({
@@ -11,9 +14,10 @@ const UserList: React.FC = () => {
             text: `Text from user-${i}`,
             time: `Time from user-${i}`,
             avatar: ``,
-            name: `User-${i}`,
+            name: `user${i}`,
         });
     }
+
     return (
         <div className="flex flex-col mx-auto h-full w-full">
             <Command className="h-full w-full max-h-full">
@@ -24,6 +28,7 @@ const UserList: React.FC = () => {
                         <CommandItem
                             key={index}
                             className="bg-card2"
+                            onSelect={() => onSelectChat(chat.name)}
                         >
                             <ChatPreviev {...chat}></ChatPreviev>
                         </CommandItem>
