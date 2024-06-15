@@ -316,3 +316,26 @@ export interface Discussion {
     likesCount: string;
     createdAt: string;
 }
+
+
+
+
+
+
+
+
+
+
+export interface GameInShopModel {
+    name?: string;
+    price: number;
+    discount: number;
+    discountFinish?: Date;
+    previeImage?: string;
+    description?: string;
+    dateOfRelease: Date;
+    developerId: string;
+    publisherId: string;
+    urlForContent?: string;
+    createdAt?: Date;
+}

@@ -1,4 +1,3 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useState } from "react";
 import { CardProps } from "./SliderCategories";
 import { Badge } from "@/components/ui/badge";
@@ -12,9 +11,9 @@ interface DealProps extends CardProps {
 
 const TopDeals: React.FC<{ games: DealProps[] }> = ({ games }) => {
     const [activeIndex, setActiveIndex] = useState(0);
-    const [currentMedia, setCurrentImage] = useState(
-        games[activeIndex] && games[activeIndex].gamePictureUrl
-    );
+    const currentGame = games[activeIndex];
+    const currentMedia = currentGame && currentGame.gamePictureUrl;
+
     return (
         <div className="flex overflow-hidden relative flex-col items-center min-h-[520px] max-md:px-5">
             <div className="w-full">
@@ -33,24 +32,24 @@ const TopDeals: React.FC<{ games: DealProps[] }> = ({ games }) => {
                     <div className="flex flex-col w-full max-w-screen-2xl max-md:flex-wrap max-md:max-w-full">
                         <div className="flex gap-5 justify-between self-center mt-24 w-full max-w-[1464px] max-md:flex-wrap max-md:mt-10 max-md:max-w-full">
                             <div className="flex flex-col my-auto">
-                                {games[activeIndex].discount ? (
+                                {currentGame?.discount ? (
                                     <div className="flex space-x-2">
-                                        <Badge className="px-4 text-background bg-accent border-0 hover:bg-accentHover">-{games[activeIndex].discount}%</Badge>
-                                        <p className="line-through text-heading-1 text-typographySecondary">{games[activeIndex].price}₴</p>
-                                        <p className="text-heading-1 text-typography">{games[activeIndex].price - games[activeIndex].price * games[activeIndex].discount / 100}₴</p>
-                                    </div>) : <p>{games[activeIndex].price}</p>}
-                                {games[activeIndex].discountEnd ? (
+                                        <Badge className="px-4 text-background bg-accent border-0 hover:bg-accentHover">-{currentGame.discount}%</Badge>
+                                        <p className="line-through text-heading-1 text-typographySecondary">{currentGame.price}₴</p>
+                                        <p className="text-heading-1 text-typography">{currentGame.price - currentGame.price * currentGame.discount / 100}₴</p>
+                                    </div>) : <p>{currentGame?.price}</p>}
+                                {currentGame?.discountEnd ? (
                                     <div className="mt-1 text-sign-2 text-typographySecondary">
-                                        Знижка діє до {games[activeIndex].discountEnd}
+                                        Знижка діє до {currentGame.discountEnd}
                                     </div>
                                 ) : null}
                             </div>
                             <div className="flex flex-col text-right max-md:max-w-full">
                                 <div className="text-heading-2 text-typography font-bold max-md:max-w-full">
-                                    {games[activeIndex].gameName}
+                                    {currentGame?.gameName}
                                 </div>
                                 <div className="mt-3.5 text-block-2 tracking-normal text-typography max-md:max-w-full">
-                                    {games[activeIndex].aboutGame}
+                                    {currentGame?.aboutGame}
                                 </div>
                             </div>
                         </div>
@@ -80,3 +79,4 @@ const TopDeals: React.FC<{ games: DealProps[] }> = ({ games }) => {
 }
 
 export default TopDeals;
+

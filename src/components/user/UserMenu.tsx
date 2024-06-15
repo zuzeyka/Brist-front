@@ -103,23 +103,11 @@ const UserMenu: React.FC<UserMenuProps> = (props) => {
     return (
         <div className="flex flex-col space-y-4">
             <div className="flex flex-col bg-card2 p-4 rounded-2xl">
-                <div className="flex space-x-4 items-center mb-4">
+                <div className="flex space-x-4 items-center mb-4 px-3">
                     <p className="text-heading-2 font-manrope font-bold">Рівень</p>
                     <LevelIcon levelPoints={props.levelPoints}></LevelIcon>
                 </div>
-                <div className="flex justify-between">
-                    <PageSwitcher onMoveContentToParent={props.onMoveContentToParent} vertical={true} pages={pages}></PageSwitcher>
-                    <ul className="flex flex-col space-y-2 mt-8 text-gray-500">
-                        <li className="bg-card3 px-4 rounded-2xl">{props.whishesCount}</li>
-                        <li className="bg-card3 px-4 rounded-2xl">{props.bagesCount}</li>
-                        <li className="bg-card3 px-4 rounded-2xl">{props.gamesCount}</li>
-                        <li className="bg-card3 px-4 rounded-2xl">{props.screenshotsCount}</li>
-                        <li className="bg-card3 px-4 rounded-2xl">{props.videosCount}</li>
-                        <li className="bg-card3 px-4 rounded-2xl">{props.guidesCount}</li>
-                        <li className="bg-card3 px-4 rounded-2xl">{props.reviewsCount}</li>
-                    </ul>
-                </div>
-
+                <PageSwitcher onMoveContentToParent={props.onMoveContentToParent} vertical={true} pages={pages} counts={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}></PageSwitcher>
             </div>
             {props.friends ? (
                 <div className="flex flex-col bg-card2 p-4 rounded-2xl">

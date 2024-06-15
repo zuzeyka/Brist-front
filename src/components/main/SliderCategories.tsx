@@ -8,7 +8,7 @@ export interface CardProps {
     gameName: string;
     gamePictureUrl: string;
     price: number;
-    discount?: number;
+    discount: number;
 }
 
 interface CategoriesProps {
