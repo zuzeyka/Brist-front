@@ -13,7 +13,7 @@ const Store: React.FC = () => {
         {
             title: 'Характеристики', content: <Characteristics gameName='Якась гра, яка дуже всім сподобається' price={1000} discount={50} rate={4.4} endDate='01.01.2023' releaseDate='01.01.2023' publisher='Zubarik Inc' developer='Rozumnichki Team'></Characteristics>
         },
-        { title: 'Спільнота', content: <Community gameName='Якась гра, яка дуже всім сподобається' subscriberCount={1000} onlineCount={500}></Community> }
+        { title: 'Спільнота', content: <Community></Community> }
     ], []);
     const [content, setContent] = useState<React.ReactNode>(null);
 
