@@ -31,7 +31,6 @@ const Register: React.FC = () => {
                     name,
                     passwordSalt: password,
                     email,
-                    phone,
                     verified: false,
                 })
             });
@@ -68,14 +67,6 @@ const Register: React.FC = () => {
                                 className="rounded-full"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                            />
-                            <span className="text-sign-2 font-bold">Телефон</span>
-                            <InputField
-                                placeholder="Номер телефону"
-                                type="phone"
-                                className="rounded-full"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
                             />
                             <span className="text-sign-2 font-bold">Пароль</span>
                             <InputField

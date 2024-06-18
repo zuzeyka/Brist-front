@@ -3,7 +3,7 @@ import { InputField } from "@/components/ui/input-field";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React, { useState } from "react";
 import GameStats from "./GameStats";
-import { Image } from "lucide-react";
+import { Image, XIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
 interface GameInfo {
@@ -79,7 +79,10 @@ const CreatePost: React.FC<GameInfo> = ({ gameName, cancel }) => {
                                     Заголовок
                                 </div>
                                 <InputField className="justify-center items-start px-4 py-3 mb-2 rounded-3xl !bg-background40 placeholder:typographySecondary border-solid max-md:pr-5 max-md:max-w-full" placeholder="Тема вашого обговорення..." />
-                                {image && !needImage && <img src={image} alt="Uploaded" className="rounded-3xl max-h-96 object-cover" />}
+                                {image && (<div className="relative">
+                                    <img src={image} alt="Uploaded" className="rounded-3xl w-full max-h-96 object-cover" />
+                                    <XIcon onClick={() => setImage(null)} className="w-5 h-5 text-typographySecondary hover:text-accent absolute top-5 right-5" fill="currentColor"></XIcon>
+                                </div>)}
                                 {needImage && !image && (
                                     <div className="flex justify-center items-center px-4 py-20 rounded-3xl border-2 border-secondary border-dashed bg-background40 max-md:px-5 max-md:max-w-full">
                                         <div className="flex gap-3 mt-12 mb-6 max-md:mt-10">
@@ -123,7 +126,10 @@ const CreatePost: React.FC<GameInfo> = ({ gameName, cancel }) => {
                                 onDragOver={handleDragOver}
                             >
                                 {image ? (
-                                    <img src={image} alt="Uploaded" className="rounded-3xl max-h-96 object-cover" />
+                                    <div className="relative">
+                                        <img src={image} alt="Uploaded" className="rounded-3xl w-full max-h-96 object-cover" />
+                                        <XIcon onClick={() => setImage(null)} className="w-5 h-5 text-typographySecondary hover:text-accent absolute top-5 right-5" fill="currentColor"></XIcon>
+                                    </div>
                                 ) : (
                                     <div className="flex justify-center items-center px-4 py-20 rounded-3xl border-2 border-secondary border-dashed bg-background40 max-md:px-5 max-md:max-w-full">
                                         <div className="flex gap-3 mt-12 mb-6 max-md:mt-10">
@@ -162,12 +168,18 @@ const CreatePost: React.FC<GameInfo> = ({ gameName, cancel }) => {
                     <TabsContent value="video">
                         <div className="flex flex-col w-full rounded-b-3xl bg-card1 max-md:max-w-full">
                             <div className="flex flex-col px-5 pb-5 mt-5 w-full text-base max-md:max-w-full">
-
+                                {image && (<div className="relative">
+                                    <img src={image} alt="Uploaded" className="rounded-3xl w-full max-h-96 object-cover" />
+                                    <XIcon onClick={() => setImage(null)} className="w-5 h-5 text-typographySecondary hover:text-accent absolute top-5 right-5" fill="currentColor"></XIcon>
+                                </div>)}
                                 {videoSrc ? (
-                                    <video controls className="rounded-3xl max-h-60 mt-5 object-cover">
-                                        <source src={videoSrc} type="video/mp4" />
-                                        Ваш браузер не підтримує відео тег.
-                                    </video>
+                                    <div className="relative">
+                                        <video controls className="rounded-3xl w-full max-h-60 mt-5 object-cover">
+                                            <source src={videoSrc} type="video/mp4" />
+                                            Ваш браузер не підтримує відео тег.
+                                        </video>
+                                        <XIcon onClick={() => setVideoSrc(null)} className="w-5 h-5 text-typographySecondary hover:text-accent absolute top-10 right-5" fill="currentColor"></XIcon>
+                                    </div>
                                 ) : (
                                     <div className="flex justify-center items-center px-4 py-20 rounded-3xl border-2 border-secondary border-dashed bg-background40 max-md:px-5 max-md:max-w-full"
                                         onDrop={handleDrop} onDragOver={handleDragOver}>
@@ -214,7 +226,10 @@ const CreatePost: React.FC<GameInfo> = ({ gameName, cancel }) => {
                                                 Обкладинка
                                             </div>
                                             {image ? (
-                                                <img src={image} alt="Uploaded" className="rounded-3xl max-h-96 object-cover" />
+                                                <div className="relative">
+                                                    <img src={image} alt="Uploaded" className="rounded-3xl w-full max-h-96 object-cover" />
+                                                    <XIcon onClick={() => setImage(null)} className="w-5 h-5 text-typographySecondary hover:text-accent absolute top-5 right-5" fill="currentColor"></XIcon>
+                                                </div>
                                             ) : (
                                                 <div className="flex justify-center items-center px-4 py-20 rounded-3xl border-2 border-secondary border-dashed bg-background40 max-md:px-5 max-md:max-w-full">
                                                     <div className="flex gap-3 mt-12 mb-6 max-md:mt-10">
@@ -264,32 +279,9 @@ const CreatePost: React.FC<GameInfo> = ({ gameName, cancel }) => {
                                     </div>
                                 </div>
                             </div>
-                            {image && !needImage && <img src={image} alt="Uploaded" className="rounded-3xl max-h-96 object-cover" />}
-                            {needImage && !image && (
-                                <div className="flex justify-center items-center px-4 py-20 rounded-3xl border-2 border-secondary border-dashed bg-background40 max-md:px-5 max-md:max-w-full">
-                                    <div className="flex gap-3 mt-12 mb-6 max-md:mt-10">
-                                        <div className="my-auto text-sign-2 text-typographySecondary">
-                                            Перетягніть файл сюди або
-                                        </div>
-                                        <Button className="justify-center px-5 py-2 font-semibold whitespace-nowrap bg-secondary text-button-2 hover:bg-secondaryHover rounded-3xl">
-                                            <label htmlFor="fileUpload" className="cursor-pointer">
-                                                Завантажити
-                                                <input
-                                                    type="file"
-                                                    id="fileUpload"
-                                                    accept="image/*"
-                                                    className="hidden"
-                                                    onChange={handleImageUpload}
-                                                />
-                                            </label>
-                                        </Button>
-                                    </div>
-                                </div>
-                            )}
                             <div className="flex justify-between gap-0 whitespace-nowrap max-md:flex-wrap">
                                 <div className="flex items-center my-3 text-sign-2 font-bold max-md:max-w-full">
                                     Заголовок
-                                    <Image className="ml-2 w-5 h-5 hover:text-accent" onClick={handleNeedImage} />
                                 </div>
                                 <div className="mt-3 text-sign-2 text-typographySecondary font-bold max-md:max-w-full">
                                     0/1000
