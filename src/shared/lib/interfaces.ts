@@ -44,28 +44,6 @@ export interface Message {
     createdAt: string;
 }
 
-export interface Developer {
-    id: string;
-    name: string;
-    subscribersCount: number;
-    urlForNewsPage: string;
-    description: string;
-    avatar: string;
-    backgroundImage?: string;
-    createdAt: string;
-}
-
-export interface Publisher {
-    id: string;
-    subscribersCount: number;
-    name: string;
-    description: string;
-    avatar: string;
-    backgroundImage: string;
-    urlForNewsPage: string;
-    createdAt: string;
-}
-
 export interface GameComment {
     id: string;
     gamePostId: string;
@@ -203,18 +181,6 @@ export interface OwnedGame {
     createdAt: string;
 }
 
-export interface Screenshot {
-    id: string;
-    title?: string;
-    description?: string;
-    likesCount: number;
-    discussionId: string;
-    gameId: string;
-    authorId: string;
-    screenshotUrl: string;
-    createdAt: string;
-}
-
 export interface UserCategory {
     id: string;
     userId: string;
@@ -295,18 +261,6 @@ export interface DLCInShop {
     createdAt: string;
 }
 
-export interface GameInShop {
-    id: string;
-    name: string;
-    price: number;
-    discount: number;
-    previeImage: string;
-    dateOfRelease: string;
-    developerId: string;
-    publisherId: string;
-    urlForContent: string;
-    createdAt: string;
-}
 
 export interface Discussion {
     id: string;
@@ -321,10 +275,53 @@ export interface Discussion {
 
 
 
+export interface Screenshot {
+    id: string;
+    title: string;
+    description: string;
+    likesCount: number;
+    gameId: string;
+    authorId: string;
+    screenshotUrl: string;
+    createdAt: Date;
+}
 
+export interface Developer {
+    id: string;
+    subscribersCount: number;
+    name: string;
+    description: string;
+    avatar: string;
+    backgroundImage: string;
+    urlForNewsPage: string;
+    createdAt: Date;
+}
 
+export interface Publisher {
+    id: string;
+    subscribersCount: number;
+    name: string;
+    description: string;
+    avatar: string;
+    backgroundImage: string;
+    urlForNewsPage: string;
+    createdAt: Date;
+}
 
-
+export interface GameInShop {
+    id: string;
+    name: string;
+    price: number;
+    discount: number;
+    discountFinish: Date;
+    previeImage: string;
+    description: string;
+    dateOfRelease: Date;
+    developerId: string;
+    publisherId: string;
+    urlForContent: string;
+    createdAt: string;
+}
 
 export interface GameInShopModel {
     name?: string;
