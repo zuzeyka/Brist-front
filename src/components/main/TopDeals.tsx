@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { CardProps } from "./SliderCategories";
 import { Badge } from "@/components/ui/badge";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-
+import { Link } from "react-router-dom";
+import Autoplay from "embla-carousel-autoplay";
+import React from "react";
 
 interface DealProps extends CardProps {
     aboutGame: string;
@@ -12,11 +14,25 @@ interface DealProps extends CardProps {
 const TopDeals: React.FC<{ games: DealProps[] }> = ({ games }) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const currentGame = games[activeIndex];
-    const currentMedia = currentGame && currentGame.gamePictureUrl;
+    const [currentMedia, setCurrentMedia] = useState(currentGame.gamePictureUrl);
 
+    const plugin = useRef(
+        Autoplay({ delay: 2000, stopOnInteraction: true })
+    );
+
+    useEffect(() => {
+        setCurrentMedia(games[activeIndex].gamePictureUrl);
+    }, [activeIndex, games]);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setActiveIndex(prevIndex => (prevIndex + 1) % games.length);
+        }, 2200);
+
+        return () => clearInterval(interval);
+    }, [games.length]);
     return (
         <div className="flex overflow-hidden relative flex-col items-center min-h-[520px] max-md:px-5">
-            <div className="w-full">
+            <Link className="w-full" to={`/store/${encodeURIComponent(currentGame.gameName)}`}>
                 <img
                     alt="Current game content"
                     className="object-cover relative inset-0 size-full h-96 p-0"
@@ -36,7 +52,7 @@ const TopDeals: React.FC<{ games: DealProps[] }> = ({ games }) => {
                                     <div className="flex space-x-2">
                                         <Badge className="px-4 text-background bg-accent border-0 hover:bg-accentHover">-{currentGame.discount}%</Badge>
                                         <p className="line-through text-heading-1 text-typographySecondary">{currentGame.price}₴</p>
-                                        <p className="text-heading-1 text-typography">{currentGame.price - currentGame.price * currentGame.discount / 100}₴</p>
+                                        <p className="text-heading-1 text-typography">{Math.round(currentGame.price - currentGame.price * currentGame.discount / 100)}₴</p>
                                     </div>) : <p>{currentGame?.price}</p>}
                                 {currentGame?.discountEnd ? (
                                     <div className="mt-1 text-sign-2 text-typographySecondary">
@@ -55,14 +71,11 @@ const TopDeals: React.FC<{ games: DealProps[] }> = ({ games }) => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <Carousel className="w-full max-w-7xl mx-auto mt-5" opts={{
-                align: "start",
-                loop: true,
-            }}>
+            </Link>
+            <Carousel plugins={[plugin.current]} className="w-full max-w-7xl mx-auto mt-5" opts={{ align: "start", loop: true }}>
                 <CarouselContent className="-ml-1">
                     {games.map((game, index) => (
-                        <CarouselItem className="pl-2 md:basis-1/2 lg:basis-1/5" key={game.gamePictureUrl}>
+                        <CarouselItem className="pl-2 md:basis-1/2 lg:basis-1/5" key={game.gamePictureUrl} onChange={() => setActiveIndex(index)}>
                             {game.gamePictureUrl.match(/\.(jpg|jpeg|png)$/i) ? (
                                 <img className='h-36 w-64 rounded-xl' src={game.gamePictureUrl} alt="Game screenshot" />
                             ) : (
@@ -79,4 +92,3 @@ const TopDeals: React.FC<{ games: DealProps[] }> = ({ games }) => {
 }
 
 export default TopDeals;
-

@@ -6,6 +6,8 @@ import { Button } from "../ui/button";
 
 const Head: React.FC = () => {
     const { isAuthenticated } = useAuth();
+    const currentPage = window.location.pathname.split('/')[1];
+    const section = currentPage === 'library' ? 'library' : currentPage === 'chat' ? 'chat' : 'shop';
     return (
         <header className="bg-card1 py-4">
             <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -16,26 +18,31 @@ const Head: React.FC = () => {
                     <ul className="flex space-x-8">
                         <li>
                             <Link
-                                className="text-typography text-heading-3 hover:text-typographySecondary font-manrope font-bold"
-                                to="/store"
+                                className={"text-typography text-heading-3 hover:text-typographySecondary font-manrope font-bold flex items-center flex-col" + (section === 'shop' ? ' text-primaryHover' : '')}
+                                to="/"
                             >
-                                Крамниця
+                                <div>Крамниця</div>
+                                <div className={section === 'shop' ? 'bg-primaryHover h-2 w-2 rounded-full mt-1' : ''} />
                             </Link>
                         </li>
                         <li>
                             <Link
-                                className="text-typography text-heading-3 hover:text-typographySecondary font-manrope font-bold"
+                                className={"text-typography text-heading-3 hover:text-typographySecondary font-manrope font-bold flex items-center flex-col" + (section === 'library' ? ' text-primaryHover' : '')}
                                 to={isAuthenticated ? "/library" : "/login"}
                             >
-                                Бібліотека
+                                <div>Бібліотека</div>
+                                <div className={section === 'library' ? 'bg-primaryHover h-2 w-2 rounded-full mt-1' : ''} />
+
                             </Link>
                         </li>
                         <li>
                             <Link
-                                className="text-typography text-heading-3 hover:text-typographySecondary font-manrope font-bold"
+                                className={"text-typography text-heading-3 hover:text-typographySecondary font-manrope font-bold flex items-center flex-col" + (section === 'chat' ? ' text-primaryHover' : '')}
                                 to={isAuthenticated ? "/chat" : "/login"}
                             >
-                                Чат
+                                <div>Чат</div>
+                                <div className={section === 'chat' ? 'bg-primaryHover h-2 w-2 rounded-full mt-1' : ''} />
+
                             </Link>
                         </li>
                     </ul>

@@ -64,12 +64,12 @@ export interface GameGuide {
     description?: string;
     likesCount: number;
     discussionId: string;
-    imageUrl?: string;
+    contentUrl?: string;
     gameId: string;
     authorId: string;
     gameGroupId: string;
     content: string;
-    createdAt: string;
+    createdAt: Date;
 }
 
 export interface GameNews {
@@ -78,12 +78,12 @@ export interface GameNews {
     description?: string;
     likesCount: number;
     discussionId: string;
-    imageUrl?: string;
+    contentUrl?: string;
     gameId: string;
     authorId: string;
     gameGroupId: string;
     content: string;
-    createdAt: string;
+    createdAt: Date;
 }
 
 export interface GamePosts {
@@ -92,12 +92,12 @@ export interface GamePosts {
     description?: string;
     likesCount: number;
     discussionId: string;
-    imageUrl?: string;
+    contentUrl?: string;
     gameId: string;
     gameTopicId: string;
     authorId: string;
     content: string;
-    createdAt: string;
+    createdAt: Date;
 }
 
 export interface GameTopic {
@@ -121,19 +121,6 @@ export interface Group {
     attachedId: string;
     name: string;
     description: string;
-    createdAt: string;
-}
-
-export interface Post {
-    id: string;
-    title: string;
-    description?: string;
-    likesCount: number;
-    discussionId: string;
-    imageUrl?: string;
-    gameId: string;
-    authorId: string;
-    content: string;
     createdAt: string;
 }
 
@@ -197,16 +184,6 @@ export interface UserComment {
     createdAt: string;
 }
 
-export interface User {
-    id: string;
-    name: string;
-    passwordSalt: string;
-    salt: string;
-    email: string;
-    phone: string;
-    createdAt: string;
-}
-
 export interface Video {
     id: string;
     title?: string;
@@ -214,8 +191,8 @@ export interface Video {
     likesCount: number;
     gameId: string;
     authorId: string;
-    videoUrl: string;
-    createdAt: string;
+    contentUrl: string;
+    createdAt: Date;
 }
 
 export interface WishedGame {
@@ -225,55 +202,6 @@ export interface WishedGame {
     createdAt: string;
 }
 
-export interface MaximumSystemRequirement {
-    id: string;
-    gameId: string;
-    OS: string;
-    processor: string;
-    RAM: string;
-    video: string;
-    freeDiskSpace: string;
-    createdAt: string;
-}
-
-export interface MinimalSystemRequirement {
-    id: string;
-    gameId: string;
-    OS: string;
-    processor: string;
-    RAM: string;
-    video: string;
-    freeDiskSpace: string;
-    createdAt: string;
-}
-
-export interface DLCInShop {
-    id: string;
-    gameId: string;
-    name: string;
-    price: number;
-    discount: number;
-    previeImage: string;
-    dateOfRelease: string;
-    developerId: string;
-    publisherId: string;
-    urlForContent: string;
-    createdAt: string;
-}
-
-
-export interface Discussion {
-    id: string;
-    authorId: string;
-    attachedId: string;
-    content: string;
-    likesCount: string;
-    createdAt: string;
-}
-
-
-
-
 
 export interface Screenshot {
     id: string;
@@ -282,7 +210,7 @@ export interface Screenshot {
     likesCount: number;
     gameId: string;
     authorId: string;
-    screenshotUrl: string;
+    contentUrl: string;
     createdAt: Date;
 }
 
@@ -335,4 +263,46 @@ export interface GameInShopModel {
     publisherId: string;
     urlForContent?: string;
     createdAt?: Date;
+}
+
+export interface GameBundle {
+    name: string;
+    description?: string;
+    price: number;
+    discount: number;
+    discountFinish?: Date;
+    createdAt?: Date;
+}
+
+export interface Discussion {
+    id: string;
+    authorId: string;
+    attachedId: string;
+    content: string;
+    rate: number;
+    likesCount: number;
+    createdAt: Date;
+}
+
+export interface User {
+    name: string;
+    passwordSalt: string;
+    description: string;
+    email: string;
+    image: string;
+    verified: boolean;
+    amountOfMoney: number;
+    amountOfXp: number;
+    createdAt: Date;
+}
+
+export interface SystemRequirement {
+    id: string;
+    gameId: string;
+    os: string;
+    processor: string;
+    ram: string;
+    video: string;
+    freeDiskSpace: string;
+    createdAt: string;
 }

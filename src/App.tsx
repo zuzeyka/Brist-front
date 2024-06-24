@@ -18,7 +18,6 @@ import Privacy from './components/credentials/Privacy';
 import Refund from './components/credentials/Refund';
 import Cart from './components/shop/cart/Cart';
 import { CartProvider } from './components/shop/cart/CardContext';
-import Wished from './components/user/Pages/Wished';
 
 const App: React.FC = () => {
     return (
@@ -30,9 +29,9 @@ const App: React.FC = () => {
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/email_confirm" element={<EmailConfirmation />} />
-                        <Route path="/store" element={<Store />} />
+                        <Route path="/store/:userName" element={<Store />} />
                         <Route path="/library" element={<Library />} />
-                        <Route path="/user" element={<UserProfile />} />
+                        <Route path="/user/:userName" element={<UserProfile />} />
                         <Route path="/admin_panel" element={<AdminPanel />} />
                         <Route path="/settings" element={<Settings />} />
                         <Route path="/testing" element={<Test />} />

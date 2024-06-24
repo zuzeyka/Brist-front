@@ -9,6 +9,7 @@ import { GameInShopModel } from "@/shared/lib/interfaces";
 
 const Main: React.FC = () => {
     const [games, setGames] = useState<GameInShopModel[]>([]);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         const fetchGames = async () => {
             try {
@@ -18,8 +19,9 @@ const Main: React.FC = () => {
                 }
                 const gamesData: GameInShopModel[] = await response.json();
                 setGames(gamesData);
-                console.log('Games:', gamesData);
+                setLoading(false);
             } catch (error) {
+                setLoading(false);
                 console.error('There was a problem with the fetch operation:', error);
             }
         };
@@ -59,15 +61,22 @@ const Main: React.FC = () => {
         <div className="bg-background">
             <Head></Head>
             <Search></Search>
-            <TopDeals games={filterValidGames(randomGames).map(mapToRequiredProps)}></TopDeals>
-            <SliderCategories vertical={false} lable="Особливі пропозиціі" cards={filterValidGames(gamesWithDiscount).map(mapToRequiredProps)}></SliderCategories>
-            <SliderCategories vertical={true} lable="До 100₴" cards={filterValidGames(gamesWithPriceLessThanOrEqualTo100).map(mapToRequiredProps)}></SliderCategories>
-            <SliderCategories vertical={true} lable="Рекомендовані вам" cards={filterValidGames(ForYouGames).map(mapToRequiredProps)}></SliderCategories>
-            <div className="grid grid-cols-3 gap-4 max-w-7xl mx-auto bg-background">
-                <Categories lable="Хіти продажу" cards={filterValidGames(randomGames).map(mapToRequiredProps)}></Categories>
-                <Categories lable="Нові релізи" cards={filterValidGames(newestReleaseGames).map(mapToRequiredProps)}></Categories>
-                <Categories lable="Безкоштовні пропозиціі" cards={filterValidGames(freeGames).map(mapToRequiredProps)}></Categories>
-            </div>
+            {loading ? (
+                <div className='h-screen flex justify-center items-center text-heading-1'>Loading...</div>
+            ) : (
+                <>
+                    <TopDeals games={filterValidGames(randomGames).map(mapToRequiredProps)}></TopDeals>
+                    <SliderCategories vertical={false} lable="Особливі пропозиціі" cards={filterValidGames(gamesWithDiscount).map(mapToRequiredProps)}></SliderCategories>
+                    <SliderCategories vertical={true} lable="До 100₴" cards={filterValidGames(gamesWithPriceLessThanOrEqualTo100).map(mapToRequiredProps)}></SliderCategories>
+                    <SliderCategories vertical={true} lable="Рекомендовані вам" cards={filterValidGames(ForYouGames).map(mapToRequiredProps)}></SliderCategories>
+                    <div className="grid grid-cols-3 gap-4 max-w-7xl mx-auto bg-background">
+                        <Categories lable="Хіти продажу" cards={filterValidGames(randomGames).map(mapToRequiredProps)}></Categories>
+                        <Categories lable="Нові релізи" cards={filterValidGames(newestReleaseGames).map(mapToRequiredProps)}></Categories>
+                        <Categories lable="Безкоштовні пропозиціі" cards={filterValidGames(freeGames).map(mapToRequiredProps)}></Categories>
+                    </div>
+                </>
+            )}
+
             <Footer></Footer>
         </div>
     );

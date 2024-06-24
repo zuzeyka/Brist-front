@@ -39,10 +39,10 @@ const CartItem: React.FC<CartItemProps> = (props) => {
                             {props.discount ? (
                                 <div className='flex space-x-2 items-center'>
                                     <Badge className="text-background bg-accent hover:bg-accentHover font-artifakt">-{props.discount}%</Badge>
-                                    <p className="line-through text-sign-1 text-typographySecondary font-artifakt">{props.price}₴</p>
-                                    <p className="text-sign-1 text-typography font-artifakt">{props.price - props.price * props.discount / 100}₴</p>
+                                    <p className="line-through text-sign-1 text-typographySecondary font-artifakt">{Math.round(props.price)}₴</p>
+                                    <p className="text-sign-1 text-typography font-artifakt">{Math.round(props.price - props.price * props.discount / 100)}₴</p>
                                 </div>
-                            ) : (<p className="text-sign-1 font-artifakt text-typography">{props.price}</p>)}
+                            ) : (<p className="text-sign-1 font-artifakt text-typography">{Math.round(props.price)}</p>)}
                             <span className='text-sign-2 text-typographySecondary'>Знижка діє до {props.endDate}</span>
                         </div>
                     </div>

@@ -1,11 +1,12 @@
 import React from 'react';
-import { GameBundle } from './AboutGame';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { GameBundle, GameInShop } from '@/shared/lib/interfaces';
 
 interface BundleProps {
     className?: string
     bundles: GameBundle[]
+    elements: GameInShop[]
 }
 
 const BundleList: React.FC<BundleProps> = (props) => {
@@ -21,8 +22,8 @@ const BundleList: React.FC<BundleProps> = (props) => {
                         </div>
                         <span className='text-typographySecondary text-block-1 font-artifakt my-2'>Вміст:</span>
                         <ul className='list-disc list-inside mb-2'>
-                            {bundle.elements.map((element) => (
-                                <li className='text-typography text-block-1 font-artifakt' key={element}>{element}</li>
+                            {props.elements.map((element) => (
+                                <li className='text-typography text-block-1 font-artifakt' key={element.id}>{element.name}</li>
                             ))}
                         </ul>
                     </div>
@@ -33,9 +34,9 @@ const BundleList: React.FC<BundleProps> = (props) => {
                                 <div className='flex space-x-2'>
                                     <Badge className="text-background bg-accent hover:bg-accentHover font-artifakt">-{bundle.discount}%</Badge>
                                     <p className="line-through text-sign-1 text-typographySecondary font-artifakt">{bundle.price}₴</p>
-                                    <p className="text-sign-1 text-typography font-artifakt">{bundle.price - bundle.price * bundle.discount / 100}₴</p>
+                                    <p className="text-sign-1 text-typography font-artifakt">{Math.round(bundle.price - bundle.price * bundle.discount / 100)}₴</p>
                                 </div>
-                                <span className='text-sign-2 text-typographySecondary'>Знижка діє до {bundle.endDate}</span>
+                                <span className='text-sign-2 text-typographySecondary'>Знижка діє до {bundle.discountFinish ? bundle.discountFinish.toLocaleString() : "немає дати"}</span>
                             </div>
                         ) : (
                             <p className="text-sign-1 font-artifakt text-typography">{bundle.price}₴</p>

@@ -46,7 +46,7 @@ const SliderCategories: React.FC<CategoriesProps> = ({ cards, lable, vertical })
                                                 <div className="flex space-x-2">
                                                     <Badge className="text-background bg-accent hover:bg-accentHover font-artifakt">-{card.discount}%</Badge>
                                                     <p className="line-through text-sign-1 text-typographySecondary font-artifakt">{card.price}₴</p>
-                                                    <p className="text-sign-1 text-typography font-artifakt">{card.price - card.price * card.discount / 100}₴</p>
+                                                    <p className="text-sign-1 text-typography font-artifakt">{Math.round(card.price - card.price * card.discount / 100)}₴</p>
                                                 </div>) : <p className="text-sign-1 font-artifakt text-typography">{card.price}</p>}
                                         </CardFooter>
                                     </Card>

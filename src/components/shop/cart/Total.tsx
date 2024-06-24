@@ -5,6 +5,7 @@ import { useCart } from "./CardContext";
 interface TotalProps {
     total: number;
     economy: number;
+    isDiscounted: boolean;
 }
 
 const Total: React.FC<TotalProps> = (props) => {
@@ -22,7 +23,7 @@ const Total: React.FC<TotalProps> = (props) => {
             <div className="flex gap-5 justify-between mt-2 whitespace-nowrap">
                 <div className="text-sign-1">Усього</div>
                 <div className="flex gap-1 items-center font-manrope">
-                    <div className="line-through text-sign-1 text-typographySecondary">{props.total}₴</div>
+                    {props.isDiscounted && <div className="line-through text-sign-1 text-typographySecondary">{props.total}₴</div>}
                     <div className="text-heading-2 font-manrope font-bold text-right">{props.total - props.economy}₴</div>
                 </div>
             </div>

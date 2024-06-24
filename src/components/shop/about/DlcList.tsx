@@ -1,8 +1,13 @@
 import React from 'react';
-import { DlcInfo } from './AboutGame';
 import { ChevronRightIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+
+interface DlcInfo {
+    name: string;
+    price: number;
+    discount?: number;
+}
 
 interface DlcProps {
     className?: string;
@@ -28,7 +33,7 @@ const DlcList: React.FC<DlcProps> = (props) => {
                             <div className='flex space-x-2'>
                                 <Badge className="text-background bg-accent hover:bg-accentHover font-artifakt">-{dlc.discount}%</Badge>
                                 <p className="line-through text-sign-1 text-typographySecondary font-artifakt">{dlc.price}₴</p>
-                                <p className="text-sign-1 text-typography font-artifakt">{dlc.price - dlc.price * dlc.discount / 100}₴</p>
+                                <p className="text-sign-1 text-typography font-artifakt">{Math.round(dlc.price - dlc.price * dlc.discount / 100)}₴</p>
                             </div>
                         ) : (<p className="text-sign-1 font-artifakt text-typography">{dlc.price}</p>)}
 
@@ -36,7 +41,7 @@ const DlcList: React.FC<DlcProps> = (props) => {
                 </div>
             ))}
             <div className='flex justify-end space-x-4 items-center mt-4'>
-                <p className="text-sign-1 font-artifakt text-typography">{sumOfAllDLC}₴</p>
+                <p className="text-sign-1 font-artifakt text-typography">{Math.round(sumOfAllDLC)}₴</p>
                 <Button className='bg-primary hover:bg-primaryHover !text-background rounded-3xl text-button-1 font-artifakt'>У кошик</Button>
             </div>
         </div>

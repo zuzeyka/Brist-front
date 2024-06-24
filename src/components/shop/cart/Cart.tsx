@@ -7,8 +7,8 @@ import Total from "./Total";
 
 const Card: React.FC = () => {
     const { cart } = useCart();
-    const totalPrice = cart.reduce((sum, game) => sum + game.price, 0);
-    const totalDiscount = cart.reduce((sum, game) => sum + (game.price - game.price * (game.discount ?? 0) / 100), 0);
+    const totalPrice = cart.reduce((sum, game) => sum + Math.round(game.price), 0);
+    const totalDiscount = cart.reduce((sum, game) => sum + Math.round(game.price * (game.discount ?? 0) / 100), 0);
     return (
         <div className="bg-background">
             <Head></Head>
@@ -27,7 +27,7 @@ const Card: React.FC = () => {
                     ))}
                 </div>
                 <div className="sticky top-20 h-1/4">
-                    <Total total={totalPrice} economy={totalDiscount}></Total>
+                    <Total total={totalPrice} economy={totalDiscount} isDiscounted={totalDiscount > 0}></Total>
                 </div>
             </div>
         </div>

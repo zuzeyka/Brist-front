@@ -17,7 +17,7 @@ const PostHeader: React.FC<PostHeaderProps> = (props) => {
         <div className={'flex items-center justify-between font-artifakt text-typography' + (props.className ? ' ' + props.className : '')}>
             <div className='flex items-center space-x-4'>
                 <div className='flex space-x-4 items-center bg-card2 p-4 pl-0 rounded-full h-1'>
-                    <Avatar src={props.imgUrl} alt={props.isUser ? 'User avatar' : 'Game image'} className='w-7 h-7'></Avatar>
+                    <Avatar src={props.imgUrl} alt={props.isUser ? 'User avatar' : 'Game image'} className='w-8 h-8'></Avatar>
                     <p className='text-sign-2 font-bold tracking-widest'>{props.postInfo}</p>
                 </div>
                 {isAuthenticated.isAuthenticated ? <p className='text-typographySecondary'>{props.postDate}</p> : null}

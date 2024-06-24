@@ -9,14 +9,15 @@ export interface PostProps {
     postDate: string;
     postMediaUrl?: string;
     postAuthor: string;
+    postAuthorAvatarUrl?: string;
     postLikes: number;
     postComments: number;
     className?: string;
 }
 const Post: React.FC<PostProps> = (props) => {
     return (
-        <div className={'max-w-7xl space-y-3 p-4 flex bg-card1 rounded-2xl flex-col' + (props.className ? ' ' + props.className : '')}>
-            <PostHeader postInfo={props.postAuthor} postDate={props.postDate} imgUrl={props.postMediaUrl ? props.postMediaUrl : ''} isUser={true}></PostHeader>
+        <div className={'max-w-7xl space-y-3 p-4 flex bg-card1 rounded-2xl flex-col mt-4' + (props.className ? ' ' + props.className : '')}>
+            <PostHeader postInfo={props.postAuthor} postDate={props.postDate} imgUrl={props.postAuthorAvatarUrl ? props.postAuthorAvatarUrl : ''} isUser={true}></PostHeader>
             <div className='pr-4 space-y-3'>
                 <h2 className='font-bold text-heading-3 text-typography'>{props.postTitle}</h2>
                 <p className='text-typographySecondary text-block-2 font-artifakt'>{props.postText}</p>
