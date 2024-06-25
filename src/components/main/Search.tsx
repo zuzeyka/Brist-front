@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import Catalog from '../popups/Catalog';
-import { useAuth } from '@/components/authorization/AuthContext';
+import { useAuth } from '@/components/authorization/auth-context';
 
 const Search: React.FC<{ className?: string }> = ({ className }) => {
     const { isAuthenticated } = useAuth();

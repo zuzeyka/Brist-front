@@ -1,7 +1,7 @@
 import React from 'react';
-import Avatar from '@/components/ui/avatar/Avatar';
+import Avatar from '@/components/ui/avatar/avatar';
 import { CircleEllipsisIcon } from 'lucide-react';
-import { useAuth } from '@/components/authorization/AuthContext';
+import { useAuth } from '@/components/authorization/auth-context';
 
 interface PostHeaderProps {
     postInfo: string;

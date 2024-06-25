@@ -1,8 +1,8 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
-import { CardProps } from "./SliderCategories";
+import { CardProps } from "./slider-categories";
 
 interface CategoriesProps {
     lable: string;

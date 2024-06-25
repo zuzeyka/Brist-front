@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { AlertOctagonIcon, HeartIcon, ShareIcon, StarIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { useCart } from './cart/CardContext';
+import { useCart } from './cart/card-context';
 
 interface PaymentProps {
     className?: string;
@@ -26,6 +26,8 @@ const Payment: React.FC<PaymentProps> = (props) => {
             gamePictureUrl: props.previewUrl
         });
     };
+
+
     return (
         <div className={'pl-0' + (props.className ? ' ' + props.className : '')}>
             <div className='flex items-center justify-end mb-5'>

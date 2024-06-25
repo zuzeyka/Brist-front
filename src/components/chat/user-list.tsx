@@ -1,6 +1,6 @@
 import React from "react";
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import ChatPreviev, { ChatPrevievProps } from "./elements/ChatPreviev";
+import ChatPreviev, { ChatPrevievProps } from "./elements/chat-previev";
 
 interface UserListProps {
     onSelectChat: (userName: string) => void;

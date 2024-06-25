@@ -1,5 +1,5 @@
 import React from "react";
-import "./LevelIcon.css";
+import "./level-icon.css";
 
 
 const Game: React.FC<{ levelPoints: number, small?: boolean }> = ({ levelPoints, small }) => {

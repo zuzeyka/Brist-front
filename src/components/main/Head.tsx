@@ -1,7 +1,7 @@
-import Avatar from "@/components/ui/avatar/Avatar";
+import Avatar from "@/components/ui/avatar/avatar";
 import { BellIcon, SettingsIcon } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useAuth } from '@/components/authorization/AuthContext';
+import { useAuth } from '@/components/authorization/auth-context';
 import { Button } from "../ui/button";
 
 const Head: React.FC = () => {

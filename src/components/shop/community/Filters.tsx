@@ -9,7 +9,7 @@ interface FiltersProps {
 }
 
 const Filters: React.FC<FiltersProps> = ({ className, onSelectChange, onCommandChange }) => {
-    const [selectedSort, setSelectedSort] = useState<string>('popular');
+    const [, setSelectedSort] = useState<string>('popular');
     const [selectedCommand, setSelectedCommand] = useState<string>('всі');
 
     const handleSelectChange = (value: string) => {

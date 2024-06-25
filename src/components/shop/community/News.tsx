@@ -1,7 +1,7 @@
 import React from 'react';
-import { PostProps } from './Post';
-import PostFooter from './PostFooter';
-import PostHeader from './PostHeader';
+import { PostProps } from './post';
+import PostFooter from './post-footer';
+import PostHeader from './post-header';
 
 const News: React.FC<PostProps> = (props) => {
     return (

@@ -1,9 +1,9 @@
-import Head from "@/components/main/Head";
-import Search from "@/components/main/Search";
+import Head from "@/components/main/head";
+import Search from "@/components/main/search";
 import React from "react";
-import { useCart } from "./CardContext";
-import CartItem from "./CartItem";
-import Total from "./Total";
+import { useCart } from "./card-context";
+import CartItem from "./cart-item";
+import Total from "./total";
 
 const Card: React.FC = () => {
     const { cart } = useCart();
@@ -22,7 +22,7 @@ const Card: React.FC = () => {
                             gameName={game.gameName}
                             price={game.price}
                             discount={game.discount}
-                            endDate={game.endDate} gamePictureUrl={"https://i.imgur.com/ufBjnf8.png"} />
+                            endDate={game.endDate} gamePictureUrl={game.gamePictureUrl} />
 
                     ))}
                 </div>

@@ -7,7 +7,7 @@ interface MediaPlayerProps {
 }
 
 const MediaPlayer: React.FC<MediaPlayerProps> = (props) => {
-    const [currentMedia, setCurrentImage] = useState(props.mediaUrl[0]);
+    const [currentMedia, setCurrentImage] = useState(props.mediaUrl.length > 0 ? props.mediaUrl[0] : '');
 
     const isVideo = currentMedia.match(/\.(mp4|webm)$/i);
 
@@ -39,10 +39,10 @@ const MediaPlayer: React.FC<MediaPlayerProps> = (props) => {
                 <CarouselContent className="-ml-1">
                     {props.mediaUrl.map((url) => (
                         <CarouselItem className="pl-1 md:basis-1/2 lg:basis-1/4" key={url}>
-                            {url.match(/\.(jpg|jpeg|png)$/i) ? (
-                                <img className='h-36 w-64 rounded-xl' src={url} alt="Game screenshot" />
-                            ) : (
+                            {url.match(/\.(mp4|webm)$/i) ? (
                                 <video className='h-36 w-64 rounded-xl' src={url} controls></video>
+                            ) : (
+                                <img className='h-36 w-64 rounded-xl' src={url} alt="Game screenshot" />
                             )}
                         </CarouselItem>
                     ))}

@@ -1,12 +1,13 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { GameBundle, GameInShop } from '@/shared/lib/interfaces';
+import { DlcInShop, GameBundle, GameInShop } from '@/shared/lib/interfaces';
 
 interface BundleProps {
     className?: string
     bundles: GameBundle[]
-    elements: GameInShop[]
+    games: GameInShop[]
+    dlcs: DlcInShop[]
 }
 
 const BundleList: React.FC<BundleProps> = (props) => {
@@ -22,7 +23,10 @@ const BundleList: React.FC<BundleProps> = (props) => {
                         </div>
                         <span className='text-typographySecondary text-block-1 font-artifakt my-2'>Вміст:</span>
                         <ul className='list-disc list-inside mb-2'>
-                            {props.elements.map((element) => (
+                            {props.games.map((element) => (
+                                <li className='text-typography text-block-1 font-artifakt' key={element.id}>{element.name}</li>
+                            ))}
+                            {props.dlcs.map((element) => (
                                 <li className='text-typography text-block-1 font-artifakt' key={element.id}>{element.name}</li>
                             ))}
                         </ul>

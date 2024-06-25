@@ -1,9 +1,9 @@
 import React from "react";
-import SendMenu from "./elements/SendMenu";
+import SendMenu from "./elements/send-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import FileMessage from "./elements/FileMessage";
-import VoiceMessage from "./elements/VoiceMessage";
-import Message from "./elements/Message";
+import FileMessage from "./elements/file-message";
+import VoiceMessage from "./elements/voice-message";
+import Message from "./elements/message";
 
 export interface MessageProps {
     datetime: string;
@@ -28,9 +28,9 @@ const renderMessage = (message: MessageProps, index: number) => {
     const extension = getFileExtension(message.media);
 
     if (message.fileName && message.fileSize) {
-        return <FileMessage key={index} {...message} />;
+        return <FileMessage fileName={message.fileName} fileSize={message.fileSize} key={index} {...message} />;
     } else if (['mp3', 'wav', 'ogg'].includes(extension)) {
-        return <VoiceMessage key={index} {...message} />;
+        return <VoiceMessage media={message.media ? message.media : ''} key={index} {...message} />;
     } else if (message.text) {
         return <Message key={index} {...message} />;
     } else {

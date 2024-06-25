@@ -1,12 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { InputField } from "@/components/ui/input-field";
-import { Link } from "react-router-dom";
-import { useAuth } from './AuthContext';
-import Head from "../main/Head";
-import Footer from "../main/Footer";
+import { useAuth } from './auth-context';
+import Head from "../main/head";
+import Footer from "../main/footer";
 
-const ForgotPassword: React.FC = () => {
+const ChangePassword: React.FC = () => {
     const { logout } = useAuth();
 
     const handleLogout = () => {
@@ -20,12 +18,13 @@ const ForgotPassword: React.FC = () => {
                 <img className="absolute top-15 left-0 w-full h-full z-0" src="/src/assets/svg/authorizationBG.svg" alt="Background"></img>
                 <img className="absolute top-15 left-0 w-full h-full z-0" src="/src/assets/svg/authorizationBG2.svg" alt="Background"></img>
                 <img className="absolute top-15 left-0 w-full h-full z-0" src="/src/assets/blobs-no-bg.png" alt="Background"></img>
-                <div className="bg-card1 p-8 w-1/3 z-10 rounded-2xl">
+                <div className="bg-card1 p-8 shadow-lg w-1/3 z-10 rounded-2xl">
                     <h1 className="text-heading-2 font-manrope font-bold mb-6 text-center">
-                        Забули пароль?
+                        Придумайте новий пароль
                     </h1>
                     <form className="space-y-4">
-                        <InputField placeholder="Введіть ваш e-mail..." type="email" className="rounded-full" />
+                        <InputField placeholder="Придумайте новий пароль..." type="password" className="rounded-full" />
+                        <InputField placeholder="Напишіть пароль ще раз..." type="email" className="rounded-full" />
                         <Button onClick={handleLogout} className="w-full rounded-full text-background">Продовжити</Button>
                     </form>
                 </div>
@@ -34,4 +33,4 @@ const ForgotPassword: React.FC = () => {
         </>
     );
 };
-export default ForgotPassword;
+export default ChangePassword;

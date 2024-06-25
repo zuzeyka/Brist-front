@@ -1,17 +1,24 @@
 import { ChevronRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { GameNews } from "@/shared/lib/interfaces";
-import News from "./News";
+import { GameInShop, GameNews } from "@/shared/lib/interfaces";
+import News from "./news";
 
 interface NewsListProps {
     className?: string
     gameNews: GameNews[]
-    gameName: string
+    gameInfo: GameInShop[]
 }
 
 
 const NewsList: React.FC<NewsListProps> = (props) => {
+    const getPostDate = (data: Date) => {
+        const date = new Date(data);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}.${month}.${year}`;
+    }
     return (
         <>
             <div className={"flex items-center justify-between" + (props.className ? ' ' + props.className : '')}>
@@ -23,9 +30,9 @@ const NewsList: React.FC<NewsListProps> = (props) => {
                 loop: true,
             }}>
                 <CarouselContent className="-ml-1">
-                    {props.gameNews.map((news) => (
+                    {props.gameNews.map((news, index) => (
                         <CarouselItem className="pl-1 md:basis-1/2 lg:basis-1/3" key={news.id}>
-                            <News className="mx-2" postgameName={props.gameName} postTitle={news.title} postText={news.content} postDate={news.createdAt} postGameImageUrl="https://i.imgur.com/549oAR2.png" postMediaUrl={news.imageUrl} postLikes={0} postComments={0} ></News>
+                            <News className="mx-2" postgameName={props.gameInfo[index].name} postTitle={news.title} postText={news.content} postDate={getPostDate(news.createdAt)} postGameImageUrl={props.gameInfo[index].previeImage} postMediaUrl={news.contentUrl} postLikes={news.likesCount} postComments={news.likesCount} ></News>
                         </CarouselItem>
                     ))}
                 </CarouselContent>

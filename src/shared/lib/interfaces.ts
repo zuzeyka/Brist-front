@@ -251,6 +251,10 @@ export interface GameInShop {
     createdAt: string;
 }
 
+export interface DlcInShop extends GameInShop {
+    gameId: string;
+}
+
 export interface GameInShopModel {
     name?: string;
     price: number;

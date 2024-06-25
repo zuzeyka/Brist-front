@@ -1,10 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
-import { MessageProps } from "../ChatContent";
+import { MessageProps } from "../chat-content";
 import { Play, Pause } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 
 interface VoiceMessageProps extends MessageProps {
+    datetime: string;
+    isMyMessage: boolean;
     media: string;
 }
 

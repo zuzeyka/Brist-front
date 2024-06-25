@@ -1,6 +1,6 @@
 import { File } from "lucide-react";
 import React, { useState } from "react";
-import { MessageProps } from "../ChatContent";
+import { MessageProps } from "../chat-content";
 import { Button } from "@/components/ui/button";
 
 interface FileMessageProps extends MessageProps {

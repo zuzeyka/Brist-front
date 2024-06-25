@@ -1,9 +1,9 @@
-import Categories from "./Categories";
-import Footer from "./Footer";
-import Head from "./Head";
-import Search from "./Search";
-import TopDeals from "./TopDeals";
-import SliderCategories from "./SliderCategories";
+import Categories from "./categories";
+import Footer from "./footer";
+import Head from "./head";
+import Search from "./search";
+import TopDeals from "./top-deals";
+import SliderCategories from "./slider-categories";
 import { useEffect, useState } from "react";
 import { GameInShopModel } from "@/shared/lib/interfaces";
 

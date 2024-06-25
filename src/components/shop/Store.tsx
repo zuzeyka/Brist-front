@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import Footer from '../main/Footer';
-import Head from '../main/Head';
-import Search from '../main/Search';
-import PageSwitcher from './PageSwitcher';
-import AboutGame from './about/AboutGame';
-import Characteristics from './characteristics/Characteristics';
-import Community from './community/Community';
-import { Developer, Discussion, GameBundle, GameGuide, GameInShop, GameNews, GamePosts, Publisher, Screenshot, SystemRequirement, User, Video } from '@/shared/lib/interfaces';
+import Footer from '../main/footer';
+import Head from '../main/head';
+import Search from '../main/search';
+import PageSwitcher from './page-switcher';
+import AboutGame from './about/about-game';
+import Characteristics from './characteristics/characteristics';
+import Community from './community/community';
+import { Developer, Discussion, DlcInShop, GameBundle, GameGuide, GameInShop, GameNews, GamePosts, Publisher, Screenshot, SystemRequirement, User, Video } from '@/shared/lib/interfaces';
 
 const Store: React.FC = () => {
     const [game, setGame] = useState<GameInShop>();
@@ -29,13 +29,13 @@ const Store: React.FC = () => {
     const [guideUsers, setGuideUsers] = useState<User[]>([]);
     const [postUsers, setPostUsers] = useState<User[]>([]);
     const [newsUsers, setNewsUsers] = useState<User[]>([]);
-    const [budlesElements, setBundlesElements] = useState<GameInShop[]>([]);
+    const [bundlesGames, setBundlesGames] = useState<GameInShop[]>([]);
+    const [bundlesDlcs, setBundlesDlcs] = useState<DlcInShop[]>([]);
     const [loading, setLoading] = useState(true);
-    const gameRate = Math.round(reviews.map(review => review.rate).reduce((a, b) => a + b, 0) / reviews.length);
+    const gameRate = reviews.length > 0 ? Math.round(reviews.map(review => review.rate).reduce((a, b) => a + b, 0) / reviews.length) : 0;
     let gameId: string;
     let developerId: string;
     let publisherId: string;
-
 
     useEffect(() => {
         async function fetchData() {
@@ -244,6 +244,7 @@ const Store: React.FC = () => {
             const data = await res.json();
             const bundleIds = data.map((x: any) => x.bundleId);
             const gamesIds = data.map((x: any) => x.gameId);
+            const dlcIds = data.map((x: any) => x.dlcId);
             const bundleRes = await fetch('http://localhost:5049/api/GameBundle/getall', {
                 method: 'POST',
                 headers: {
@@ -258,10 +259,19 @@ const Store: React.FC = () => {
                 },
                 body: JSON.stringify(gamesIds)
             });
+            const dlcsRes = await fetch('http://localhost:5049/api/DLCInShop/getall', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dlcIds)
+            });
             const bundleData = await bundleRes.json() as GameBundle[];
             const gameData = await gamesRes.json() as GameInShop[];
+            const dlcData = await dlcsRes.json() as DlcInShop[];
             setBundles(bundleData);
-            setBundlesElements(gameData);
+            setBundlesGames(gameData);
+            setBundlesDlcs(dlcData);
         } catch (error) {
             console.log('Fetch bundles error:', error);
         }
@@ -295,19 +305,27 @@ const Store: React.FC = () => {
         fetchUsers(news, setNewsUsers);
     }, [reviews]);
 
+    const getPostDate = (data: Date) => {
+        const date = new Date(data);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}.${month}.${year}`;
+    }
     const pages = [
         {
             title: 'Про ігру',
             content: (
                 <AboutGame
-                    releaseDate='01.01.2023'
+                    releaseDate={game && game.dateOfRelease ? getPostDate(game.dateOfRelease) : 'No release date'}
                     reviews={reviews ? reviews : []}
                     users={reviewUsers ? reviewUsers : []}
                     bundles={bundles ? bundles : []}
-                    bundlesContent={budlesElements ? budlesElements : []}
+                    bundlesGames={bundlesGames ? bundlesGames : []}
+                    bundlesDlcs={bundlesDlcs ? bundlesDlcs : []}
                     publisher={publisher ? publisher.name : 'Невідомо'}
                     developer={developer ? developer.name : 'Невідомо'}
-                    previewUrl={screenshots && screenshots[0] ? screenshots[0].contentUrl : ""}
+                    previewUrl={game && game.previeImage ? game.previeImage : ""}
                     DLC={gameDLC ? gameDLC : []}
                     price={game ? game.price : 0}
                     discount={game ? game.discount : 0}
@@ -316,7 +334,7 @@ const Store: React.FC = () => {
                     gameCategorys={categories ? categories : ['Немає категорій']}
                     mediaUrl={screenshots.map(x => x.contentUrl)}
                     rate={gameRate}
-                    endDate={game && game.discountFinish ? game.discountFinish.toLocaleString() : 'No end date'}
+                    endDate={game && game.discountFinish ? getPostDate(game.discountFinish) : 'No end date'}
                 />
             )
         },
@@ -326,13 +344,14 @@ const Store: React.FC = () => {
                 <Characteristics
                     gameName='Якась гра, яка дуже всім сподобається'
                     users={reviewUsers ? reviewUsers : []}
-                    maxOs={maxrequirements ? maxrequirements : []}
-                    minOs={minrequirements ? minrequirements : []}
+                    maxOs={maxrequirements}
+                    minOs={minrequirements}
+                    previewUrl={game && game.previeImage ? game.previeImage : ""}
                     price={1000}
                     discount={50}
                     rate={gameRate}
-                    endDate='01.01.2023'
-                    releaseDate='01.01.2023'
+                    endDate={game && game.discountFinish ? game.discountFinish.toLocaleString() : 'No end date'}
+                    releaseDate={game && game.dateOfRelease ? game.dateOfRelease.toLocaleString() : 'No release date'}
                     publisher={publisher ? publisher.name : 'Невідомо'}
                     developer={developer ? developer.name : 'Невідомо'}
                 />

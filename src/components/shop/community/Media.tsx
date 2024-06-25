@@ -1,14 +1,14 @@
 import React from 'react';
-import { PostProps } from './Post';
-import PostHeader from './PostHeader';
-import PostFooter from './PostFooter';
+import { PostProps } from './post';
+import PostHeader from './post-header';
+import PostFooter from './post-footer';
 
 const Media: React.FC<PostProps> = (props) => {
-    const extensions = props.postMediaUrl?.split('.').pop()?.toLowerCase();
+    const extensions = props.postMediaUrl?.split('.').pop()?.slice(0, 3).toLowerCase();
     let media;
     if (extensions === 'jpg' || extensions === 'jpeg' || extensions === 'png') {
         media = <img className='w-full h-auto rounded-md' src={props.postMediaUrl} alt="Game screenshot"></img>;
-    } else if (extensions === 'mp4' || extensions === 'webm') {
+    } else if (extensions === 'mp4' || extensions === 'web') {
         media = <video className='w-full h-auto rounded-md' src={props.postMediaUrl} controls></video>;
     }
 

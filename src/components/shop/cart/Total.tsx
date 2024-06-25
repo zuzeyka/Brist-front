@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
-import { useCart } from "./CardContext";
+import { useCart } from "./card-context";
 
 interface TotalProps {
     total: number;

@@ -1,5 +1,5 @@
 import React from "react";
-import { MessageProps } from "../ChatContent";
+import { MessageProps } from "../chat-content";
 
 const Message: React.FC<MessageProps> = (props) => {
     return (

@@ -1,13 +1,13 @@
 import React from "react";
 import Catalog from "./Catalog";
-import NewCollection from "./NewCollection";
-import NewDiscussion from "./NewDiscussion";
-import NewGuide from "./NewGuide";
-import NewReview from "./NewReview";
-import NewScreenshot from "./NewScreenshot";
-import NewVideo from "./NewVideo";
-import WishedFriends from "./WishedFriends";
-import Notifications from "./Notifications";
+import NewCollection from "./new-collection";
+import NewDiscussion from "./new-discussion";
+import NewGuide from "./new-guide";
+import NewReview from "./new-review";
+import NewScreenshot from "./new-screenshot";
+import NewVideo from "./new-video";
+import WishedFriends from "./wished-friends";
+import Notifications from "./notifications";
 
 
 const Test: React.FC = () => {

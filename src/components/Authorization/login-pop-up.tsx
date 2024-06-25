@@ -2,14 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { InputField } from "@/components/ui/input-field";
 import { Link } from "react-router-dom";
-import { useAuth } from './AuthContext';
+import { useAuth } from './auth-context';
 
 const LoginPopUp: React.FC = () => {
     const { login } = useAuth();
 
     const handleLogin = () => {
         // Здесь можно добавить логику аутентификации (например, запрос к серверу)
-        login();
+        login({ username: 'username', password: 'password' });
     };
     return (
         <div className="bg-card2 rounded-lg p-8 max-w-md mx-auto w-[400px] rounded-2xl">

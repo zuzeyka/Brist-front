@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import DlcList from './DlcList';
-import Payment from '../Payment';
-import MediaPlayer from './MediaPlayer';
+import DlcList from './dlc-list';
+import Payment from '../payment';
+import MediaPlayer from './media-player';
 import { ChevronDown, ChevronUp, FuelIcon, Gamepad2Icon, GamepadIcon } from 'lucide-react';
-import Avatar from '@/components/ui/avatar/Avatar';
-import ReviewList from './ReviewList';
-import BundleList from './BundleList';
-import { Discussion, GameBundle, GameInShop, User } from '@/shared/lib/interfaces';
-import Friends from './Friends';
+import ReviewList from './review-list';
+import BundleList from './bundle-list';
+import { Discussion, DlcInShop, GameBundle, GameInShop, User } from '@/shared/lib/interfaces';
+import Friends from './friends';
 
 export interface UserData {
     name: string;
@@ -21,7 +20,8 @@ interface AboutGameProps {
     reviews: Discussion[];
     users: User[];
     bundles: GameBundle[];
-    bundlesContent: GameInShop[];
+    bundlesGames: GameInShop[];
+    bundlesDlcs: DlcInShop[];
     DLC: GameInShop[];
     mediaUrl: string[];
     price: number;
@@ -82,7 +82,7 @@ const AboutGame: React.FC<AboutGameProps> = (props) => {
                             </Button>
                         </div>
                         {props.bundles ? (
-                            <BundleList elements={props.bundlesContent} bundles={props.bundles}></BundleList>
+                            <BundleList dlcs={props.bundlesDlcs} games={props.bundlesGames} bundles={props.bundles}></BundleList>
                         ) : null}
                     </div>
                 </div>

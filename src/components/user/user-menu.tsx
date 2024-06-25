@@ -1,16 +1,15 @@
 import { useMemo } from "react";
-import PageSwitcher from "../shop/PageSwitcher";
-import Avatar from "@/components/ui/avatar/Avatar";
-import { ReviewInfo } from "@/components/shop/about/AboutGame";
-import Main from "./Pages/Main";
-import Level from "./Pages/Level";
-import Posts from "./Pages/Posts";
-import { PostProps } from "../shop/community/Post";
-import Media from "./Pages/Media";
-import Guides from "./Pages/Guides";
-import Reviews from "./Pages/Reviews";
-import Wished, { GameProps } from "./Pages/Wished";
-import LevelIcon from "./Elements/LevelIcon";
+import PageSwitcher from "../shop/page-switcher";
+import Avatar from "@/components/ui/avatar/avatar";
+import Main from "./pages/main";
+import Level from "./pages/level";
+import Posts from "./pages/posts";
+import { PostProps } from "../shop/community/post";
+import Media from "./pages/media";
+import Guides from "./pages/guides";
+import Reviews from "./pages/reviews";
+import Wished, { GameProps } from "./pages/wished";
+import LevelIcon from "./elements/level-icon";
 
 interface UserMenuProps {
     levelPoints: number;
@@ -32,8 +31,13 @@ interface Friend {
     levelPoints: number;
 }
 
-export interface ReviewProps extends ReviewInfo {
+export interface ReviewProps {
     gameName: string;
+    reviewText: string;
+    rating: number;
+    likes: number;
+    date: string;
+    comments: number;
     gamePictureUrl: string;
 }
 
@@ -75,7 +79,7 @@ const UserMenu: React.FC<UserMenuProps> = (props) => {
         postDate: "2022-01-01",
         postAuthor: "Автор",
     })), [props.guidesCount]);
-    const reviews: ReviewProps[] = useMemo(() => Array.from({ length: props.reviewsCount }, (_, i) => ({
+    const reviews: ReviewProps[] = useMemo(() => Array.from({ length: props.reviewsCount }, (_) => ({
         gameName: "Game",
         userName: "Автор",
         avatarUrl: "https://i.imgur.com/ufBjnf8.png",
@@ -86,7 +90,7 @@ const UserMenu: React.FC<UserMenuProps> = (props) => {
         likes: 2,
         comments: 1
     })), [props.reviewsCount]);
-    const wishes: GameProps[] = useMemo(() => Array.from({ length: props.whishesCount }, (_, i) => ({
+    const wishes: GameProps[] = useMemo(() => Array.from({ length: props.whishesCount }, (_) => ({
         name: "Game",
         imageUrl: "https://i.imgur.com/ufBjnf8.png",
         rating: 3,

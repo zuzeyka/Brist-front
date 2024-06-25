@@ -1,5 +1,5 @@
 import { FilterIcon } from 'lucide-react';
-import SmallGame, { GameInfo } from './SmallGame';
+import SmallGame, { GameInfo } from './small-game';
 
 interface GamesProps {
     games: GameInfo[]

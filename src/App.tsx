@@ -1,23 +1,23 @@
-import EmailConfirmation from './components/authorization/EmailConfirmation';
-import Login from './components/authorization/Login';
-import Register from './components/authorization/Register';
-import Library from './components/library/Library';
-import Main from './components/main/Main';
-import Store from './components/shop/Store';
+import EmailConfirmation from './components/authorization/email-confirmation';
+import Login from './components/authorization/login';
+import Register from './components/authorization/register';
+import Library from './components/library/library';
+import Main from './components/main/main';
+import Store from './components/shop/store';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import UserProfile from './components/user/UserProfile';
-import AdminPanel from './components/admin/AdminPanel';
-import { AuthProvider } from './components/authorization/AuthContext';
-import Settings from './components/settings/Settings';
-import Test from './components/popups/Test';
-import Chat from './components/chat/Chat';
-import ForgotPassword from './components/authorization/ForgotPassword';
-import Terms from './components/credentials/Terms';
-import Privacy from './components/credentials/Privacy';
-import Refund from './components/credentials/Refund';
-import Cart from './components/shop/cart/Cart';
-import { CartProvider } from './components/shop/cart/CardContext';
+import UserProfile from './components/user/user-profile';
+import AdminPanel from './components/admin/admin-panel';
+import { AuthProvider } from './components/authorization/auth-context';
+import Settings from './components/settings/settings';
+import Test from './components/popups/test';
+import Chat from './components/chat/chat';
+import ForgotPassword from './components/authorization/forgot-password';
+import Terms from './components/credentials/terms';
+import Privacy from './components/credentials/privacy';
+import Refund from './components/credentials/refund';
+import Cart from './components/shop/cart/cart';
+import { CartProvider } from './components/shop/cart/card-context';
 
 const App: React.FC = () => {
     return (

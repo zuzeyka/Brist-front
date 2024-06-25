@@ -1,7 +1,7 @@
-import Avatar from '@/components/ui/avatar/Avatar';
+import Avatar from '@/components/ui/avatar/avatar';
 import React from 'react';
-import { UserData } from './AboutGame';
-import { useAuth } from '@/components/authorization/AuthContext';
+import { UserData } from './about-game';
+import { useAuth } from '@/components/authorization/auth-context';
 
 
 const Friends: React.FC<{ wishedFriends: UserData[], ownedFriends: UserData[] }> = ({ wishedFriends, ownedFriends }) => {

@@ -2,14 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { InputField } from "@/components/ui/input-field";
 import { Link } from "react-router-dom";
-import Head from "../main/Head";
-import Footer from "../main/Footer";
+import Head from "../main/head";
+import Footer from "../main/footer";
 import { useState } from "react";
 
 const Register: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
 

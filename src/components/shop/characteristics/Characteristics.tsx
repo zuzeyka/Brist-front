@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Payment from '../Payment';
+import Payment from '../payment';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import CharacteristicsList from './CharacteristicsList';
+import CharacteristicsList from './characteristics-list';
 import { FuelIcon, Gamepad2Icon, GamepadIcon } from 'lucide-react';
 import { SystemRequirement, User } from '@/shared/lib/interfaces';
-import Friends from '../about/Friends';
+import Friends from '../about/friends';
 
 interface CharacteristicsProps {
     gameName: string;
@@ -14,6 +14,7 @@ interface CharacteristicsProps {
     rate: number;
     minOs: SystemRequirement[];
     maxOs: SystemRequirement[];
+    previewUrl: string;
     releaseDate: string;
     developer: string;
     publisher: string;
@@ -32,21 +33,16 @@ const Characteristics: React.FC<CharacteristicsProps> = ({
     releaseDate,
     developer,
     publisher,
+    previewUrl,
     users,
-    className
+    className = '',
 }) => {
-
-
-    const setSelectedCharacteristic = (characteristic: string) => {
-        setSelectedCharacteristicState(characteristic);
-    }
-    const hasOsData = minOs[0].length > 0 ? 0 : 1;
-    const characteristics = [...(minOs || []), ...(maxOs || [])];
-    const allOS = characteristics[hasOsData].map(({ os }) => os);
-    const [selectedCharacteristicState, setSelectedCharacteristicState] = useState<string>(allOS[0]);
+    const characteristics = [...minOs, ...maxOs];
+    const allOS = characteristics.map(({ os }) => os);
+    const [selectedCharacteristic, setSelectedCharacteristic] = useState<string>(allOS[0]);
 
     return (
-        <div className={`col-span-2 flex ${className ? className : ''}`}>
+        <div className={`col-span-2 flex ${className}`}>
             <div className='flex flex-col flex-grow py-4'>
                 <h1 className='text-heading-1 font-bold text-typography'>{gameName}</h1>
                 <div>
@@ -60,20 +56,20 @@ const Characteristics: React.FC<CharacteristicsProps> = ({
                             ))}
                         </SelectContent>
                     </Select>
-                    {characteristics[hasOsData].find(({ os }) => os === selectedCharacteristicState) && (
-                        <CharacteristicsList data={characteristics[hasOsData].filter(({ os }) => os === selectedCharacteristicState)} />
-                    )}
+                    {characteristics.filter(({ os }) => os === selectedCharacteristic).map((osData, index) => (
+                        <CharacteristicsList key={index} data={[osData]} />
+                    ))}
                 </div>
             </div>
             <div className='flex-1 pl-4 py-4'>
                 <div className='sticky top-20 z-9'>
                     <Payment
                         gameName={gameName}
-                        platforms={[<GamepadIcon />, <Gamepad2Icon />, <FuelIcon />]}
+                        platforms={[<GamepadIcon key="1" />, <Gamepad2Icon key="2" />, <FuelIcon key="3" />]}
                         developer={developer}
                         publisher={publisher}
                         releaseDate={releaseDate}
-                        previewUrl={'https://i.imgur.com/hNIw75C.png'}
+                        previewUrl={previewUrl}
                         price={price}
                         discount={discount}
                         rate={rate}

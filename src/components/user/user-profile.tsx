@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import Footer from '../main/Footer';
-import Head from '../main/Head';
-import UserHeader from './UserHeader';
-import UserMenu from './UserMenu';
+import Footer from '../main/footer';
+import Head from '../main/head';
+import UserHeader from './user-header';
+import UserMenu from './user-menu';
 
 const UserProfile: React.FC = () => {
     const userBackgroundUrl: string = '';

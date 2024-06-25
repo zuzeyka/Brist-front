@@ -1,4 +1,4 @@
-import Avatar from "@/components/ui/avatar/Avatar";
+import Avatar from "@/components/ui/avatar/avatar";
 import React from "react";
 
 export interface ChatPrevievProps {

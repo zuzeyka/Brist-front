@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import TableView from './TableView';
-import EditForm from './EditForm';
-import InsertForm from './InsertForm';
-import * as Interfaces from '../../shared/lib/interfaces';
+import TableView from './table-view';
+import EditForm from './edit-form';
+import InsertForm from './insert-form';
 
 interface TableRow {
     id: number;

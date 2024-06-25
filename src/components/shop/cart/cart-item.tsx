@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import React from "react";
-import { CartItemProps, useCart } from "./CardContext";
+import { CartItemProps, useCart } from "./card-context";
 
 
 const CartItem: React.FC<CartItemProps> = (props) => {

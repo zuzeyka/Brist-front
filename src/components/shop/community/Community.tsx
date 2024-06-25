@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import Filters from './Filters';
+import Filters from './filters';
 import { Button } from '@/components/ui/button';
 import { BellPlusIcon, CircleEllipsisIcon, PlusIcon } from 'lucide-react';
-import News from './News';
-import Guide from './Guide';
-import Post from './Post';
-import Media from './Media';
-import CreatePost from './CreatePost';
-import GameStats from './GameStats';
+import News from './news';
+import Guide from './guide';
+import Post from './post';
+import Media from './media';
+import CreatePost from './create-post';
+import GameStats from './game-stats';
 import { GameGuide, GameNews, GamePosts, Screenshot, User, Video } from '@/shared/lib/interfaces';
 
 interface CommunityContent {
@@ -73,6 +73,7 @@ const Community: React.FC<CommunityContent> = ({ posts, guides, news, screenshot
                         {selectedCommand === "всі" && combinedContent.map((item, index) => {
                             switch (item.type) {
                                 case 'post':
+                                    console.log("item", item);
                                     return (
                                         <Post
                                             key={index}

@@ -1,11 +1,11 @@
 import React from "react";
-import Badge from "../Showcases/Badge";
-import Games from "../Showcases/Games";
-import Screenshots from "../Showcases/Screenshots";
-import Videos from "../Showcases/Video";
-import Reviews from "../Showcases/Reviews";
-import Guides from "../Showcases/Guides";
-import Comments from "../Showcases/Comments";
+import Badge from "../showcases/badge";
+import Games from "../showcases/games";
+import Screenshots from "../showcases/screenshots";
+import Videos from "../showcases/video";
+import Reviews from "../showcases/reviews";
+import Guides from "../showcases/guides";
+import Comments from "../showcases/comments";
 
 
 const Main: React.FC = () => {

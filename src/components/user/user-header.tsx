@@ -1,6 +1,6 @@
 import { CircleEllipsisIcon, MailIcon, PencilLineIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Avatar from "@/components/ui/avatar/Avatar";
+import Avatar from "@/components/ui/avatar/avatar";
 
 interface UserHeaderProps {
     className?: string;

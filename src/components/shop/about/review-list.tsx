@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Avatar from '@/components/ui/avatar/Avatar';
+import Avatar from '@/components/ui/avatar/avatar';
 import { ChevronDown, HeartIcon, MessageSquareIcon, StarIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';

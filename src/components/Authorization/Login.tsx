@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { InputField } from "@/components/ui/input-field";
 import { Link } from "react-router-dom";
-import { useAuth } from './AuthContext';
-import Head from "../main/Head";
-import Footer from "../main/Footer";
+import { useAuth } from './auth-context';
+import Head from "../main/head";
+import Footer from "../main/footer";
 
 const Login: React.FC = () => {
     const { login } = useAuth();

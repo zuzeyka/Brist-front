@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import Head from "../main/Head";
+import Head from "../main/head";
 import {
     ResizableHandle,
     ResizablePanel,
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import UserList from "./UserList";
-import ChatContent, { MessageProps } from "./ChatContent";
-import InfoBar from "./InfoBar";
+import UserList from "./user-list";
+import ChatContent, { MessageProps } from "./chat-content";
+import InfoBar from "./info-bar";
 import { useParams } from "react-router-dom";
 
 // Пример данных для различных чатов

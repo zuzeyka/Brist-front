@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { CardProps } from "./SliderCategories";
+import { CardProps } from "./slider-categories";
 import { Badge } from "@/components/ui/badge";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Link } from "react-router-dom";
@@ -17,7 +17,7 @@ const TopDeals: React.FC<{ games: DealProps[] }> = ({ games }) => {
     const [currentMedia, setCurrentMedia] = useState(currentGame.gamePictureUrl);
 
     const plugin = useRef(
-        Autoplay({ delay: 2000, stopOnInteraction: true })
+        Autoplay({ delay: 4000, stopOnInteraction: true })
     );
 
     useEffect(() => {
@@ -26,7 +26,7 @@ const TopDeals: React.FC<{ games: DealProps[] }> = ({ games }) => {
     useEffect(() => {
         const interval = setInterval(() => {
             setActiveIndex(prevIndex => (prevIndex + 1) % games.length);
-        }, 2200);
+        }, 4000);
 
         return () => clearInterval(interval);
     }, [games.length]);
@@ -76,10 +76,10 @@ const TopDeals: React.FC<{ games: DealProps[] }> = ({ games }) => {
                 <CarouselContent className="-ml-1">
                     {games.map((game, index) => (
                         <CarouselItem className="pl-2 md:basis-1/2 lg:basis-1/5" key={game.gamePictureUrl} onChange={() => setActiveIndex(index)}>
-                            {game.gamePictureUrl.match(/\.(jpg|jpeg|png)$/i) ? (
-                                <img className='h-36 w-64 rounded-xl' src={game.gamePictureUrl} alt="Game screenshot" />
-                            ) : (
+                            {game.gamePictureUrl.match(/\.(mp4|webm)$/i) ? (
                                 <video className='h-36 w-64 rounded-xl' src={game.gamePictureUrl} controls></video>
+                            ) : (
+                                <img className='h-36 w-64 rounded-xl' src={game.gamePictureUrl} alt="Game screenshot" />
                             )}
                         </CarouselItem>
                     ))}

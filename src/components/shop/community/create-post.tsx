@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { InputField } from "@/components/ui/input-field";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React, { useState } from "react";
-import GameStats from "./GameStats";
+import GameStats from "./game-stats";
 import { Image, XIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
