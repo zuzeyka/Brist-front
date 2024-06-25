@@ -3,7 +3,7 @@ import { InputField } from "@/components/ui/input-field";
 import React from "react";
 
 
-const Password: React.FC<{ oldhash: string }> = ({ oldhash }) => {
+const Password: React.FC = () => {
     return (
         <div className="flex justify-center bg-card1 rounded-2xl w-full p-4">
             <div className="flex flex-col text-base max-w-[596px]">

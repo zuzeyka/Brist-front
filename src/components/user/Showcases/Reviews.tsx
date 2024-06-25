@@ -1,5 +1,5 @@
-import PostFooter from "@/components/shop/community/PostFooter";
-import { CircleEllipsisIcon, HeartIcon, MessageSquareIcon, StarIcon } from "lucide-react";
+import PostFooter from "@/components/shop/community/post-footer";
+import { CircleEllipsisIcon, StarIcon } from "lucide-react";
 import React from "react";
 
 interface Review {

@@ -1,4 +1,4 @@
-import Avatar from "@/components/ui/avatar/Avatar";
+import Avatar from "@/components/ui/avatar/avatar";
 import { Button } from "@/components/ui/button";
 import { InputField } from "@/components/ui/input-field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";

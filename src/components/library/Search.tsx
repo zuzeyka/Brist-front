@@ -1,4 +1,4 @@
-import { FilterIcon, LayoutGridIcon, ListIcon, MoreVerticalIcon } from 'lucide-react';
+import { FilterIcon, LayoutGridIcon, ListIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Input from '@/components/ui/search-input';
 import React from 'react';

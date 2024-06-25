@@ -1,5 +1,5 @@
 import React from "react";
-import PostHeader from "../../shop/community/PostHeader";
+import PostHeader from "../../shop/community/post-header";
 import Input from "@/components/ui/search-input";
 
 interface CommentsProps {

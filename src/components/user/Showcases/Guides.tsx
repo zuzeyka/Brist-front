@@ -1,4 +1,4 @@
-import Guide from "../../shop/community/Guide";
+import Guide from "../../shop/community/guide";
 import React from "react";
 
 interface Guide {

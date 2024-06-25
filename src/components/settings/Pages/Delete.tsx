@@ -2,12 +2,8 @@ import { Button } from "@/components/ui/button";
 import { InputField } from "@/components/ui/input-field";
 import React from "react";
 
-interface DeleteProps {
-    nick: string;
-    passwordHash: string;
-}
 
-const Delete: React.FC<DeleteProps> = (props) => {
+const Delete: React.FC = () => {
     return (
         <div className="flex justify-center bg-card1 rounded-2xl w-full p-4">
             <div className="flex flex-col text-base max-w-[596px]">

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import Post, { PostProps } from "../../shop/community/Post";
+import Post, { PostProps } from "../../shop/community/post";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { InputField } from "@/components/ui/input-field";
 import { PlusIcon } from "lucide-react";
 
 const Posts: React.FC<{ posts: PostProps[] }> = ({ posts }) => {
-    const [filter, setFilter] = useState("all");
+    const [, setFilter] = useState("all");
     const [visibleCount, setVisibleCount] = useState(4);
 
     const handleLoadMore = () => {

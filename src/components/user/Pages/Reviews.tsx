@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { InputField } from "@/components/ui/input-field";
-import Review from "../Elements/Review";
-import { ReviewProps } from "../UserMenu";
+import Review from "../elements/review";
+import { ReviewProps } from "../user-menu";
 import { PlusIcon } from "lucide-react";
 
 const Reviews: React.FC<{ reviewInfo: ReviewProps[] }> = ({ reviewInfo }) => {
-    const [filter, setFilter] = useState("all");
+    const [, setFilter] = useState("all");
     const [visibleCount, setVisibleCount] = useState(4);
 
     const handleLoadMore = () => {

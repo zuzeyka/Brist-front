@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import Head from '../main/Head';
-import { Command, CommandEmpty, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
+import Head from '../main/head';
+import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Bell, DollarSign, LockKeyhole, SunMoon, UserRoundCog, UserRoundX } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
-import Base from './Pages/Base';
-import Notification from './Pages/Notification';
-import Password from './Pages/Password';
-import Delete from './Pages/Delete';
-import Wallet from './Pages/Wallet';
+import Base from './pages/base';
+import Notification from './pages/notification';
+import Password from './pages/password';
+import Delete from './pages/delete';
+import Wallet from './pages/wallet';
 
 interface PageContent {
     title: string;
@@ -39,10 +39,10 @@ const Settings: React.FC = () => {
 
     const pages: PageContent[] = [
         { title: 'Загальні налаштування', icon: <UserRoundCog className='w-5 h-5' />, content: <Base name="name" email="email" about="about" avaterUrl="https://i.imgur.com/ufBjnf8.png" backgroundUrl="https://i.imgur.com/ufBjnf8.png"></Base> },
-        { title: 'Пароль', icon: <LockKeyhole className='w-5 h-5' />, content: <Password oldhash='1'></Password> },
+        { title: 'Пароль', icon: <LockKeyhole className='w-5 h-5' />, content: <Password></Password> },
         { title: 'Сповіщення', icon: <Bell />, content: <Notification isAcceptFriendRequest={true} isDeclineFriendRequest={true} isBigSale={true} isWishSale={true} isNewComment={true} isNewFriendRequest={true} isNewMessage={true} isNewMessageSound={true}></Notification> },
         { title: 'Гаманець', icon: <DollarSign />, content: <Wallet balance={1000} transactions={[{ type: 'Якась гра, яка дуже всім сподобається', amount: -1000, date: '2022-01-01' }, { type: 'Поповнення балансу', amount: 2000, date: '2022-01-01' }]}></Wallet> },
-        { title: 'Видалення акаунта', icon: <UserRoundX />, content: <Delete nick="name" passwordHash="1"></Delete> },
+        { title: 'Видалення акаунта', icon: <UserRoundX />, content: <Delete></Delete> },
     ];
 
     return (

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { CircleEllipsisIcon, HeartIcon, MessageSquareMoreIcon, StarIcon } from "lucide-react";
-import { ReviewProps } from "../UserMenu";
-import PostFooter from "@/components/shop/community/PostFooter";
+import React from "react";
+import { CircleEllipsisIcon, StarIcon } from "lucide-react";
+import { ReviewProps } from "../user-menu";
+import PostFooter from "@/components/shop/community/post-footer";
 
 
 const Review: React.FC<{ info: ReviewProps }> = ({ info }) => {

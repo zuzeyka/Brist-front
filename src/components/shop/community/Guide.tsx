@@ -1,7 +1,7 @@
 import React from 'react';
-import { PostProps } from './Post';
-import PostHeader from './PostHeader';
-import PostFooter from './PostFooter';
+import { PostProps } from './post';
+import PostHeader from './post-header';
+import PostFooter from './post-footer';
 
 const Guide: React.FC<PostProps> = (props) => {
     return (

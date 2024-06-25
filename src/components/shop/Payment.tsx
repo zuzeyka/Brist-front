@@ -1,11 +1,13 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { AlertOctagonIcon, FuelIcon, Gamepad2Icon, GamepadIcon, HeartIcon, ShareIcon, StarIcon } from 'lucide-react';
+import { AlertOctagonIcon, HeartIcon, ShareIcon, StarIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { useCart } from './cart/card-context';
 
 interface PaymentProps {
     className?: string;
-    previewUrl?: string;
+    gameName: string;
+    previewUrl: string;
     price: number;
     rate: number;
     endDate?: string;
@@ -16,6 +18,16 @@ interface PaymentProps {
     discount?: number;
 }
 const Payment: React.FC<PaymentProps> = (props) => {
+    const { addToCart } = useCart();
+
+    const handleAddToCart = () => {
+        addToCart({
+            gameName: props.gameName, price: props.price, discount: props.discount, endDate: props.endDate,
+            gamePictureUrl: props.previewUrl
+        });
+    };
+
+
     return (
         <div className={'pl-0' + (props.className ? ' ' + props.className : '')}>
             <div className='flex items-center justify-end mb-5'>
@@ -36,20 +48,20 @@ const Payment: React.FC<PaymentProps> = (props) => {
                     ))}
                 </div>
             </div>
-            {props.previewUrl && <img src={props.previewUrl} className="w-auto mb-4 rounded-xl" />}
+            <img src={props.previewUrl} className="w-auto mb-4 rounded-xl" />
             <div className="flex flex-col justify-between mb-4">
                 {props.discount ? (
                     <div className='flex space-x-2 items-center'>
                         <Badge className="text-background bg-accent hover:bg-accentHover font-artifakt">-{props.discount}%</Badge>
                         <p className="line-through text-sign-1 text-typographySecondary font-artifakt">{props.price}₴</p>
-                        <p className="text-sign-1 text-typography font-artifakt">{props.price - props.price * props.discount / 100}₴</p>
+                        <p className="text-sign-1 text-typography font-artifakt">{Math.round(props.price - props.price * props.discount / 100)}₴</p>
                     </div>
                 ) : (<p className="text-sign-1 font-artifakt text-typography">{props.price}</p>)}
                 <span className='text-sign-2 text-typographySecondary'>Знижка діє до {props.endDate}</span>
             </div>
-            <Button className='bg-primary hover:bg-primaryHover !text-background rounded-2xl w-full text-button-1 font-artifakt'>У кошик</Button>
+            <Button className='bg-primary hover:bg-primaryHover !text-background rounded-2xl w-full text-button-1 font-artifakt'>Купити</Button>
             <div className='flex mt-3'>
-                <Button className="w-full rounded-2xl bg-secondary hover:bg-secondaryHover text-typography text-button-1 border-0 mr-5 font-artifakt">Додати у кошик</Button>
+                <Button className="w-full rounded-2xl bg-secondary hover:bg-secondaryHover text-typography text-button-1 border-0 mr-5 font-artifakt" onClick={handleAddToCart}>Додати у кошик</Button>
                 <Button className="w-1/4 rounded-2xl bg-secondary hover:bg-secondaryHover text-typography text-button-1 border-0 font-artifakt"><HeartIcon></HeartIcon></Button>
             </div>
             <div className="flex items-center justify-between mt-3">

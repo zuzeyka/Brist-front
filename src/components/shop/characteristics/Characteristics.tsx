@@ -1,26 +1,10 @@
-import React from 'react';
-import Payment from '../Payment';
-import Avatar from '@/components/ui/avatar/Avatar';
+import React, { useState } from 'react';
+import Payment from '../payment';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { UserData } from '../about/AboutGame';
-import CharacteristicsList from './CharacteristicsList';
+import CharacteristicsList from './characteristics-list';
 import { FuelIcon, Gamepad2Icon, GamepadIcon } from 'lucide-react';
-
-export interface Characteristics {
-    system: string;
-    graphics: string;
-    processor: string;
-    memory: string;
-    directX?: string;
-    storage: string;
-    sound?: string;
-    other?: string;
-}
-
-export interface CharacteristicsOS {
-    name: string;
-    characteristics: Characteristics[];
-}
+import { SystemRequirement, User } from '@/shared/lib/interfaces';
+import Friends from '../about/friends';
 
 interface CharacteristicsProps {
     gameName: string;
@@ -28,138 +12,70 @@ interface CharacteristicsProps {
     discount?: number;
     endDate?: string;
     rate: number;
+    minOs: SystemRequirement[];
+    maxOs: SystemRequirement[];
+    previewUrl: string;
     releaseDate: string;
     developer: string;
     publisher: string;
+    users: User[];
     className?: string;
 }
 
-const Characteristics: React.FC<CharacteristicsProps> = (props) => {
-    const friends: UserData[] = [
-        {
-            name: 'Юзернейм',
-        },
-        {
-            name: 'Довгий Юзернейм',
-        }
-    ]
-    const characteristics: CharacteristicsOS[] = [
-        {
-            name: 'Windows',
-            characteristics: [{
-                system: 'Windows 7 64-bit, Service Pack 1',
-                graphics: 'NVIDIA GeForce 460 GTX, 1 GB or AMD Radeon 6870 HD, 1 GB',
-                processor: 'Intel Core i5-2300, 2.8 GHz or AMD FX-6300, 3.5 GHz',
-                memory: '4 GB RAM',
-                directX: 'DirectX 11',
-                storage: '20 GB HDD',
-                sound: 'Windows Compatible Audio Device',
-                other: 'Підтримка контролера: рекомендується контролер Microsoft Xbox 360® для Windows® (або еквівалент)'
-            },
-            {
-                system: 'Windows 10 64-bit',
-                graphics: 'NVIDIA GeForce GTX 1060 3 GB or AMD Radeon RX 580 4 GB',
-                processor: 'Intel Core i7-7700, 3.6 GHz or AMD Ryzen 7 3700X, 3.6GHz',
-                memory: '8 GB RAM',
-                directX: 'DirectX 12',
-                storage: '25 GB HDD',
-                sound: 'Windows Compatible Audio Device',
-            }],
-        },
-        {
-            name: 'Linux',
-            characteristics: [
-                {
-                    system: 'Ubuntu 16.04 LTS (64bit)',
-                    graphics: 'GeForce 9800GTX+ (1GB)',
-                    processor: 'Intel Core 2 Duo E5200',
-                    memory: '4 GB RAM',
-                    storage: '9 GB HDD',
-                    other: '1080p, 16:9 recommended'
-                },
-                {
-                    system: 'Ubuntu 16.04 LTS (64bit)',
-                    graphics: 'GeForce GTX 560',
-                    processor: ' Intel Core i5',
-                    memory: '8 GB RAM',
-                    storage: '9 GB HDD',
-                    other: '1080p, 16:9 recommended'
-                }
-            ]
-        },
-        {
-            name: 'MacOS',
-            characteristics: [
-                {
-                    system: 'MacOS 10.13.6+',
-                    graphics: 'Intel HD 5000 (must support Metal API)',
-                    processor: 'Dual Core 2.4GHz',
-                    memory: '4 GB RAM',
-                    directX: '9.0c',
-                    storage: '15 GB HDD',
-                    sound: 'DirectX 9.0c',
-                    other: "MacBook Air, MacBook Pro, iMac, Mac Mini late 2012 and newer; Mac Pro late 2013 and newer; MacBook 2015 and newer"
-                },
-                {
-                    system: 'MacOS 10.14+',
-                    graphics: 'Intel UHD 630+ (must support Metal API)',
-                    processor: 'Quad Core 3.0 GHz+',
-                    memory: '8 GB RAM',
-                    directX: '9.0c',
-                    storage: '20 GB HDD',
-                    sound: 'DirectX 9.0c'
-                }
-            ]
-        }
-    ]
-    const [selectedCharacteristicState, setSelectedCharacteristicState] = React.useState<string>(characteristics[0].name);
-
-    const setSelectedCharacteristic = (characteristic: string) => {
-        setSelectedCharacteristicState(characteristic);
-    }
+const Characteristics: React.FC<CharacteristicsProps> = ({
+    gameName,
+    price,
+    discount,
+    endDate,
+    rate,
+    minOs,
+    maxOs,
+    releaseDate,
+    developer,
+    publisher,
+    previewUrl,
+    users,
+    className = '',
+}) => {
+    const characteristics = [...minOs, ...maxOs];
+    const allOS = characteristics.map(({ os }) => os);
+    const [selectedCharacteristic, setSelectedCharacteristic] = useState<string>(allOS[0]);
 
     return (
-        <div className={'col-span-2 flex' + (props.className ? ' ' + props.className : '')}>
+        <div className={`col-span-2 flex ${className}`}>
             <div className='flex flex-col flex-grow py-4'>
-                <h1 className='text-heading-1 font-bold text-typography'>{props.gameName}</h1>
+                <h1 className='text-heading-1 font-bold text-typography'>{gameName}</h1>
                 <div>
-                    <Select onValueChange={(characteristic) => {
-                        if (characteristic) {
-                            setSelectedCharacteristic(characteristic);
-                        }
-                    }}>
-                        <SelectContent className='!bg-secondary'>
-                            {characteristics.map(c => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}
-                        </SelectContent>
+                    <Select onValueChange={setSelectedCharacteristic}>
                         <SelectTrigger className="w-96 my-4 !bg-cardLight12 rounded-2xl" id="sort">
-                            <SelectValue placeholder={characteristics[0].name} />
+                            <SelectValue placeholder={allOS[0]} />
                         </SelectTrigger>
+                        <SelectContent className='!bg-secondary'>
+                            {allOS.map((element: string, index: number) => (
+                                <SelectItem key={index} value={element}>{element}</SelectItem>
+                            ))}
+                        </SelectContent>
                     </Select>
-                    {characteristics.find(c => c.name === selectedCharacteristicState) && <CharacteristicsList data={characteristics.find(c => c.name === selectedCharacteristicState)!} />}
-
+                    {characteristics.filter(({ os }) => os === selectedCharacteristic).map((osData, index) => (
+                        <CharacteristicsList key={index} data={[osData]} />
+                    ))}
                 </div>
             </div>
             <div className='flex-1 pl-4 py-4'>
                 <div className='sticky top-20 z-9'>
-                    <Payment platforms={[<GamepadIcon />, <Gamepad2Icon />, <FuelIcon />]} developer={props.developer} publisher={props.publisher} releaseDate={props.releaseDate} previewUrl={'https://i.imgur.com/hNIw75C.png'} price={props.price} discount={props.discount} rate={props.rate} endDate={props.endDate}></Payment>
-                    <div className='bg-card1 p-4 mt-4 rounded-2xl font-artifakt text-typography'>
-                        <span className='font-semibold text-typography'>Друзів бажають цю гру: {friends.length}</span>
-                        {friends.map((friend, index) => (
-                            <div key={index} className='flex items-center my-2 space-x-2 bg-card2 rounded-2xl'>
-                                <Avatar src={friend.avatarUrl} alt='Avatar' className='w-8 h-8'></Avatar>
-                                <span className='font-bold text-sign-2'>{friend.name}</span>
-                            </div>
-                        ))}
-                    </div>
-                    <div className='bg-card1 p-4 mt-4 rounded-2xl font-artifakt text-typography'>
-                        <span className='font-semibold text-typography'>Друзів мають цю гру: {friends.length}</span>
-                        {friends.map((friend, index) => (
-                            <div key={index} className='flex items-center my-2 space-x-2 bg-card2 rounded-2xl'>
-                                <Avatar src={friend.avatarUrl} alt='Avatar' className='w-8 h-8'></Avatar>
-                                <span className='font-bold text-sign-2'>{friend.name}</span>
-                            </div>
-                        ))}
-                    </div>
+                    <Payment
+                        gameName={gameName}
+                        platforms={[<GamepadIcon key="1" />, <Gamepad2Icon key="2" />, <FuelIcon key="3" />]}
+                        developer={developer}
+                        publisher={publisher}
+                        releaseDate={releaseDate}
+                        previewUrl={previewUrl}
+                        price={price}
+                        discount={discount}
+                        rate={rate}
+                        endDate={endDate}
+                    />
+                    <Friends wishedFriends={users} ownedFriends={users} />
                 </div>
             </div>
         </div>

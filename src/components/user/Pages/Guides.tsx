@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { PostProps } from "../../shop/community/Post";
+import { PostProps } from "../../shop/community/post";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { InputField } from "@/components/ui/input-field";
-import Guide from "@/components/shop/community/Guide";
+import Guide from "@/components/shop/community/guide";
 import { PlusIcon } from "lucide-react";
 
 const Guides: React.FC<{ guides: PostProps[] }> = ({ guides }) => {
-    const [filter, setFilter] = useState("all");
+    const [, setFilter] = useState("all");
     const [visibleCount, setVisibleCount] = useState(4);
 
     const handleLoadMore = () => {

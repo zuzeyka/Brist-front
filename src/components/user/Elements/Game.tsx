@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { GameProps } from "../Pages/Wished";
+import React from "react";
+import { GameProps } from "../pages/wished";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { HeartIcon, StarIcon } from "lucide-react";

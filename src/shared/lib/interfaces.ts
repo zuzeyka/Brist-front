@@ -7,6 +7,7 @@ export interface Categories {
 
 export interface CategoryByAuthor {
     id: string;
+    authorId: string;
     name: string;
     description: string;
     image: string;
@@ -15,6 +16,7 @@ export interface CategoryByAuthor {
 
 export interface CategoryByUser {
     id: string;
+    authorId: string;
     name: string;
     description: string;
     createdAt: string;
@@ -27,25 +29,18 @@ export interface CategoryForGame {
     createdAt: string;
 }
 
-export interface Developer {
+export interface Chat {
     id: string;
-    name: string;
-    subscribersCount: number;
-    urlForNewsPage: string;
-    description: string;
-    avatar: string;
-    backgroundImage?: string;
+    firstUser: string;
+    secondUser: string;
     createdAt: string;
 }
 
-export interface Publisher {
+export interface Message {
     id: string;
-    subscribersCount: number;
-    name: string;
-    description: string;
-    avatar: string;
-    backgroundImage: string;
-    urlForNewsPage: string;
+    chatId: string;
+    senderId: string;
+    content: string;
     createdAt: string;
 }
 
@@ -69,12 +64,12 @@ export interface GameGuide {
     description?: string;
     likesCount: number;
     discussionId: string;
-    imageUrl?: string;
+    contentUrl?: string;
     gameId: string;
     authorId: string;
     gameGroupId: string;
     content: string;
-    createdAt: string;
+    createdAt: Date;
 }
 
 export interface GameNews {
@@ -83,12 +78,12 @@ export interface GameNews {
     description?: string;
     likesCount: number;
     discussionId: string;
-    imageUrl?: string;
+    contentUrl?: string;
     gameId: string;
     authorId: string;
     gameGroupId: string;
     content: string;
-    createdAt: string;
+    createdAt: Date;
 }
 
 export interface GamePosts {
@@ -97,12 +92,12 @@ export interface GamePosts {
     description?: string;
     likesCount: number;
     discussionId: string;
-    imageUrl?: string;
+    contentUrl?: string;
     gameId: string;
     gameTopicId: string;
     authorId: string;
     content: string;
-    createdAt: string;
+    createdAt: Date;
 }
 
 export interface GameTopic {
@@ -129,19 +124,6 @@ export interface Group {
     createdAt: string;
 }
 
-export interface Post {
-    id: string;
-    title: string;
-    description?: string;
-    likesCount: number;
-    discussionId: string;
-    imageUrl?: string;
-    gameId: string;
-    authorId: string;
-    content: string;
-    createdAt: string;
-}
-
 export interface Topic {
     id: string;
     attachedId: string;
@@ -165,6 +147,13 @@ export interface Language {
     createdAt: string;
 }
 
+export interface CategoryByUserForGame {
+    id: string;
+    name: string;
+    image: string;
+    createdAt: string;
+}
+
 export interface Friends {
     id: string;
     userId: string;
@@ -179,15 +168,11 @@ export interface OwnedGame {
     createdAt: string;
 }
 
-export interface Screenshot {
+export interface UserCategory {
     id: string;
-    title?: string;
-    description?: string;
-    likesCount: number;
-    discussionId: string;
-    gameId: string;
-    authorId: string;
-    screenshotUrl: string;
+    userId: string;
+    ownedGameId: string;
+    categoryId: string;
     createdAt: string;
 }
 
@@ -199,26 +184,15 @@ export interface UserComment {
     createdAt: string;
 }
 
-export interface User {
-    id: string;
-    name: string;
-    passwordSalt: string;
-    salt: string;
-    email: string;
-    phone: string;
-    createdAt: string;
-}
-
 export interface Video {
     id: string;
     title?: string;
     description?: string;
     likesCount: number;
-    discussionId: string;
     gameId: string;
     authorId: string;
-    videoUrl: string;
-    createdAt: string;
+    contentUrl: string;
+    createdAt: Date;
 }
 
 export interface WishedGame {
@@ -228,40 +202,38 @@ export interface WishedGame {
     createdAt: string;
 }
 
-export interface MaximumSystemRequirement {
+
+export interface Screenshot {
     id: string;
+    title: string;
+    description: string;
+    likesCount: number;
     gameId: string;
-    OS: string;
-    processor: string;
-    RAM: string;
-    video: string;
-    freeDiskSpace: string;
-    createdAt: string;
+    authorId: string;
+    contentUrl: string;
+    createdAt: Date;
 }
 
-export interface MinimalSystemRequirement {
+export interface Developer {
     id: string;
-    gameId: string;
-    OS: string;
-    processor: string;
-    RAM: string;
-    video: string;
-    freeDiskSpace: string;
-    createdAt: string;
-}
-
-export interface DLCInShop {
-    id: string;
-    gameId: string;
+    subscribersCount: number;
     name: string;
-    price: number;
-    discount: number;
-    previeImage: string;
-    dateOfRelease: string;
-    developerId: string;
-    publisherId: string;
-    urlForContent: string;
-    createdAt: string;
+    description: string;
+    avatar: string;
+    backgroundImage: string;
+    urlForNewsPage: string;
+    createdAt: Date;
+}
+
+export interface Publisher {
+    id: string;
+    subscribersCount: number;
+    name: string;
+    description: string;
+    avatar: string;
+    backgroundImage: string;
+    urlForNewsPage: string;
+    createdAt: Date;
 }
 
 export interface GameInShop {
@@ -269,10 +241,72 @@ export interface GameInShop {
     name: string;
     price: number;
     discount: number;
+    discountFinish: Date;
     previeImage: string;
-    dateOfRelease: string;
+    description: string;
+    dateOfRelease: Date;
     developerId: string;
     publisherId: string;
     urlForContent: string;
+    createdAt: string;
+}
+
+export interface DlcInShop extends GameInShop {
+    gameId: string;
+}
+
+export interface GameInShopModel {
+    name?: string;
+    price: number;
+    discount: number;
+    discountFinish?: Date;
+    previeImage?: string;
+    description?: string;
+    dateOfRelease: Date;
+    developerId: string;
+    publisherId: string;
+    urlForContent?: string;
+    createdAt?: Date;
+}
+
+export interface GameBundle {
+    name: string;
+    description?: string;
+    price: number;
+    discount: number;
+    discountFinish?: Date;
+    createdAt?: Date;
+}
+
+export interface Discussion {
+    id: string;
+    authorId: string;
+    attachedId: string;
+    content: string;
+    rate: number;
+    likesCount: number;
+    createdAt: Date;
+}
+
+export interface User {
+    name: string;
+    passwordSalt: string;
+    description: string;
+    email: string;
+    image: string;
+    verified: boolean;
+    amountOfMoney: number;
+    amountOfXp: number;
+    createdAt: Date;
+}
+
+export interface SystemRequirement {
+    id: string;
+    gameId: string;
+    os: string;
+    processor: string;
+    ram: string;
+    video: string;
+    freeDiskSpace: string;
     createdAt: string;
 }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { InputField } from "@/components/ui/input-field";
-import Game from "../Elements/Game";
+import Game from "../elements/game";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@radix-ui/react-collapsible";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
 
@@ -20,7 +20,7 @@ export interface GameProps {
 const Wished: React.FC<{ games: GameProps[] }> = ({ games }) => {
     const [visibleCount, setVisibleCount] = useState(4);
     const [isOpen, setIsOpen] = React.useState(false);
-    const [filter, setFilter] = useState("all");
+    const [, setFilter] = useState("all");
 
     const handleLoadMore = () => {
         setVisibleCount(prevCount => Math.min(prevCount + 2, games.length));
