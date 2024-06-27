@@ -2,7 +2,9 @@ import Avatar from "@/components/ui/avatar/avatar";
 import { BellIcon, SettingsIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from '@/components/authorization/auth-context';
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import Notifications from "../popups/notifications";
 
 const Head: React.FC = () => {
     const { isAuthenticated } = useAuth();
@@ -57,7 +59,14 @@ const Head: React.FC = () => {
                             <SettingsIcon className="text-typography h-6 w-6" />
                         </Link>
                         <div className="bg-cardLight12 rounded-2xl p-2 w-10 h-10 text-white text-sm hover:brightness-50">
-                            <BellIcon className="text-typography h-6 w-6" />
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <BellIcon className="text-typography h-6 w-6" />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="w-auto bg-card2">
+                                    <Notifications />
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
                         <Avatar alt="User Avatar" src="" className="w-10 h-10"></Avatar>
                     </div>

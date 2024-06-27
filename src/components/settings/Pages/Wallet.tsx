@@ -71,7 +71,7 @@ const Wallet: React.FC<WalletProps> = (props) => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {props.transactions.map((transaction, index) => (
+                        {[...props.transactions].reverse().map((transaction, index) => (
                             <TableRow className="bg-card1" key={index}>
                                 <TableCell>{transaction.amount > 0 ? "+" + transaction.amount + "₴" : transaction.amount + "₴"}</TableCell>
                                 <TableCell>{transaction.type}</TableCell>

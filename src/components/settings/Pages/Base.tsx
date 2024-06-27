@@ -1,5 +1,8 @@
+import { useAuth } from "@/components/authorization/auth-context";
+import EmailConfirmation from "@/components/authorization/email-confirmation";
 import Avatar from "@/components/ui/avatar/avatar";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { InputField } from "@/components/ui/input-field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,6 +19,8 @@ interface BaseProps {
 const Base: React.FC<BaseProps> = (props) => {
     const [backgroundUrl, setBackgroundUrl] = useState(props.backgroundUrl);
     const [avatarUrl, setAvatarUrl] = useState(props.avaterUrl);
+    const [emailChanged, setEmailChanged] = useState(false);
+    const { logout } = useAuth();
 
     const handleAvatarChange = (fileUrl: string) => {
         setAvatarUrl(fileUrl);
@@ -29,7 +34,7 @@ const Base: React.FC<BaseProps> = (props) => {
             <div className="flex flex-col pb-6 rounded-3xl bg-card1 gap-52">
                 <div>
                     <label htmlFor="background-upload" className="relative w-full h-72 bg-gradient-to-br from-gray-500 via-gray-700 to-gray-900 rounded-t-2xl flex items-center justify-center cursor-pointer">
-                        {backgroundUrl ? (
+                        {!backgroundUrl ? (
                             <img src={backgroundUrl} alt="User background" className="w-full h-full object-cover rounded-t-2xl" />
                         ) : (
                             <div className="flex items-center justify-center text-white rounded-t-2xl">
@@ -56,7 +61,7 @@ const Base: React.FC<BaseProps> = (props) => {
                             <div className="flex flex-col w-[19%] max-md:ml-0 max-md:w-full">
                                 <div className="relative">
                                     {avatarUrl ? (
-                                        <Avatar className="h-[198px] rounded-[120px] w-[198px] max-md:mt-10" src={avatarUrl} alt="User avater" />
+                                        <Avatar className="h-[198px] rounded-[120px] w-[198px] max-md:mt-10" src="" alt="User avater" />
                                     ) : (
                                         <div className="flex flex-col items-center px-16 pt-20 mx-auto mt-3.5 bg-neutral-500 font-bold text-5xl h-[198px] rounded-[120px] w-[198px] max-md:mt-10">U</div>
                                     )}
@@ -113,13 +118,24 @@ const Base: React.FC<BaseProps> = (props) => {
                                             </SelectContent>
                                         </Select>
                                     </div>
+                                    <div className="flex justify-between">
+                                        {!emailChanged ? (<Dialog>
+                                            <DialogTrigger asChild>
+                                                <Button className="justify-center items-center px-9 py-3.5 text-negative rounded-3xl border-0 bg-accent text-button-2 max-md:px-5 hover:bg-cardLight25">Пiдтвердити пошту</Button>
+                                            </DialogTrigger>
+                                            <DialogContent className="w-auto !bg-card2">
+                                                <EmailConfirmation emailChange={setEmailChanged} />
+                                            </DialogContent>
+                                        </Dialog>) : null}
+                                        <Button onClick={logout} className="justify-center items-center px-9 py-3.5 rounded-3xl border-0 bg-transparent text-button-2 max-md:px-5 hover:bg-negative">Вийти з акаунта</Button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="flex gap-5 justify-end px-5 self-end mr-6 max-w-full text-base whitespace-nowrap w-[472px] max-md:flex-wrap max-md:mt-10 max-md:mr-2.5">
-                    <Button className="justify-center items-center px-9 py-3.5 text-negative rounded-3xl border-0 bg-transparent text-button-2 max-md:px-5">
+                    <Button className="justify-center items-center px-9 py-3.5 text-negative rounded-3xl border-0 bg-transparent text-button-2 max-md:px-5 hover:bg-cardLight25">
                         Відхилити
                     </Button>
                     <Button className="justify-center items-center px-9 py-3.5 !text-background rounded-3xl border-0 bg-primary text-button-2 hover:bg-primaryHover max-md:px-5">
