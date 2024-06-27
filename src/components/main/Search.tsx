@@ -3,7 +3,7 @@ import { HeartIcon, ShoppingCartIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import Catalog from '../popups/Catalog';
+import Catalog from '../popups/catalog';
 import { useAuth } from '@/components/authorization/auth-context';
 
 const Search: React.FC<{ className?: string }> = ({ className }) => {

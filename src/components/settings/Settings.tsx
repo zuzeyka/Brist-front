@@ -24,14 +24,6 @@ const Settings: React.FC = () => {
         setSelectedPage(page);
     };
 
-    useEffect(() => {
-        if (theme === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    }, [theme]);
-
     const toggleTheme = () => {
         setTheme(theme === 'light' ? 'dark' : 'light');
     };
@@ -41,9 +33,18 @@ const Settings: React.FC = () => {
         { title: 'Загальні налаштування', icon: <UserRoundCog className='w-5 h-5' />, content: <Base name="name" email="email" about="about" avaterUrl="https://i.imgur.com/ufBjnf8.png" backgroundUrl="https://i.imgur.com/ufBjnf8.png"></Base> },
         { title: 'Пароль', icon: <LockKeyhole className='w-5 h-5' />, content: <Password></Password> },
         { title: 'Сповіщення', icon: <Bell />, content: <Notification isAcceptFriendRequest={true} isDeclineFriendRequest={true} isBigSale={true} isWishSale={true} isNewComment={true} isNewFriendRequest={true} isNewMessage={true} isNewMessageSound={true}></Notification> },
-        { title: 'Гаманець', icon: <DollarSign />, content: <Wallet balance={1000} transactions={[{ type: 'Якась гра, яка дуже всім сподобається', amount: -1000, date: '2022-01-01' }, { type: 'Поповнення балансу', amount: 2000, date: '2022-01-01' }]}></Wallet> },
+        { title: 'Гаманець', icon: <DollarSign />, content: <Wallet balance={1000} transactions={[{ type: 'Якась гра, яка дуже всім сподобається', amount: -1000, date: new Date(Date.now()).toLocaleDateString() }, { type: 'Поповнення балансу', amount: 2000, date: new Date(Date.now() - 1000 * 60 * 60 * 48).toLocaleDateString() }]}></Wallet> },
         { title: 'Видалення акаунта', icon: <UserRoundX />, content: <Delete></Delete> },
     ];
+
+    useEffect(() => {
+        setSelectedPage(pages[0]);
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [theme]);
 
     return (
         <>
@@ -67,7 +68,7 @@ const Settings: React.FC = () => {
                                 <CommandItem
                                     key={index}
                                     onSelect={() => handleSelectPage(page)}
-                                    className={selectedPage === page ? 'bg-gray-200' : ''}
+                                    className={selectedPage?.title === page.title ? 'bg-primary' : ''}
                                 >
                                     <div className='flex justify-between w-full'>
                                         <div className="flex items-center space-x-2">
@@ -93,3 +94,4 @@ const Settings: React.FC = () => {
 };
 
 export default Settings;
+

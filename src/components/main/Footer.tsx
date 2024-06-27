@@ -14,21 +14,23 @@ const Footer: React.FC = () => {
                         owners.
                     </p>
                     <div className="flex space-x-4 mt-4">
-                        <Link className="text-button-2 font-artifakt text-typography hover:underline" to="/terms">
+                        <Link className="text-button-2 font-artifakt text-typography hover:text-primaryHover" to="/terms">
                             Terms of Service
                         </Link>
-                        <Link className="text-button-2 font-artifakt text-typography hover:underline" to="/privacy">
+                        <Link className="text-button-2 font-artifakt text-typography hover:text-primaryHover" to="/privacy">
                             Privacy Policy
                         </Link>
-                        <Link className="text-button-2 font-artifakt text-typography hover:underline" to="/refund">
+                        <Link className="text-button-2 font-artifakt text-typography hover:text-primaryHover" to="/refund">
                             Store Refund Policy
                         </Link>
                     </div>
                 </div>
                 <div className="flex space-x-4">
-                    <FacebookIcon className="text-typography h-6 w-6" />
-                    <InstagramIcon className="text-typography h-6 w-6" />
-                    <TwitterIcon className="text-typography h-6 w-6" />
+                    <Link to="https://uk-ua.facebook.com"><FacebookIcon className="text-typography h-6 w-6 hover:text-primaryHover" /></Link>
+                    <Link to="https://www.instagram.com"><InstagramIcon className="text-typography h-6 w-6 hover:text-primaryHover" /></Link>
+                    <Link to="https://x.com"><TwitterIcon className="text-typography h-6 w-6 hover:text-primaryHover" /></Link>
+
+
                 </div>
             </div>
         </footer>

@@ -216,41 +216,38 @@ const Library: React.FC = () => {
     return (
         <>
             <Head></Head>
-            {isLoading && !screenshotUsers && !videoUsers && !postUsers && !guideUsers ? (
-                <div className='h-screen flex justify-center items-center text-heading-1'>Loading...</div>
-            ) : (
-                <div className="bg-background flex">
-                    <ResizablePanelGroup
-                        direction="horizontal"
-                        className="flex h-full w-full">
-                        <ResizablePanel defaultSize={25}>
-                            <ListOfSmallGames games={!isLoading ? gamesInfo : []} />
-                        </ResizablePanel>
-                        <ResizableHandle />
-                        <ResizablePanel defaultSize={75}>
-                            <div className="flex flex-col p-5 text-typography">
-                                <Search isFilter={isFilter} onFilterChange={setIsFilter}></Search>
-                                <NewsList gameInfo={games} gameNews={news ? news : []}></NewsList>
-                                <CommunityList comunityContent={combinedContentJSX}></CommunityList>
-                                <Tabs defaultValue="all" className="w-full mt-5">
-                                    <TabsList className='ml-2 bg-transparent'>
-                                        <TabsTrigger className='bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=inactive]:text-typographySecondary data-[state=active]:underline !text-heading-2' value="all">All games</TabsTrigger>
-                                        <TabsTrigger className='data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=inactive]:text-typographySecondary data-[state=active]:underline !text-heading-2 ' value="favorites">Favorites</TabsTrigger>
-                                        {collections.map((collection) => (
-                                            <TabsTrigger className='data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=inactive]:text-typographySecondary data-[state=active]:underline !text-heading-2' key={collection} value={collection}>{collection}</TabsTrigger>
-                                        ))}
-                                    </TabsList>
-                                    <TabsContent value="all"><AllGames list={isFilter} games={!isLoading ? games : []}></AllGames></TabsContent>
-                                    <TabsContent value="favorites"><AllGames list={isFilter} games={!isLoading ? games.slice(0, 5) : []}></AllGames></TabsContent>
-                                    <TabsContent value={collections[0]}><AllGames list={isFilter} games={!isLoading ? games.slice(5, 15) : []}></AllGames></TabsContent>
-                                    <TabsContent value={collections[1]}><AllGames list={isFilter} games={!isLoading ? games.slice(2, 7) : []}></AllGames></TabsContent>
-                                    <TabsContent value={collections[2]}><AllGames list={isFilter} games={!isLoading ? games.slice(5, 10) : []}></AllGames></TabsContent>
-                                </Tabs>
+            <div className="bg-background flex">
+                <ResizablePanelGroup
+                    direction="horizontal"
+                    className="flex h-full w-full">
+                    <ResizablePanel defaultSize={25}>
+                        <ListOfSmallGames games={!isLoading ? gamesInfo : []} />
+                    </ResizablePanel>
+                    <ResizableHandle />
+                    <ResizablePanel defaultSize={75}>
+                        <div className="flex flex-col p-5 text-typography">
+                            <Search isFilter={isFilter} onFilterChange={setIsFilter}></Search>
+                            <NewsList gameInfo={games} gameNews={news ? news : []}></NewsList>
+                            <CommunityList comunityContent={combinedContentJSX}></CommunityList>
+                            <Tabs defaultValue="all" className="w-full mt-5">
+                                <TabsList className='ml-2 bg-transparent'>
+                                    <TabsTrigger className='bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=inactive]:text-typographySecondary data-[state=active]:underline !text-heading-2' value="all">All games</TabsTrigger>
+                                    <TabsTrigger className='data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=inactive]:text-typographySecondary data-[state=active]:underline !text-heading-2 ' value="favorites">Favorites</TabsTrigger>
+                                    {collections.map((collection) => (
+                                        <TabsTrigger className='data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=inactive]:text-typographySecondary data-[state=active]:underline !text-heading-2' key={collection} value={collection}>{collection}</TabsTrigger>
+                                    ))}
+                                </TabsList>
+                                <TabsContent value="all"><AllGames list={isFilter} games={!isLoading ? games : []}></AllGames></TabsContent>
+                                <TabsContent value="favorites"><AllGames list={isFilter} games={!isLoading ? games.slice(0, 5) : []}></AllGames></TabsContent>
+                                <TabsContent value={collections[0]}><AllGames list={isFilter} games={!isLoading ? games.slice(5, 15) : []}></AllGames></TabsContent>
+                                <TabsContent value={collections[1]}><AllGames list={isFilter} games={!isLoading ? games.slice(2, 7) : []}></AllGames></TabsContent>
+                                <TabsContent value={collections[2]}><AllGames list={isFilter} games={!isLoading ? games.slice(5, 10) : []}></AllGames></TabsContent>
+                            </Tabs>
 
-                            </div>
-                        </ResizablePanel>
-                    </ResizablePanelGroup>
-                </div>)}
+                        </div>
+                    </ResizablePanel>
+                </ResizablePanelGroup>
+            </div>
             <Footer></Footer>
         </>
     );

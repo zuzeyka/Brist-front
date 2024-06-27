@@ -1,6 +1,7 @@
 import { CircleEllipsisIcon, StarIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { GameInShop } from "@/shared/lib/interfaces"
+import { useState } from "react"
 
 interface GameProps {
     className?: string
@@ -9,6 +10,27 @@ interface GameProps {
 }
 
 const AllGames: React.FC<GameProps> = (props) => {
+    const [isDownloading, setIsDownloading] = useState(false);
+
+    const handleDownload = (index: number) => {
+        if (props.games[index].urlForContent) {
+            setIsDownloading(true);
+            fetch(props.games[index].urlForContent)
+                .then((response) => response.blob())
+                .then((blob) => {
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = props.games[index].urlForContent;
+                    link.click();
+
+                    setIsDownloading(false);
+                })
+                .catch((error) => {
+                    console.error("Error downloading file:", error);
+                    setIsDownloading(false);
+                });
+        }
+    };
     return props.list ? (
         <div className="flex flex-col justify-start w-full space-y-4 m-2 text-typography font-artifakt">
             {Array.from({ length: props.games.length }).map((_, index) => (
@@ -17,7 +39,7 @@ const AllGames: React.FC<GameProps> = (props) => {
                         <img src={props.games[index].previeImage} className="h-36 rounded-l-lg w-60 object-cover" alt="game-image" />
                         <div className="flex justify-evenly flex-col p-4">
                             <h2 className="font-bold text-heading-3 font-manrope">{props.games[index].name}</h2>
-                            <Button onClick={() => window.open(props.games[index].urlForContent)} className="bg-primary text-background rounded-full hover:bg-primaryHover">Скачать</Button>
+                            <Button onClick={() => handleDownload(index)} className="bg-primary text-background rounded-full hover:bg-primaryHover">{isDownloading ? "Завантаження..." : "Скачать"}</Button>
                         </div>
                     </div>
                     <div className="flex flex-col justify-evenly p-4 text-typographySecondary">
@@ -48,7 +70,7 @@ const AllGames: React.FC<GameProps> = (props) => {
                             <span className="text-transparent group-hover:text-typographySecondary">{props.games[index].discount}MB</span>
                         </div>
                         <div className="flex justify-between">
-                            <Button className="bg-transparent text-transparent group-hover:bg-primary group-hover:text-background">Скачать</Button>
+                            <Button onClick={() => handleDownload(index)} className="bg-transparent text-transparent group-hover:bg-primary group-hover:text-background">{isDownloading ? "Завантаження..." : "Скачать"}</Button>
                             <Button className="bg-transparent text-xl text-transparent group-hover:bg-primary group-hover:text-background">...</Button>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import ChatPreviev, { ChatPrevievProps } from "./elements/chat-previev";
 
@@ -7,16 +7,23 @@ interface UserListProps {
 }
 
 const UserList: React.FC<UserListProps> = ({ onSelectChat }) => {
+    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const chats: ChatPrevievProps[] = [];
-    for (let i = 0; i < 10; i++) {
+    const names: string[] = ["frostbyte", "eisera", "arctiq", "coldedge", "brist"];
+    for (let i = 0; i < names.length; i++) {
         chats.push({
             className: `user-${i}`,
-            text: `Text from user-${i}`,
-            time: `Time from user-${i}`,
+            text: `message`,
+            time: new Date().toLocaleString(),
             avatar: ``,
-            name: `user${i}`,
+            name: names[i],
         });
     }
+
+    const handleSelect = (index: number) => {
+        setSelectedIndex(index);
+        onSelectChat(chats[index].name);
+    };
 
     return (
         <div className="flex flex-col mx-auto h-full w-full">
@@ -27,8 +34,8 @@ const UserList: React.FC<UserListProps> = ({ onSelectChat }) => {
                     {chats.map((chat, index) => (
                         <CommandItem
                             key={index}
-                            className="bg-card2"
-                            onSelect={() => onSelectChat(chat.name)}
+                            className={`bg-card2 ${index === selectedIndex ? 'bg-primary' : ''}`}
+                            onSelect={() => handleSelect(index)}
                         >
                             <ChatPreviev {...chat}></ChatPreviev>
                         </CommandItem>
@@ -40,3 +47,4 @@ const UserList: React.FC<UserListProps> = ({ onSelectChat }) => {
 }
 
 export default UserList;
+

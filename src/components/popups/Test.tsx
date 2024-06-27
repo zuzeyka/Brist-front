@@ -1,5 +1,5 @@
 import React from "react";
-import Catalog from "./Catalog";
+import Catalog from "./catalog";
 import NewCollection from "./new-collection";
 import NewDiscussion from "./new-discussion";
 import NewGuide from "./new-guide";
