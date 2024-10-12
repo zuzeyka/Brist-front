@@ -1,43 +1,57 @@
-# Дипломный проект "Slush"
+# Slush - Digital Game Distribution Platform
 
-Добро пожаловать в репозиторий дипломного проекта "Slush"! Этот проект является частью моего обучения и представляет собой платформу для цифровой дистрибуции и покупки видеоигр, схожую по функциональности с платформой Steam.
+Welcome to the repository of the **Slush** diploma project! This platform provides a modern and streamlined way for gamers to discover, purchase, and play video games, featuring community-driven interactions similar to other gaming platforms like Steam.
 
-## О проекте
+## About the Project
 
-"Slush" создан с целью предоставить игрокам удобный способ искать, покупать и запускать игры, а также общаться с другими игроками через встроенные функции сообщества.
+**Slush** is designed to offer gamers and developers an all-in-one solution for digital game distribution. With features like robust game search, community engagement tools, and easy game purchasing, Slush aims to enhance the gaming experience.
 
-## Основные возможности
+## Key Features
 
--   **Поиск и фильтрация игр**: Пользователи могут искать игры по различным критериям, таким как жанр, платформа, цена и рейтинг.
--   **Цифровая дистрибуция**: Платформа обеспечивает удобную цифровую дистрибуцию игр, позволяя разработчикам загружать свои игры на платформу и продавать их пользователям.
--   **Сообщество игроков**: Пользователи могут создавать профили, добавлять друзей, обмениваться сообщениями, создавать и присоединяться к игровым группам.
+- **Game Search and Filters**: Users can search and filter games by genre, platform, price, and rating.
+- **Digital Distribution**: Developers can upload and sell their games directly to users through the platform.
+- **Player Community**: Users can create profiles, make friends, send messages, and form or join gaming groups to engage with others.
 
-## Технологии
+## Technologies Used
 
-Проект разработан с использованием следующих технологий:
+- **ASP.NET**: The primary backend framework.
+- **React**: For building a dynamic and responsive user interface.
+- **MySQL**: Used to store user data, game information, and other essential platform data.
 
--   **ASP .NET**: фреймворк используемый для бэкенда.
--   **React**: библиотека JavaScript для создания пользовательских интерфейсов.
--   **MySQL**: реляционная база данных для хранения информации о пользователях, играх и других аспектах платформы.
+## Installation and Setup
 
-## Установка и запуск
+Follow these steps to set up and run the project locally:
 
-Чтобы установить и запустить проект локально, выполните следующие шаги:
+1. Clone the repository:
 
-1. Клонируйте репозиторий на свой компьютер:
+    ```bash
+    git clone https://github.com/zuzeyka/Slush.git
+    ```
 
-```bash
-git clone https://github.com/zuzeyka/Slush.git
-```
+2. Navigate to the project directory:
 
-## Вклад и поддержка
+    ```bash
+    cd Slush
+    ```
 
-Если у вас есть предложения по улучшению проекта или вы нашли ошибку, пожалуйста, откройте новый Issue или Pull Request. Мы всегда рады новым идеям и вкладам!
+3. Set up the required environment variables and database configurations.
 
-## Лицензия
+4. Build and run the application.
 
-Проект распространяется под лицензией MIT. Подробную информацию можно найти в файле [LICENSE](LICENSE).
+## Contribution
+
+We welcome contributions! If you'd like to help improve Slush or fix any issues, please feel free to submit an Issue or a Pull Request. All contributions, whether they are ideas, bug fixes, or new features, are greatly appreciated.
+
+## License
+
+This project is licensed under the MIT License. For more details, check the [LICENSE](LICENSE) file.
+
+## Contact
+
+If you have any questions or need further assistance, feel free to reach out. We're always happy to assist.
 
 ---
 
-Спасибо, что рассмотрели дипломный проект "Brist"! Надеемся, он понравится вам и пригодится в вашей работе. Если у вас есть какие-либо вопросы, пожалуйста, не стесняйтесь задать их нам. Всегда рады помочь!
+Thank you for exploring the **Slush** project! We hope you enjoy the experience.
+
+[Watch the demo video on YouTube](https://youtu.be/jt5rnjzjRjk)
