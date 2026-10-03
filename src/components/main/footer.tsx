@@ -1,36 +1,40 @@
-import { FacebookIcon, InstagramIcon, TwitterIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const socials = [
+    { href: 'https://uk-ua.facebook.com', icon: '/src/assets/svg/social-facebook.svg', label: 'Facebook' },
+    { href: 'https://www.instagram.com', icon: '/src/assets/svg/social-instagram.svg', label: 'Instagram' },
+    { href: 'https://x.com', icon: '/src/assets/svg/social-twitter.svg', label: 'X' },
+];
+
+const links = [
+    { to: '/terms', label: 'Умови використання' },
+    { to: '/privacy', label: 'Політика конфіденційності' },
+    { to: '/refund', label: 'Політика повернення коштів магазину' },
+];
 
 const Footer: React.FC = () => {
     return (
-        <footer className="bg-card1 text-typography py-6">
-            <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-                <div>
-                    <h2 className="text-3xl font-semibold uppercase text-sign-1 text-primary">Slush</h2>
-                    <p className="text-block-2 font-artifakt text-typographySecondary mt-4">
-                        © 2024, Zubatik inc, Inc. All rights reserved. Zubatik inc, Zubatik inc, the Zubatik inc logo, Fortnite, the Fortnite logo, Unreal,
-                        Unreal Engine, the Unreal Engine logo, Unreal Tournament, and the Unreal Tournament logo are trademarks or registered trademarks of
-                        Zubatik inc, Inc. in the United States of America and elsewhere. Other brands or product names are the trademarks of their respective
-                        owners.
-                    </p>
-                    <div className="flex space-x-4 mt-4">
-                        <Link className="text-button-2 font-artifakt text-typography hover:text-primaryHover" to="/terms">
-                            Terms of Service
-                        </Link>
-                        <Link className="text-button-2 font-artifakt text-typography hover:text-primaryHover" to="/privacy">
-                            Privacy Policy
-                        </Link>
-                        <Link className="text-button-2 font-artifakt text-typography hover:text-primaryHover" to="/refund">
-                            Store Refund Policy
-                        </Link>
+        <footer className="relative bg-card1 text-typography">
+            <div className="max-w-[1464px] mx-auto pt-[52px] pb-12 flex flex-col">
+                <div className="flex justify-between items-start">
+                    <img className="h-6 w-auto mt-1" src="/src/assets/svg/logoDecorativeDark.svg" alt="Slush" />
+                    <div className="flex gap-2">
+                        {socials.map((s) => (
+                            <a key={s.label} href={s.href} target="_blank" rel="noreferrer" aria-label={s.label} className="p-[2.3px] hover:opacity-70">
+                                <img src={s.icon} alt="" width={27.43} height={27.43} />
+                            </a>
+                        ))}
                     </div>
                 </div>
-                <div className="flex space-x-4">
-                    <Link to="https://uk-ua.facebook.com"><FacebookIcon className="text-typography h-6 w-6 hover:text-primaryHover" /></Link>
-                    <Link to="https://www.instagram.com"><InstagramIcon className="text-typography h-6 w-6 hover:text-primaryHover" /></Link>
-                    <Link to="https://x.com"><TwitterIcon className="text-typography h-6 w-6 hover:text-primaryHover" /></Link>
-
-
+                <p className="mt-6 w-[808px] max-w-full font-artifakt text-block-2 tracking-[-0.01em] text-typographySecondary">
+                    © 2024, Zubarik inc, Inc. All rights reserved. Zubarik inc, Zubarik inc, the Zubarik inc logo, Zubarik, the Zubarik logo, Unreal, Unreal Engine, the Unreal Engine logo, Unreal Tournament, and the Unreal Tournament logo are trademarks or registered trademarks of Zubarik inc, Inc. in the United States of America and elsewhere. Other brands or product names are the trademarks of their respective owners.
+                </p>
+                <div className="flex gap-8 mt-6">
+                    {links.map((l) => (
+                        <Link key={l.to} className="font-artifakt font-semibold text-button-2 hover:text-primaryHover" to={l.to}>
+                            {l.label}
+                        </Link>
+                    ))}
                 </div>
             </div>
         </footer>

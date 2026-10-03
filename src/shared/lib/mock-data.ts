@@ -25,67 +25,88 @@ export const users = [
     createdAt: daysFromNow(-400 + i * 30),
 }));
 
-export const developers = [
-    { id: 'd1', name: 'Rozumnichki Team' },
-    { id: 'd2', name: 'Blue Fox Studio' },
-    { id: 'd3', name: 'Steppe Games' },
-].map((d) => ({
-    ...d,
+const studio = (id: string, name: string) => ({
+    id,
+    name,
     subscribersCount: 1200,
     description: LOREM,
-    avatar: image(`${d.id}-avatar`, 150, 150),
-    backgroundImage: image(`${d.id}-bg`, 1280, 400),
+    avatar: image(`${id}-avatar`, 150, 150),
+    backgroundImage: image(`${id}-bg`, 1280, 400),
     urlForNewsPage: '',
     createdAt: daysFromNow(-900),
-}));
+});
 
-export const publishers = [
-    { id: 'p1', name: 'Zubarik Inc' },
-    { id: 'p2', name: 'Dnipro Interactive' },
-].map((p) => ({
-    ...p,
-    subscribersCount: 5400,
-    description: LOREM,
-    avatar: image(`${p.id}-avatar`, 150, 150),
-    backgroundImage: image(`${p.id}-bg`, 1280, 400),
-    urlForNewsPage: '',
-    createdAt: daysFromNow(-1200),
-}));
+const studioNames = [
+    'Ubisoft', 'Massive Entertainment', 'CD PROJEKT RED', 'Slavic Magic', 'Hooded Horse', 'Donkey Crew',
+    'ConcernedApe', 'Sucker Punch Productions', 'PlayStation Publishing', 'Larian Studios', 'Warhorse Studios',
+    'Deep Silver', 'The Indie Stone', 'Okomotive', 'Bungie', 'Unknown Worlds Entertainment', 'Valve', 'Plarium',
+    'Indie Studio',
+];
+const studios = studioNames.map((name, i) => studio(`st${i + 1}`, name));
+const studioId = (name: string) => studios.find((st) => st.name === name)!.id;
+
+export const developers = studios;
+export const publishers = studios;
 
 export const categories = [
     'шутер', 'екшн', 'виживання', 'наукова фантастика', 'відкритий світ',
-    'многокористувацька', 'RPG', 'стратегія', 'інді', 'пригоди', 'гонки', 'головоломка',
+    'многокористувацька', 'RPG', 'стратегія', 'інді', 'пригоди', 'симулятор', 'головоломка',
 ].map((name, i) => ({ id: `c${i + 1}`, name, description: '', createdAt: daysFromNow(-1000) }));
 
-// [name, price, discount %, days until discount ends, days since release]
-const gameSeeds: [string, number, number, number, number][] = [
-    ['Cyber Steppe 2077', 1299, 40, 7, -30],
-    ['Kozak Legends', 799, 0, 0, -400],
-    ['Night City Racer', 499, 25, 3, -120],
-    ['Pixel Dungeon Quest', 99, 0, 0, -800],
-    ['Space Colony Zero', 1099, 50, 10, -15],
-    ['Forest of Shadows', 0, 0, 0, -200],
-    ['Mech Arena', 0, 0, 0, -60],
-    ['Dnipro Drift', 349, 70, 2, -365],
-    ['Puzzle Tower', 79, 20, 5, -500],
-    ['Last Survivor', 899, 15, 14, -5],
-    ['Kingdom of Ash', 1499, 0, 0, -2],
-    ['Ocean Explorer', 59, 0, 0, -90],
+// The catalogue shown in the Figma mockups. Covers live in public/mock/games.
+// The main page picks its rows from this list by rule (see main.tsx), so the
+// order here decides which games land in the curated rows.
+const gameSeeds: {
+    name: string; slug: string; price: number; discount?: number;
+    released: number; developer?: string; publisher?: string; description?: string;
+}[] = [
+    {
+        name: 'Avatar: Frontiers of Pandora', slug: 'hero/avatar-banner', price: 1519, discount: 40, released: -300,
+        developer: 'Massive Entertainment', publisher: 'Ubisoft',
+        description: 'Avatar: Frontiers of Pandora™ — це пригодницька гра від першої особи, де події розгортаються на західному кордоні.',
+    },
+    { name: 'Cyberpunk 2077', slug: 'cyberpunk-2077', price: 1099, released: -1400, developer: 'CD PROJEKT RED', publisher: 'CD PROJEKT RED' },
+    { name: 'Відьмак 3: Дикий гін', slug: 'witcher-3', price: 729, released: -3400, developer: 'CD PROJEKT RED', publisher: 'CD PROJEKT RED' },
+    { name: 'Manor Lords', slug: 'manor-lords', price: 599, discount: 25, released: -160, developer: 'Slavic Magic', publisher: 'Hooded Horse' },
+    { name: 'Bellwright', slug: 'bellwright', price: 600, released: -150, developer: 'Donkey Crew' },
+    { name: 'Stardew Valley', slug: 'stardew-valley', price: 229, released: -3000, developer: 'ConcernedApe', publisher: 'ConcernedApe' },
+    { name: 'Ghost of Tsushima', slug: 'ghost-of-tsushima', price: 1699, released: -120, developer: 'Sucker Punch Productions', publisher: 'PlayStation Publishing' },
+    { name: 'Avatar: Frontiers of Pandora Special Edition', slug: 'avatar-special-edition', price: 1519, discount: 40, released: -300, developer: 'Massive Entertainment', publisher: 'Ubisoft' },
+    { name: "Baldur's Gate 3", slug: 'baldurs-gate-3', price: 899, released: -400, developer: 'Larian Studios', publisher: 'Larian Studios' },
+    { name: 'Kingdom Come: Deliverance', slug: 'kingdom-come', price: 799, discount: 80, released: -2300, developer: 'Warhorse Studios', publisher: 'Deep Silver' },
+    { name: 'Project Zomboid', slug: 'project-zomboid', price: 415, released: -3800, developer: 'The Indie Stone', publisher: 'The Indie Stone' },
+    { name: 'FAR: Lone Sails', slug: 'far-lone-sails', price: 229, discount: 85, released: -2400, developer: 'Okomotive' },
+    { name: 'Placid Plastic Yellow Duck Simulator', slug: 'duck-simulator', price: 60, released: -500 },
+    { name: 'The Escape: Together', slug: 'escape-together', price: 74, released: -600 },
+    { name: 'Juro Janosik', slug: 'juro-janosik', price: 245, discount: 69, released: -700 },
+    { name: 'Destiny 2: The Final Shape', slug: 'destiny-2', price: 1249, released: -5, developer: 'Bungie', publisher: 'Bungie' },
+    { name: 'Sun Haven', slug: 'sun-haven', price: 329, discount: 30, released: -10 },
+    { name: 'Subnautica', slug: 'subnautica', price: 1498, discount: 10, released: -20, developer: 'Unknown Worlds Entertainment', publisher: 'Unknown Worlds Entertainment' },
+    { name: 'Soul Dossier', slug: 'soul-dossier', price: 0, released: -200 },
+    { name: 'Counter-Strike 2', slug: 'counter-strike-2', price: 365, discount: 100, released: -350, developer: 'Valve', publisher: 'Valve' },
+    { name: 'RAID: Shadow Legends', slug: 'raid-shadow-legends', price: 0, released: -2000, developer: 'Plarium', publisher: 'Plarium' },
 ];
 
-export const games = gameSeeds.map(([name, price, discount, discountDays, releaseDays], i) => ({
+// Discounts end a week from now at 10:00, like the mockups.
+const discountEnd = () => {
+    const d = new Date(Date.now() + 7 * 86_400_000);
+    d.setHours(10, 0, 0, 0);
+    return d.toISOString();
+};
+
+export const games = gameSeeds.map((g, i) => ({
     id: `g${i + 1}`,
-    name,
-    price,
-    discount,
-    discountFinish: discount ? daysFromNow(discountDays) : (null as unknown as string),
-    previeImage: image(`slush-game-${i + 1}`),
-    description: `${name} — ${LOREM}`,
-    dateOfRelease: daysFromNow(releaseDays),
-    developerId: developers[i % developers.length].id,
-    publisherId: publishers[i % publishers.length].id,
+    name: g.name,
+    price: g.price,
+    discount: g.discount ?? 0,
+    discountFinish: g.discount ? discountEnd() : (null as unknown as string),
+    previeImage: g.slug.includes('/') ? `/mock/${g.slug}.jpg` : `/mock/games/${g.slug}.jpg`,
+    description: g.description ?? `${g.name} — ${LOREM}`,
+    dateOfRelease: daysFromNow(g.released),
+    developerId: studioId(g.developer ?? 'Indie Studio'),
+    publisherId: studioId(g.publisher ?? g.developer ?? 'Indie Studio'),
     urlForContent: '',
-    createdAt: daysFromNow(releaseDays),
+    createdAt: daysFromNow(g.released),
 }));
 
 export const categoriesForGames = games.flatMap((g, i) =>
@@ -153,7 +174,20 @@ export const reviews = perGame(3, (g, gi, k) => ({
     createdAt: daysFromNow(-k * 4 - gi),
 }));
 
-export const screenshots = perGame(2, (g, gi, k) => ({
+const avatarShots = Array.from({ length: 10 }, (_, i) => `/mock/hero/thumb-${i + 1}.jpg`);
+
+export const screenshots = [
+    ...avatarShots.map((url, k) => ({
+        id: `s-avatar-${k}`,
+        title: 'Скріншот з Avatar: Frontiers of Pandora',
+        description: 'Гарний момент з гри',
+        likesCount: 12 + k,
+        gameId: 'g1',
+        authorId: author(0, k),
+        contentUrl: url,
+        createdAt: daysFromNow(-k),
+    })),
+    ...perGame(2, (g, gi, k) => ({
     id: `s${gi}-${k}`,
     title: `Скріншот з ${g.name}`,
     description: 'Гарний момент з гри',
@@ -162,7 +196,8 @@ export const screenshots = perGame(2, (g, gi, k) => ({
     authorId: author(gi, k + 1),
     contentUrl: image(`slush-shot-${gi}-${k}`, 1280, 720),
     createdAt: daysFromNow(-gi - k),
-}));
+})).filter((s) => s.gameId !== 'g1'),
+];
 
 export const videos = perGame(1, (g, gi, k) => ({
     id: `v${gi}-${k}`,

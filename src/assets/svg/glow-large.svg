@@ -1,0 +1,12 @@
+<svg width="1697" height="1659" viewBox="0 0 1697 1659" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Vector" opacity="0.7" filter="url(#filter0_f_0_602)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M831.748 666.082C883.593 646.6 939.592 575.611 984.061 608.633C1030.13 642.84 962.892 723.017 981.519 777.298C997.135 822.804 1063.14 835.173 1077.55 881.074C1094.78 935.914 1115.31 1018.45 1067.08 1049.71C1012.35 1085.17 944.93 1007.6 879.75 1009.26C838.898 1010.3 809.85 1064.63 769.65 1057.28C729.634 1049.97 711.851 1003.47 684.274 973.553C655.666 942.523 615.155 919.273 604.711 878.375C593.943 836.208 601.628 787.301 627.839 752.565C652.909 719.343 700.366 717.091 738.675 700.843C769.794 687.645 800.106 677.972 831.748 666.082Z" fill="#49FFDE"/>
+</g>
+<defs>
+<filter id="filter0_f_0_602" x="-5.05305e-07" y="3.28683e-07" width="1697" height="1659" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="300" result="effect1_foregroundBlur_0_602"/>
+</filter>
+</defs>
+</svg>

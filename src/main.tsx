@@ -8,6 +8,15 @@ if (import.meta.env.VITE_USE_MOCK_API !== 'false') {
     installMockApi()
 }
 
+// The design is dark ("Night") by default; light is opt-in from Settings.
+try {
+    if (localStorage.getItem('theme') !== 'light') {
+        document.documentElement.classList.add('dark')
+    }
+} catch {
+    document.documentElement.classList.add('dark')
+}
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <App />
