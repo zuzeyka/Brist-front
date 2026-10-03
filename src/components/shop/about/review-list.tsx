@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Avatar from '@/components/ui/avatar/avatar';
-import { ChevronDown, HeartIcon, MessageSquareIcon, StarIcon } from 'lucide-react';
+import { MoreHorizontalIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
 import { Discussion, User } from '@/shared/lib/interfaces';
+import StarRating from '@/components/ui/star-rating';
+import { ChevronDownIcon, CommentIcon, HeartOutlineIcon } from '@/components/ui/icons';
 
 interface ReviewListProps {
     className?: string;
@@ -11,47 +12,78 @@ interface ReviewListProps {
     reviewData: Discussion[];
 }
 
+const sorters: Record<string, (a: Discussion, b: Discussion) => number> = {
+    popular: (a, b) => b.likesCount - a.likesCount,
+    new: (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    old: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    positive: (a, b) => b.rate - a.rate,
+    negative: (a, b) => a.rate - b.rate,
+};
+
+export const formatCount = (n: number) => n >= 1000 ? `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k` : `${n}`;
+
+export const formatDate = (value: Date | string) => {
+    const date = new Date(value);
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()}`;
+};
+
+const chip = 'flex items-center gap-2 rounded-lg bg-cardLight12 px-2 py-1 font-artifakt font-semibold text-button-2 text-typographySecondary';
+
+const ReviewCard: React.FC<{ review: Discussion; user?: User }> = ({ review, user }) => (
+    <article className='flex flex-col gap-[30px] bg-card1 p-5 rounded-[20px] text-typography'>
+        <div className="flex items-start justify-between">
+            <div className="flex items-center gap-4">
+                <Avatar alt="" src={user?.image} className='size-14' />
+                <div className="flex flex-col gap-3">
+                    <p className="font-artifakt font-bold text-subheading-1">{user?.name ?? 'Гравець'}</p>
+                    <StarRating rate={review.rate} />
+                </div>
+            </div>
+            <button type="button" aria-label="Більше" className="text-typography hover:text-primaryHover">
+                <MoreHorizontalIcon className="size-6" />
+            </button>
+        </div>
+        <p className="font-artifakt text-block-1 tracking-[-0.01em]">{review.content}</p>
+        <div className="flex justify-between items-center">
+            <div className="flex items-center gap-3">
+                <span className={chip}><HeartOutlineIcon className="text-accent" />{formatCount(review.likesCount)}</span>
+                <span className={chip}><CommentIcon />{formatCount(review.likesCount)}</span>
+            </div>
+            <p className="font-artifakt text-sign-2 tracking-[-0.01em] text-typographySecondary">{formatDate(review.createdAt)}</p>
+        </div>
+    </article>
+);
 
 const ReviewList: React.FC<ReviewListProps> = (props) => {
-    const [showMore, setShowMore] = React.useState(false);
+    const [showMore, setShowMore] = useState(false);
     const [selectedSort, setSelectedSort] = useState<string>('popular');
-    const reviews = showMore ? props.userData : props.userData.slice(0, 4);
 
-    if (selectedSort === 'rate') {
-        props.reviewData.sort((a, b) => b.likesCount - a.likesCount);
-    } else if (selectedSort === 'new') {
-        props.reviewData.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    } else if (selectedSort === 'old') {
-        props.reviewData.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-    } else if (selectedSort === 'positive') {
-        props.reviewData.sort((a, b) => b.rate - a.rate);
-    } else if (selectedSort === 'negative') {
-        props.reviewData.sort((a, b) => a.rate - b.rate);
-    }
-
-    const getPostDate = (index: number) => {
-        const date = new Date(props.reviewData[index].createdAt);
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear();
-        return <p className="text-sign-2 text-typography font-artifakt">{`${day}.${month}.${year}`}</p>;
-    }
+    // Users are fetched in the same order as the reviews.
+    const reviews = props.reviewData
+        .map((review, index) => ({ review, user: props.userData[index] }))
+        .sort((a, b) => sorters[selectedSort](a.review, b.review));
+    const visible = showMore ? reviews : reviews.slice(0, 4);
+    // Two masonry columns, filled alternately like the design.
+    const columns = [visible.filter((_, i) => i % 2 === 0), visible.filter((_, i) => i % 2 === 1)];
 
     return (
-        <div className={"max-w-7xl mx-auto bg-background mb-8" + (props.className ? ' ' + props.className : '')}>
-            <div className="flex flex-col space-y-4">
-                <div className='flex items-center justify-between'>
-                    <span className='text-heading-1 font-bold text-typography'>Рецензії</span>
-                    <Button className='bg-primary hover:bg-primaryHover !text-background rounded-3xl text-button-1 font-artifakt'>Написати рецензію</Button>
-                </div>
-                <div className='flex items-center space-x-2'>
-                    <span className='text-block-2 font-artifakt text-typographySecondary'>Сортування:</span>
-                    <Select onValueChange={setSelectedSort}>
-                        <SelectTrigger className="w-1/4 !bg-transparent border-0 !text-typography !text-button-2 !font-artifakt justify-start space-x-2" id="sort">
-                            <SelectValue placeholder="За оцінкою" />
+        <section className={"flex flex-col items-center gap-5" + (props.className ? ' ' + props.className : '')}>
+            <div className='w-full flex items-center justify-between'>
+                <h2 className='font-manrope font-bold text-heading-1 text-typography'>Рецензії</h2>
+                <button type="button" className='h-10 px-5 rounded-[20px] bg-primary hover:bg-primaryHover text-background font-artifakt font-semibold text-button-2'>
+                    Написати рецензію
+                </button>
+            </div>
+            <div className='w-full flex flex-col gap-3'>
+                <div className='flex items-center gap-2.5'>
+                    <span className='font-artifakt text-block-2 tracking-[-0.01em] text-typographySecondary'>Сортування:</span>
+                    <Select value={selectedSort} onValueChange={setSelectedSort}>
+                        <SelectTrigger className="w-auto h-auto p-0 gap-0.5 !bg-transparent border-0 !text-typography !text-button-2 !font-artifakt font-semibold" id="sort">
+                            <SelectValue />
                         </SelectTrigger>
                         <SelectContent className='!bg-card2 !text-typography !font-artifakt'>
-                            <SelectItem value="rate">За оцінкою</SelectItem>
+                            <SelectItem value="popular">Спочатку популярні</SelectItem>
                             <SelectItem value="new">Спочатку нові</SelectItem>
                             <SelectItem value="old">Спочатку старі</SelectItem>
                             <SelectItem value="positive">Спочатку позитивні</SelectItem>
@@ -59,59 +91,21 @@ const ReviewList: React.FC<ReviewListProps> = (props) => {
                         </SelectContent>
                     </Select>
                 </div>
-                <div className="grid grid-cols-2 gap-4 mt-4">
-                    {reviews.map((item, index) => (
-                        <div key={index} className='bg-card1 p-4 rounded-2xl'>
-                            <div className="flex items-center">
-                                <Avatar alt="User Avatar" src={item.image} className='w-10 h-10'></Avatar>
-                                <div className="ml-3">
-                                    <p className="text-typography text-subheading-1 font-artifakt font-bold">{item.name}</p>
-                                    <div className="flex space-x-1">
-                                        {[...Array(props.reviewData[index].rate)].map((_, i) => (
-                                            <StarIcon
-                                                key={i}
-                                                className={`text-accent w-4 h-4`}
-                                                fill="currentColor"
-                                            />
-                                        ))}
-                                        {[...Array(5 - props.reviewData[index].rate)].map((_, i) => (
-                                            <StarIcon
-                                                key={5 + i}
-                                                className={`text-accent w-4 h-4`}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                            <p className="mt-3 text-typography font-artifakt text-block-1">{props.reviewData[index].content}</p>
-                            <div className="flex justify-between items-center mt-4 font-semibold">
-                                <div className="flex items-center space-x-6">
-                                    <div className="flex items-center space-x-2 bg-cardLight12 p-2 rounded-md w-16 justify-center">
-                                        <HeartIcon className="shrink-0 p-0.5 text-accent" />
-                                        <p className="text-button-2 text-typographySecondary font-artifakt mr-1">{props.reviewData[index].likesCount >= 1000 ? props.reviewData[index].likesCount / 1000 + 'k' : props.reviewData[index].likesCount}</p>
-                                    </div>
-                                    <div className="flex items-center space-x-2 bg-cardLight12 p-2 rounded-md w-16 justify-center">
-                                        <MessageSquareIcon className="shrink-0 p-0.5" />
-                                        <p className="text-button-2 text-typographySecondary font-artifakt mr-1">{Math.floor(Math.random() * 100)}</p>
-                                    </div>
-                                </div>
-                                {getPostDate(index)}
-                            </div>
+                <div className="grid grid-cols-2 gap-4 items-start">
+                    {columns.map((column, c) => (
+                        <div key={c} className="flex flex-col gap-4">
+                            {column.map(({ review, user }) => <ReviewCard key={review.id} review={review} user={user} />)}
                         </div>
                     ))}
                 </div>
-                {props.userData.length > 4 && (
-                    <div className="flex justify-center mt-4">
-                        <Button className="bg-transparent hover:bg-transparent text-black" onClick={() => setShowMore(true)}><ChevronDown className='text-typography' /></Button>
-                    </div>
-                )}
-
             </div>
-
-
-        </div>
+            {!showMore && reviews.length > 4 && (
+                <button type="button" aria-label="Показати більше" onClick={() => setShowMore(true)} className="text-typography hover:text-primaryHover">
+                    <ChevronDownIcon className="size-10" />
+                </button>
+            )}
+        </section>
     );
 };
 
 export default ReviewList;
-

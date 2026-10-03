@@ -3,31 +3,41 @@ import React from 'react';
 import { UserData } from './about-game';
 import { useAuth } from '@/components/authorization/auth-context';
 
+const MAX_SHOWN = 7;
+
+const FriendsBox: React.FC<{ title: string; friends: UserData[] }> = ({ title, friends }) => {
+    if (!friends.length) return null;
+    const hidden = friends.length - MAX_SHOWN;
+    return (
+        <div className='flex flex-col gap-5 bg-card1 p-5 rounded-[20px] text-typography'>
+            <p className='text-heading-3'>
+                <span className='font-manrope font-bold'>{title}:</span>{' '}
+                <span className='font-artifakt tracking-[-0.01em]'>{friends.length}</span>
+            </p>
+            <div className='flex flex-wrap gap-2'>
+                {friends.slice(0, MAX_SHOWN).map((friend) => (
+                    // "Username card"
+                    <div key={friend.name} className='flex items-center gap-3 pr-4 bg-card2 rounded-[20px]'>
+                        <Avatar src={friend.avatarUrl} alt='' className='size-9' />
+                        <span className='font-artifakt font-bold text-sign-2 tracking-[-0.01em]'>{friend.name}</span>
+                    </div>
+                ))}
+                {hidden > 0 && (
+                    <span className='flex items-center justify-center w-9 py-2 rounded-[20px] bg-cardLight25 font-artifakt text-sign-2 text-typographySecondary'>+{hidden}</span>
+                )}
+            </div>
+        </div>
+    );
+};
 
 const Friends: React.FC<{ wishedFriends: UserData[], ownedFriends: UserData[] }> = ({ wishedFriends, ownedFriends }) => {
     const { isAuthenticated } = useAuth();
     if (!isAuthenticated) return null;
     return (
-        <>
-            <div className='bg-card1 p-4 mt-4 rounded-2xl font-artifakt text-typography'>
-                <span className='font-semibold text-typography'>Друзів бажають цю гру: {wishedFriends.length}</span>
-                {wishedFriends.slice(0, Math.ceil(ownedFriends.length / 2)).map((friend, index) => (
-                    <div key={index} className='flex items-center my-2 space-x-2 bg-card2 rounded-2xl'>
-                        <Avatar src={friend.avatarUrl} alt='Avatar' className='w-8 h-8'></Avatar>
-                        <span className='font-bold text-sign-2'>{friend.name}</span>
-                    </div>
-                ))}
-            </div>
-            <div className='bg-card1 p-4 mt-4 rounded-2xl font-artifakt text-typography'>
-                <span className='font-semibold text-typography'>Друзів мають цю гру: {ownedFriends.length}</span>
-                {ownedFriends.slice(Math.ceil(ownedFriends.length / 2)).map((friend, index) => (
-                    <div key={index} className='flex items-center my-2 space-x-2 bg-card2 rounded-2xl'>
-                        <Avatar src={friend.avatarUrl} alt='Avatar' className='w-8 h-8'></Avatar>
-                        <span className='font-bold text-sign-2'>{friend.name}</span>
-                    </div>
-                ))}
-            </div>
-        </>
+        <div className='flex flex-col gap-5'>
+            <FriendsBox title='Друзів бажають цю гру' friends={wishedFriends} />
+            <FriendsBox title='Друзів мають цю гру' friends={ownedFriends} />
+        </div>
     );
 };
 

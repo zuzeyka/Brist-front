@@ -13,10 +13,12 @@ interface GamePriceProps {
     price: number;
     discount: number;
     size?: 'md' | 'lg';
+    // Bold final price, as on the game page's bundle and DLC cards.
+    bold?: boolean;
     className?: string;
 }
 
-const GamePrice: React.FC<GamePriceProps> = ({ price, discount, size = 'md', className }) => {
+const GamePrice: React.FC<GamePriceProps> = ({ price, discount, size = 'md', bold, className }) => {
     const large = size === 'lg';
     return (
         <div className={cn("flex items-center", large ? "gap-4" : "gap-3", className)}>
@@ -29,7 +31,7 @@ const GamePrice: React.FC<GamePriceProps> = ({ price, discount, size = 'md', cla
                 </span>
             )}
             <div className={cn("flex items-center gap-2 whitespace-nowrap", large ? "text-big-sign" : "text-sign-1 font-artifakt tracking-[-0.01em]")}>
-                <span className={cn("text-typography", large && "font-manrope font-bold")}>
+                <span className={cn("text-typography", large && "font-manrope font-bold", bold && "font-bold tracking-normal")}>
                     {formatPrice(discount > 0 ? discountedPrice(price, discount) : price)}
                 </span>
                 {discount > 0 && (

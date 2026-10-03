@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import DlcList from './dlc-list';
 import Payment from '../payment';
 import MediaPlayer from './media-player';
-import { ChevronDown, ChevronUp, FuelIcon, Gamepad2Icon, GamepadIcon } from 'lucide-react';
 import ReviewList from './review-list';
-import BundleList from './bundle-list';
-import { Discussion, DlcInShop, GameBundle, GameInShop, User } from '@/shared/lib/interfaces';
+import BundleList, { BundleItem } from './bundle-list';
+import { Discussion, GameBundle, GameInShop, User } from '@/shared/lib/interfaces';
 import Friends from './friends';
+import StarRating from '@/components/ui/star-rating';
+import { ChevronDownIcon, MacOsIcon, TagExpandIcon, WindowsIcon } from '@/components/ui/icons';
+import { cn } from '@/shared/lib/utils';
 
 export interface UserData {
     name: string;
@@ -20,9 +21,10 @@ interface AboutGameProps {
     reviews: Discussion[];
     users: User[];
     bundles: GameBundle[];
-    bundlesGames: GameInShop[];
-    bundlesDlcs: DlcInShop[];
+    bundleContents: BundleItem[][];
     DLC: GameInShop[];
+    wishedFriends: User[];
+    ownedFriends: User[];
     mediaUrl: string[];
     price: number;
     rate: number;
@@ -32,69 +34,76 @@ interface AboutGameProps {
     developer: string;
     publisher: string;
     gameCategorys: string[];
+    discountEnd: (date?: Date) => string | undefined;
     className?: string;
 }
 
-const AboutGame: React.FC<AboutGameProps> = (props) => {
-    const [showMore, setShowMore] = useState(false);
-    const [isChevronUp, setIsChevronUp] = useState(false);
+const VISIBLE_TAGS = 7;
+const tag = 'flex items-center rounded-[20px] bg-cardLight25 font-artifakt font-bold text-sign-3 tracking-[-0.01em] text-typographySecondary';
 
-    const handleButtonClick = () => {
-        setShowMore(!showMore);
-        setIsChevronUp(!isChevronUp);
-    };
+const toUserData = (users: User[]): UserData[] => users.map((u) => ({ name: u.name, avatarUrl: u.image }));
+
+// Title row with rating, then the main column (media, tags, description, bundles,
+// DLC, reviews) next to a sticky 348px purchase sidebar.
+export const GameTitle: React.FC<{ name: string; rate: number }> = ({ name, rate }) => (
+    <div className="flex items-center justify-between text-typography">
+        <h1 className="font-manrope font-bold text-heading-1">{name}</h1>
+        <div className="flex items-center gap-[15px]">
+            <span className="font-manrope font-bold text-heading-2">{rate.toFixed(1)}</span>
+            <StarRating rate={rate} size={32} />
+        </div>
+    </div>
+);
+
+const AboutGame: React.FC<AboutGameProps> = (props) => {
+    const [expanded, setExpanded] = useState(false);
+    const tags = expanded ? props.gameCategorys : props.gameCategorys.slice(0, VISIBLE_TAGS);
+
     return (
-        <div className={'flex justify-between mx-auto py-4' + (props.className ? ' ' + props.className : '')}>
-            <div>
-                <div className='grid grid-cols-3 gap-4'>
-                    <div className="col-span-3">
-                        <h1 className="text-heading-1 font-bold mb-4 text-typography">{props.gameName}</h1>
-                        <MediaPlayer mediaUrl={props.mediaUrl}></MediaPlayer>
-                        <div className="flex space-x-2 mb-2 flex-wrap">
-                            {props.gameCategorys.slice(0, 4).map((category) => (
-                                <span key={category} className="bg-cardLight25 text-typographySecondary text-sign-3 px-4 py-2 mb-2 rounded-full font-semibold">{category}</span>
-                            ))}
-                            {props.gameCategorys.length > 4 && (
-                                <Button
-                                    className="bg-transparent hover:bg-transparent text-black"
-                                    onClick={handleButtonClick}
-                                >
-                                    <span className='bg-cardLight25 text-typographySecondary text-sign-3 font-artifakt px-4 py-2 mb-2 rounded-full font-semibold'>+{props.gameCategorys.length - 4} categories</span>
-                                </Button>
-                            )}
-                        </div>
-                        {showMore && (
-                            <div className="flex space-x-2 flex-wrap space-x-4">
-                                {props.gameCategorys.slice(4).map((category) => (
-                                    <span key={category} className="bg-cardLight25 text-typographySecondary text-sign-3 font-artifakt px-4 py-2 mb-2 rounded-full font-semibold">{category}</span>
-                                ))}
-                            </div>
+        <div className={cn('flex flex-col gap-6 pt-8', props.className)}>
+            <GameTitle name={props.gameName} rate={props.rate} />
+            <div className='flex gap-6 items-start'>
+                <div className='w-[1092px] min-w-0 flex flex-col'>
+                    <MediaPlayer mediaUrl={props.mediaUrl.length ? props.mediaUrl : [props.previewUrl]} />
+                    <div className="flex flex-wrap gap-2 mt-6">
+                        {tags.map((category) => (
+                            <span key={category} className={cn(tag, 'px-3 py-1')}>{category}</span>
+                        ))}
+                        {props.gameCategorys.length > VISIBLE_TAGS && (
+                            <button type="button" aria-label="Усі теги" onClick={() => setExpanded(!expanded)} className={cn(tag, 'px-2 py-1 text-typography')}>
+                                <TagExpandIcon className={cn('size-4 transition', expanded && 'rotate-180')} />
+                            </button>
                         )}
-                        <div className='text-typographySecondary text-block-1 font-artifak'>
-                            {showMore ? props.gameDescription : props.gameDescription.slice(0, 200) + (props.gameDescription.length > 50 ? '...' : '')}
-                        </div>
-                        <div className="flex justify-center">
-                            <Button
-                                className="bg-transparent hover:bg-transparent text-black"
-                                onClick={handleButtonClick}
-                            >
-                                {isChevronUp ? <ChevronUp className='text-typography hover:text-typographySecondary' /> : <ChevronDown className='text-typography hover:text-typographySecondary' />}
-                            </Button>
-                        </div>
-                        {props.bundles ? (
-                            <BundleList dlcs={props.bundlesDlcs} games={props.bundlesGames} bundles={props.bundles}></BundleList>
-                        ) : null}
+                    </div>
+                    <div className="flex flex-col items-center gap-1 mt-6">
+                        <p className={cn('font-artifakt text-block-1 tracking-[-0.01em] text-typography', !expanded && 'line-clamp-3')}>
+                            {props.gameDescription}
+                        </p>
+                        <button type="button" aria-label={expanded ? 'Згорнути' : 'Розгорнути'} onClick={() => setExpanded(!expanded)} className="text-typography hover:text-primaryHover">
+                            <ChevronDownIcon className={cn('size-10 transition', expanded && 'rotate-180')} />
+                        </button>
+                    </div>
+                    <div className="flex flex-col gap-8 mt-9">
+                        <BundleList bundles={props.bundles} contents={props.bundleContents} discountEnd={props.discountEnd} />
+                        <DlcList dlc={props.DLC} />
+                        <ReviewList userData={props.users} reviewData={props.reviews} />
                     </div>
                 </div>
-                {props.DLC ? <DlcList dlc={props.DLC}></DlcList> : null}
-                {props.reviews ? <ReviewList userData={props.users} reviewData={props.reviews}></ReviewList> : null}
-
-            </div>
-            <div className='flex-1 pl-4'>
-                <div className='sticky top-20 z-9'>
-                    <Payment gameName={props.gameName} platforms={[<GamepadIcon />, <Gamepad2Icon />, <FuelIcon />]} developer={props.developer} publisher={props.publisher} releaseDate={props.releaseDate} previewUrl={props.previewUrl} price={props.price} discount={props.discount} rate={props.rate} endDate={props.endDate}></Payment>
-                    <Friends wishedFriends={props.users} ownedFriends={props.users} />
-                </div>
+                <aside className='w-[348px] shrink-0 sticky top-6 flex flex-col gap-8'>
+                    <Payment
+                        gameName={props.gameName}
+                        platforms={[<WindowsIcon />, <MacOsIcon />]}
+                        developer={props.developer}
+                        publisher={props.publisher}
+                        releaseDate={props.releaseDate}
+                        previewUrl={props.previewUrl}
+                        price={props.price}
+                        discount={props.discount}
+                        rate={props.rate}
+                        endDate={props.endDate}
+                    />
+                    <Friends wishedFriends={toUserData(props.wishedFriends)} ownedFriends={toUserData(props.ownedFriends)} />
+                </aside>
             </div>
         </div>
     );

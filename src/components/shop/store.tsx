@@ -7,6 +7,14 @@ import AboutGame from './about/about-game';
 import Characteristics from './characteristics/characteristics';
 import Community from './community/community';
 import { Developer, Discussion, DlcInShop, GameBundle, GameGuide, GameInShop, GameNews, GamePosts, Publisher, Screenshot, SystemRequirement, User, Video } from '@/shared/lib/interfaces';
+import { BundleItem } from './about/bundle-list';
+import PageGlows from '@/components/ui/page-glows';
+
+const glows = [
+    { left: 4, top: 817, large: true },
+    { left: 1472, top: 108, large: true },
+    { left: 1016, top: 2327, large: true },
+];
 
 const Store: React.FC = () => {
     const [game, setGame] = useState<GameInShop>();
@@ -29,8 +37,9 @@ const Store: React.FC = () => {
     const [guideUsers, setGuideUsers] = useState<User[]>([]);
     const [postUsers, setPostUsers] = useState<User[]>([]);
     const [newsUsers, setNewsUsers] = useState<User[]>([]);
-    const [bundlesGames, setBundlesGames] = useState<GameInShop[]>([]);
-    const [bundlesDlcs, setBundlesDlcs] = useState<DlcInShop[]>([]);
+    const [bundleContents, setBundleContents] = useState<BundleItem[][]>([]);
+    const [wishedFriends, setWishedFriends] = useState<User[]>([]);
+    const [ownedFriends, setOwnedFriends] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const gameRate = reviews.length > 0 ? Math.round(reviews.map(review => review.rate).reduce((a, b) => a + b, 0) / reviews.length) : 0;
     let gameId: string;
@@ -53,7 +62,8 @@ const Store: React.FC = () => {
                     fetchGamePosts(),
                     fetchVideo(),
                     fetchGameGuides(),
-                    fetchGameNews()
+                    fetchGameNews(),
+                    fetchFriends()
                 ]);
                 setLoading(false);
             } catch (error) {
@@ -266,14 +276,40 @@ const Store: React.FC = () => {
                 },
                 body: JSON.stringify(dlcIds)
             });
-            const bundleData = await bundleRes.json() as GameBundle[];
+            const bundleData = await bundleRes.json() as (GameBundle & { id: string })[];
             const gameData = await gamesRes.json() as GameInShop[];
             const dlcData = await dlcsRes.json() as DlcInShop[];
             setBundles(bundleData);
-            setBundlesGames(gameData);
-            setBundlesDlcs(dlcData);
+            // Each collection row links a bundle to a game and/or a DLC.
+            setBundleContents(bundleData.map((bundle) => {
+                const rows = data.filter((x: any) => x.bundleId === bundle.id);
+                const items: BundleItem[] = [];
+                for (const row of rows) {
+                    const game = gameData.find((g) => g.id === row.gameId);
+                    if (game && !items.some((i) => i.name === game.name)) items.push({ name: game.name, isBaseGame: true });
+                    const dlc = dlcData.find((d) => d.id === row.dlcId);
+                    if (dlc) items.push({ name: dlc.name });
+                }
+                return items;
+            }));
         } catch (error) {
             console.log('Fetch bundles error:', error);
+        }
+    };
+
+    const fetchFriends = async () => {
+        try {
+            const [wished, owned] = await Promise.all([
+                fetch('http://localhost:5049/api/Friends/wished/bygameid/' + gameId),
+                fetch('http://localhost:5049/api/Friends/owned/bygameid/' + gameId),
+            ]);
+            if (!wished.ok || !owned.ok) {
+                throw new Error('Network response was not ok');
+            }
+            setWishedFriends(await wished.json() as User[]);
+            setOwnedFriends(await owned.json() as User[]);
+        } catch (error) {
+            console.log('Fetch friends error:', error);
         }
     };
 
@@ -312,6 +348,11 @@ const Store: React.FC = () => {
         const year = date.getFullYear();
         return `${day}.${month}.${year}`;
     }
+    const getDiscountEnd = (data?: Date) => {
+        if (!data) return undefined;
+        const date = new Date(data);
+        return `${getPostDate(data)} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+    }
     const pages = [
         {
             title: 'Про ігру',
@@ -320,9 +361,11 @@ const Store: React.FC = () => {
                     releaseDate={game && game.dateOfRelease ? getPostDate(game.dateOfRelease) : 'No release date'}
                     reviews={reviews ? reviews : []}
                     users={reviewUsers ? reviewUsers : []}
-                    bundles={bundles ? bundles : []}
-                    bundlesGames={bundlesGames ? bundlesGames : []}
-                    bundlesDlcs={bundlesDlcs ? bundlesDlcs : []}
+                    bundles={bundles}
+                    bundleContents={bundleContents}
+                    wishedFriends={wishedFriends}
+                    ownedFriends={ownedFriends}
+                    discountEnd={getDiscountEnd}
                     publisher={publisher ? publisher.name : 'Невідомо'}
                     developer={developer ? developer.name : 'Невідомо'}
                     previewUrl={game && game.previeImage ? game.previeImage : ""}
@@ -334,7 +377,7 @@ const Store: React.FC = () => {
                     gameCategorys={categories ? categories : ['Немає категорій']}
                     mediaUrl={screenshots.map(x => x.contentUrl)}
                     rate={gameRate}
-                    endDate={game && game.discountFinish ? getPostDate(game.discountFinish) : 'No end date'}
+                    endDate={getDiscountEnd(game?.discountFinish)}
                 />
             )
         },
@@ -342,16 +385,17 @@ const Store: React.FC = () => {
             title: 'Характеристики',
             content: (
                 <Characteristics
-                    gameName='Якась гра, яка дуже всім сподобається'
-                    users={reviewUsers ? reviewUsers : []}
+                    gameName={game ? game.name : 'Невідомо'}
+                    wishedFriends={wishedFriends}
+                    ownedFriends={ownedFriends}
                     maxOs={maxrequirements}
                     minOs={minrequirements}
                     previewUrl={game && game.previeImage ? game.previeImage : ""}
-                    price={1000}
-                    discount={50}
+                    price={game ? game.price : 0}
+                    discount={game ? game.discount : 0}
                     rate={gameRate}
-                    endDate={game && game.discountFinish ? game.discountFinish.toLocaleString() : 'No end date'}
-                    releaseDate={game && game.dateOfRelease ? game.dateOfRelease.toLocaleString() : 'No release date'}
+                    endDate={getDiscountEnd(game?.discountFinish)}
+                    releaseDate={game && game.dateOfRelease ? getPostDate(game.dateOfRelease) : 'No release date'}
                     publisher={publisher ? publisher.name : 'Невідомо'}
                     developer={developer ? developer.name : 'Невідомо'}
                 />
@@ -366,10 +410,12 @@ const Store: React.FC = () => {
         setContent(node);
     }, []);
     return (
-        <>
+        <div className="relative bg-background">
+            <PageGlows glows={glows} />
+            <div className="relative">
             <Head />
             <Search />
-            <div className="max-w-7xl mx-auto bg-background text-typography">
+            <div className="max-w-[1464px] mx-auto pt-3 pb-[120px] text-typography">
                 {loading ? (
                     <div className='h-screen flex justify-center items-center text-heading-1'>Loading...</div>
                 ) : (
@@ -378,7 +424,8 @@ const Store: React.FC = () => {
                 {content}
             </div>
             <Footer />
-        </>
+            </div>
+        </div>
     );
 };
 

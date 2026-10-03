@@ -7,16 +7,14 @@ import SliderCategories from "./slider-categories";
 import { useEffect, useState } from "react";
 import { GameInShopModel } from "@/shared/lib/interfaces";
 import { discountedPrice } from "./game-price";
+import PageGlows, { Glow } from "@/components/ui/page-glows";
 
-// Soft teal glows behind the content, positioned relative to the page centre
-// as in the 1920px design.
-const glows = [
-    // `bleed` is how far the blur extends past the shape in each SVG.
-    { src: '/src/assets/svg/glow.svg', bleed: 500, left: -45, top: 400 },
-    { src: '/src/assets/svg/glow.svg', bleed: 500, left: 1591, top: 1098 },
-    { src: '/src/assets/svg/glow.svg', bleed: 500, left: 352, top: 1699 },
-    { src: '/src/assets/svg/glow-large.svg', bleed: 600, left: 20, top: 3116 },
-    { src: '/src/assets/svg/glow-large.svg', bleed: 600, left: 1404, top: 3316 },
+const glows: Glow[] = [
+    { left: -45, top: 400 },
+    { left: 1591, top: 1098 },
+    { left: 352, top: 1699 },
+    { left: 20, top: 3116, large: true },
+    { left: 1404, top: 3316, large: true },
 ];
 
 const formatDate = (value?: Date) => {
@@ -74,13 +72,8 @@ const Main: React.FC = () => {
     });
 
     return (
-        <div className="relative bg-background overflow-hidden">
-            <div className="absolute inset-0 pointer-events-none" aria-hidden>
-                {glows.map((glow, i) => (
-                    <img key={i} src={glow.src} alt="" className="absolute max-w-none"
-                        style={{ left: `calc(50% - 960px + ${glow.left - glow.bleed}px)`, top: glow.top - glow.bleed }} />
-                ))}
-            </div>
+        <div className="relative bg-background">
+            <PageGlows glows={glows} />
             <div className="relative">
                 <Head />
                 {loading ? (

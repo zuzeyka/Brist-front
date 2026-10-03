@@ -56,9 +56,7 @@ const Head: React.FC = () => {
                                 <Notifications />
                             </DropdownMenuContent>
                         </DropdownMenu>
-                        <Link to="/user/zuzeyka" aria-label="Профіль">
-                            <Avatar alt="User Avatar" src="" className="size-[52px]" />
-                        </Link>
+                        <Avatar alt="Профіль" src="" className="size-[52px]" />
                     </div>
                 ) : (
                     <Link

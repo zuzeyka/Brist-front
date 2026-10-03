@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import Payment from '../payment';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import CharacteristicsList from './characteristics-list';
-import { FuelIcon, Gamepad2Icon, GamepadIcon } from 'lucide-react';
 import { SystemRequirement, User } from '@/shared/lib/interfaces';
 import Friends from '../about/friends';
+import { GameTitle } from '../about/about-game';
+import { MacOsIcon, WindowsIcon } from '@/components/ui/icons';
 
 interface CharacteristicsProps {
     gameName: string;
@@ -18,65 +19,57 @@ interface CharacteristicsProps {
     releaseDate: string;
     developer: string;
     publisher: string;
-    users: User[];
+    wishedFriends: User[];
+    ownedFriends: User[];
     className?: string;
 }
 
-const Characteristics: React.FC<CharacteristicsProps> = ({
-    gameName,
-    price,
-    discount,
-    endDate,
-    rate,
-    minOs,
-    maxOs,
-    releaseDate,
-    developer,
-    publisher,
-    previewUrl,
-    users,
-    className = '',
-}) => {
-    const characteristics = [...minOs, ...maxOs];
-    const allOS = characteristics.map(({ os }) => os);
-    const [selectedCharacteristic, setSelectedCharacteristic] = useState<string>(allOS[0]);
+const platforms = [
+    { id: 'windows', label: 'Windows', icon: <WindowsIcon className="size-6" /> },
+    { id: 'macos', label: 'macOS', icon: <MacOsIcon className="size-6" /> },
+];
+
+const toUserData = (users: User[]) => users.map((u) => ({ name: u.name, avatarUrl: u.image }));
+
+const Characteristics: React.FC<CharacteristicsProps> = (props) => {
+    const [platform, setPlatform] = useState(platforms[0].id);
+    const current = platforms.find((p) => p.id === platform)!;
 
     return (
-        <div className={`col-span-2 flex ${className}`}>
-            <div className='flex flex-col flex-grow py-4'>
-                <h1 className='text-heading-1 font-bold text-typography'>{gameName}</h1>
-                <div>
-                    <Select onValueChange={setSelectedCharacteristic}>
-                        <SelectTrigger className="w-96 my-4 !bg-cardLight12 rounded-2xl" id="sort">
-                            <SelectValue placeholder={allOS[0]} />
+        <div className={`flex flex-col gap-6 pt-8 ${props.className ?? ''}`}>
+            <GameTitle name={props.gameName} rate={props.rate} />
+            <div className='flex gap-6 items-start'>
+                <div className='w-[1092px] min-w-0 flex flex-col gap-8'>
+                    <Select value={platform} onValueChange={setPlatform}>
+                        <SelectTrigger className="w-[512px] h-12 px-4 rounded-2xl border border-secondary !bg-card1 !text-typography font-artifakt font-semibold text-button-1">
+                            <div className="flex items-center gap-3">{current.icon}{current.label}</div>
                         </SelectTrigger>
-                        <SelectContent className='!bg-secondary'>
-                            {allOS.map((element: string, index: number) => (
-                                <SelectItem key={index} value={element}>{element}</SelectItem>
+                        <SelectContent className='!bg-card2 !text-typography'>
+                            {platforms.map((p) => (
+                                <SelectItem key={p.id} value={p.id}>{p.label}</SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
-                    {characteristics.filter(({ os }) => os === selectedCharacteristic).map((osData, index) => (
-                        <CharacteristicsList key={index} data={[osData]} />
-                    ))}
+                    <div className='grid grid-cols-2 gap-6'>
+                        <CharacteristicsList title='Мінімальні налаштування' data={props.minOs[0]} />
+                        <CharacteristicsList title='Рекомендовані налаштування' data={props.maxOs[0]} />
+                    </div>
                 </div>
-            </div>
-            <div className='flex-1 pl-4 py-4'>
-                <div className='sticky top-20 z-9'>
+                <aside className='w-[348px] shrink-0 sticky top-6 flex flex-col gap-8'>
                     <Payment
-                        gameName={gameName}
-                        platforms={[<GamepadIcon key="1" />, <Gamepad2Icon key="2" />, <FuelIcon key="3" />]}
-                        developer={developer}
-                        publisher={publisher}
-                        releaseDate={releaseDate}
-                        previewUrl={previewUrl}
-                        price={price}
-                        discount={discount}
-                        rate={rate}
-                        endDate={endDate}
+                        gameName={props.gameName}
+                        platforms={[<WindowsIcon />, <MacOsIcon />]}
+                        developer={props.developer}
+                        publisher={props.publisher}
+                        releaseDate={props.releaseDate}
+                        previewUrl={props.previewUrl}
+                        price={props.price}
+                        discount={props.discount}
+                        rate={props.rate}
+                        endDate={props.endDate}
                     />
-                    <Friends wishedFriends={users} ownedFriends={users} />
-                </div>
+                    <Friends wishedFriends={toUserData(props.wishedFriends)} ownedFriends={toUserData(props.ownedFriends)} />
+                </aside>
             </div>
         </div>
     );

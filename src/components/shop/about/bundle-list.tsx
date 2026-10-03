@@ -1,55 +1,60 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { DlcInShop, GameBundle, GameInShop } from '@/shared/lib/interfaces';
+import { GameBundle } from '@/shared/lib/interfaces';
+import GamePrice from '@/components/main/game-price';
+
+export interface BundleItem {
+    name: string;
+    isBaseGame?: boolean;
+}
 
 interface BundleProps {
     className?: string
     bundles: GameBundle[]
-    games: GameInShop[]
-    dlcs: DlcInShop[]
+    // Contents of each bundle, in the same order as `bundles`.
+    contents: BundleItem[][]
+    discountEnd: (date?: Date) => string | undefined
 }
 
-const BundleList: React.FC<BundleProps> = (props) => {
-    return (
-        <div>
-            <span className='font-bold text-typography text-heading-1'>Комплекти:</span>
-            {props.bundles.map((bundle) => (
-                <div key={bundle.name} className="flex flex-col space-x-2 bg-card1 text-typography px-4 py-3 my-4 rounded-2xl font-semibold">
-                    <div className='mb-2 font-bold text-typography text-heading-2'>{bundle.name}</div>
-                    <div className='flex flex-col bg-card2 rounded-2xl p-4'>
-                        <div className='text-typography text-block-1 font-artifakt'>
-                            {bundle.description}
-                        </div>
-                        <span className='text-typographySecondary text-block-1 font-artifakt my-2'>Вміст:</span>
-                        <ul className='list-disc list-inside mb-2'>
-                            {props.games.map((element) => (
-                                <li className='text-typography text-block-1 font-artifakt' key={element.id}>{element.name}</li>
-                            ))}
-                            {props.dlcs.map((element) => (
-                                <li className='text-typography text-block-1 font-artifakt' key={element.id}>{element.name}</li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className='flex justify-end space-x-4 mt-2 items-center'>
+export const primaryButton = 'bg-primary hover:bg-primaryHover text-background rounded-[20px] px-[26px] py-3 font-artifakt font-semibold text-button-1 whitespace-nowrap';
 
-                        {bundle.discount ? (
-                            <div className="flex flex-col items-end">
-                                <div className='flex space-x-2'>
-                                    <Badge className="text-background bg-accent hover:bg-accentHover font-artifakt">-{bundle.discount}%</Badge>
-                                    <p className="line-through text-sign-1 text-typographySecondary font-artifakt">{bundle.price}₴</p>
-                                    <p className="text-sign-1 text-typography font-artifakt">{Math.round(bundle.price - bundle.price * bundle.discount / 100)}₴</p>
+// "Bundle Card" list from the game page.
+const BundleList: React.FC<BundleProps> = (props) => {
+    if (!props.bundles.length) return null;
+    return (
+        <section className={'flex flex-col gap-5' + (props.className ? ' ' + props.className : '')}>
+            <h2 className='font-manrope font-bold text-heading-1 text-typography'>Комплекти</h2>
+            <div className='flex flex-col gap-2'>
+                {props.bundles.map((bundle, index) => {
+                    const end = bundle.discount ? props.discountEnd(bundle.discountFinish) : undefined;
+                    return (
+                        <div key={bundle.name} className="flex flex-col items-end gap-5 bg-card1 p-5 rounded-[20px] text-typography">
+                            <h3 className='w-full font-manrope font-bold text-heading-2'>{bundle.name}</h3>
+                            <div className='w-full flex flex-col gap-3 bg-card2 rounded-[20px] px-4 pt-3 pb-4 font-artifakt text-block-1 tracking-[-0.01em]'>
+                                {bundle.description && <p>{bundle.description}</p>}
+                                <div>
+                                    <p className='text-typographySecondary'>Вміст:</p>
+                                    <ul className='list-disc ms-[30px]'>
+                                        {(props.contents[index] ?? []).map((item) => (
+                                            <li key={item.name}>
+                                                {item.name}
+                                                {item.isBaseGame && <span className='text-typographySecondary'> (базова гра)</span>}
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
-                                <span className='text-sign-2 text-typographySecondary'>Знижка діє до {bundle.discountFinish ? bundle.discountFinish.toLocaleString() : "немає дати"}</span>
                             </div>
-                        ) : (
-                            <p className="text-sign-1 font-artifakt text-typography">{bundle.price}₴</p>
-                        )}
-                        <Button className='bg-primary hover:bg-primaryHover !text-background rounded-3xl text-button-1 font-artifakt'>У кошик</Button>
-                    </div>
-                </div>
-            ))}
-        </div>
+                            <div className='flex items-center gap-[18px]'>
+                                <div className='flex flex-col items-end gap-1'>
+                                    <GamePrice price={bundle.price} discount={bundle.discount} bold />
+                                    {end && <p className='font-artifakt text-sign-3 tracking-[-0.01em] text-typographySecondary'>Знижка діє до {end}</p>}
+                                </div>
+                                <button type="button" className={primaryButton}>У кошик</button>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        </section>
     );
 };
 

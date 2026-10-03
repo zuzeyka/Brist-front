@@ -12,8 +12,9 @@ type Handler = (params: string[], body: unknown) => unknown;
 
 const byId = <T extends { id: string }>(list: T[]) => (id: string) => list.find((x) => x.id === id);
 const byGame = <T extends { gameId: string }>(list: T[]) => (id: string) => list.filter((x) => x.gameId === id);
+// Returns items in the order the ids were requested.
 const byIds = <T extends { id: string }>(list: T[]) => (_: string[], body: unknown) =>
-    list.filter((x) => (body as string[]).includes(x.id));
+    (body as string[]).map((id) => list.find((x) => x.id === id)).filter((x): x is T => !!x);
 
 // Patterns are matched against the path after API_BASE; ":x" captures a segment.
 const routes: [method: string, pattern: string, handler: Handler][] = [
@@ -50,6 +51,9 @@ const routes: [method: string, pattern: string, handler: Handler][] = [
     ['GET', 'GamePost/bygameid/:id', ([id]) => byGame(db.posts)(id)],
     ['GET', 'GameGuide', () => db.guides],
     ['GET', 'GameGuide/bygameid/:id', ([id]) => byGame(db.guides)(id)],
+
+    ['GET', 'Friends/wished/bygameid/:id', ([id]) => db.wishedFriends(id)],
+    ['GET', 'Friends/owned/bygameid/:id', ([id]) => db.ownedFriends(id)],
 
     ['GET', 'User/getbyuid/:id', ([id]) => byId(db.users)(id)],
     ['POST', 'User', (_, body) => ({ ...(body as object), id: `u${Date.now()}` })],

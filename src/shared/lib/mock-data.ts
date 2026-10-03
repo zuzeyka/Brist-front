@@ -8,22 +8,26 @@ const LOREM = 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minima 
 
 const daysFromNow = (days: number) => new Date(Date.now() + days * 86_400_000).toISOString();
 
-export const users = [
-    { id: 'u1', name: 'zuzeyka', email: 'zuzeyka@example.com', amountOfXp: 2450 },
-    { id: 'u2', name: 'Rozumnichok', email: 'rozumnichok@example.com', amountOfXp: 870 },
-    { id: 'u3', name: 'PixelHunter', email: 'pixel@example.com', amountOfXp: 5120 },
-    { id: 'u4', name: 'NightOwl', email: 'owl@example.com', amountOfXp: 330 },
-    { id: 'u5', name: 'Kozak_Gamer', email: 'kozak@example.com', amountOfXp: 9900 },
-    { id: 'u6', name: 'Zubarik', email: 'zubarik@example.com', amountOfXp: 1500 },
-].map((u, i) => ({
-    ...u,
+// Names from the mockups; everyone uses the design's placeholder avatar.
+const userNames = [
+    'zuzeyka', 'DenroyPro', 'N.Anderson', 'KiriketHirik', 'Юзернейм', 'GhostRogue', 'sanya_KAL',
+    'karl_vava', 'NikaNii', 's1imerock', 'whysxugly', 'low_owl', 'mop_riderEX',
+    'Rozumnichok', 'PixelHunter', 'NightOwl', 'Kozak_Gamer',
+];
+
+export const users = userNames.map((name, i) => ({
+    id: `u${i + 1}`,
+    name,
+    email: `user${i + 1}@example.com`,
+    amountOfXp: 300 + i * 450,
     passwordSalt: '',
     description: 'Гравець спільноти Slush',
-    image: `https://i.pravatar.cc/150?img=${i + 11}`,
+    image: i >= 5 && i <= 12 ? '/mock/avatars/friend.jpg' : '/mock/avatars/reviewer.jpg',
     verified: true,
     amountOfMoney: 1000,
     createdAt: daysFromNow(-400 + i * 30),
 }));
+const userId = (name: string) => users.find((u) => u.name === name)!.id;
 
 const studio = (id: string, name: string) => ({
     id,
@@ -40,7 +44,7 @@ const studioNames = [
     'Ubisoft', 'Massive Entertainment', 'CD PROJEKT RED', 'Slavic Magic', 'Hooded Horse', 'Donkey Crew',
     'ConcernedApe', 'Sucker Punch Productions', 'PlayStation Publishing', 'Larian Studios', 'Warhorse Studios',
     'Deep Silver', 'The Indie Stone', 'Okomotive', 'Bungie', 'Unknown Worlds Entertainment', 'Valve', 'Plarium',
-    'Indie Studio',
+    'Indie Studio', 'Zubarik Inc',
 ];
 const studios = studioNames.map((name, i) => studio(`st${i + 1}`, name));
 const studioId = (name: string) => studios.find((st) => st.name === name)!.id;
@@ -51,21 +55,29 @@ export const publishers = studios;
 export const categories = [
     'шутер', 'екшн', 'виживання', 'наукова фантастика', 'відкритий світ',
     'многокористувацька', 'RPG', 'стратегія', 'інді', 'пригоди', 'симулятор', 'головоломка',
+    'кіберпанк', 'оголеність', 'майбутнє', 'насильство', 'сюжетна', 'від першої особи',
 ].map((name, i) => ({ id: `c${i + 1}`, name, description: '', createdAt: daysFromNow(-1000) }));
 
 // The catalogue shown in the Figma mockups. Covers live in public/mock/games.
 // The main page picks its rows from this list by rule (see main.tsx), so the
 // order here decides which games land in the curated rows.
+const releaseDate = (released: number | string) =>
+    typeof released === 'string' ? new Date(`${released}T00:00:00`).toISOString() : daysFromNow(released);
+
 const gameSeeds: {
     name: string; slug: string; price: number; discount?: number;
-    released: number; developer?: string; publisher?: string; description?: string;
+    released: number | string; developer?: string; publisher?: string; description?: string;
 }[] = [
     {
         name: 'Avatar: Frontiers of Pandora', slug: 'hero/avatar-banner', price: 1519, discount: 40, released: -300,
         developer: 'Massive Entertainment', publisher: 'Ubisoft',
         description: 'Avatar: Frontiers of Pandora™ — це пригодницька гра від першої особи, де події розгортаються на західному кордоні.',
     },
-    { name: 'Cyberpunk 2077', slug: 'cyberpunk-2077', price: 1099, released: -1400, developer: 'CD PROJEKT RED', publisher: 'CD PROJEKT RED' },
+    {
+        name: 'Cyberpunk 2077', slug: 'cyberpunk-2077', price: 1099, released: '2020-12-10',
+        developer: 'CD PROJEKT RED', publisher: 'Zubarik Inc',
+        description: 'Cyberpunk 2077 — пригодницький бойовик і рольова гра з відкритим світом. Дія відбувається у темному майбутньому Найт-Сіті, небезпечного мегаполіса, одержимого владою, гламуром і ненаситною модифікацією тіла.',
+    },
     { name: 'Відьмак 3: Дикий гін', slug: 'witcher-3', price: 729, released: -3400, developer: 'CD PROJEKT RED', publisher: 'CD PROJEKT RED' },
     { name: 'Manor Lords', slug: 'manor-lords', price: 599, discount: 25, released: -160, developer: 'Slavic Magic', publisher: 'Hooded Horse' },
     { name: 'Bellwright', slug: 'bellwright', price: 600, released: -150, developer: 'Donkey Crew' },
@@ -102,47 +114,56 @@ export const games = gameSeeds.map((g, i) => ({
     discountFinish: g.discount ? discountEnd() : (null as unknown as string),
     previeImage: g.slug.includes('/') ? `/mock/${g.slug}.jpg` : `/mock/games/${g.slug}.jpg`,
     description: g.description ?? `${g.name} — ${LOREM}`,
-    dateOfRelease: daysFromNow(g.released),
+    dateOfRelease: releaseDate(g.released),
     developerId: studioId(g.developer ?? 'Indie Studio'),
     publisherId: studioId(g.publisher ?? g.developer ?? 'Indie Studio'),
     urlForContent: '',
-    createdAt: daysFromNow(g.released),
+    createdAt: releaseDate(g.released),
+}));
+const gameId = (name: string) => games.find((g) => g.name === name)!.id;
+const CYBERPUNK = gameId('Cyberpunk 2077');
+
+const cyberpunkTags = ['шутер', 'екшн', 'кіберпанк', 'оголеність', 'відкритий світ', 'майбутнє', 'насильство', 'RPG', 'сюжетна', 'від першої особи'];
+
+export const categoriesForGames = games.flatMap((g, i) => {
+    const ids = g.id === CYBERPUNK
+        ? cyberpunkTags.map((name) => categories.find((c) => c.name === name)!.id)
+        : [0, 1, 2, 3].map((k) => categories[(i + k * 3) % 12].id);
+    return ids.map((categoryId, k) => ({ id: `cg${i}-${k}`, gameId: g.id, categoryId, createdAt: g.createdAt }));
+});
+
+const dlc = (game: (typeof games)[number], id: string, name: string, price: number) => ({
+    ...game, id, gameId: game.id, name, price, discount: 0,
+    discountFinish: null as unknown as string,
+    previeImage: image(`slush-${id}`),
+});
+
+const cyberpunk = games.find((g) => g.id === CYBERPUNK)!;
+export const dlcs = [
+    dlc(cyberpunk, 'dlc-cp-bonus', 'Cyberpunk 2077 Bonus Content', 0),
+    dlc(cyberpunk, 'dlc-cp-redmod', 'Cyberpunk 2077 REDmod', 0),
+    dlc(cyberpunk, 'dlc-cp-pl', 'Cyberpunk 2077: Ілюзія свободи', 549),
+    ...['Manor Lords', "Baldur's Gate 3", 'Stardew Valley'].flatMap((name, i) => {
+        const g = games.find((x) => x.name === name)!;
+        return [1, 2].map((n) => dlc(g, `dlc${i}-${n}`, `${g.name}: DLC ${n}`, Math.round(g.price / 4)));
+    }),
+];
+
+const CYBERPUNK_ABOUT = 'Cyberpunk 2077 — пригодницький рольовий екшн у відкритому світі мегаполісу Найт-Сіті, де у ролі кіберпанкового найманця ви боротиметеся за виживання. Гра вдосконалена і має новий безкоштовний вміст. Налаштуйте персонажа й ігровий стиль, виконуючи завдання, нарощуючи репутацію і відкриваючи апгрейди. Будуючи взаємини і здійснюючи вибір, ви формуєте сюжет і світ навколо. Тут народжуються легенди. Якою буде ваша?';
+
+const bundleSeeds = [
+    { id: 'b-cp', gameId: CYBERPUNK, name: 'Cyberpunk 2077', description: CYBERPUNK_ABOUT, price: 1099, discount: 0, dlcIds: ['dlc-cp-bonus', 'dlc-cp-redmod'] },
+    { id: 'b-cp-full', gameId: CYBERPUNK, name: 'Cyberpunk: Повне видання', description: '', price: 1648, discount: 8, dlcIds: ['dlc-cp-pl'] },
+];
+
+export const bundles = bundleSeeds.map(({ dlcIds: _d, gameId: _g, ...b }) => ({
+    ...b,
+    discountFinish: b.discount ? daysFromNow(10) : (null as unknown as string),
+    createdAt: daysFromNow(-100),
 }));
 
-export const categoriesForGames = games.flatMap((g, i) =>
-    [0, 1, 2, 3].map((k) => ({
-        id: `cg${i}-${k}`,
-        gameId: g.id,
-        categoryId: categories[(i + k * 3) % categories.length].id,
-        createdAt: g.createdAt,
-    })),
-);
-
-export const dlcs = games.slice(0, 5).flatMap((g, i) =>
-    [1, 2].map((n) => ({
-        ...g,
-        id: `dlc${i + 1}-${n}`,
-        gameId: g.id,
-        name: `${g.name}: DLC ${n}`,
-        price: Math.round(g.price / 4),
-        previeImage: image(`slush-dlc-${i + 1}-${n}`),
-    })),
-);
-
-export const bundles = games.slice(0, 5).map((g, i) => ({
-    id: `b${i + 1}`,
-    name: `${g.name} — Повне видання`,
-    description: 'Гра та всі доповнення',
-    price: g.price + dlcs.filter((d) => d.gameId === g.id).reduce((s, d) => s + d.price, 0),
-    discount: 20,
-    discountFinish: daysFromNow(10),
-    createdAt: g.createdAt,
-}));
-
-export const bundleCollections = bundles.flatMap((b, i) =>
-    dlcs
-        .filter((d) => d.gameId === games[i].id)
-        .map((d, k) => ({ id: `bc${i}-${k}`, bundleId: b.id, gameId: games[i].id, dlcId: d.id })),
+export const bundleCollections = bundleSeeds.flatMap((b) =>
+    b.dlcIds.map((dlcId, k) => ({ id: `bc-${b.id}-${k}`, bundleId: b.id, gameId: b.gameId, dlcId })),
 );
 
 const requirement = (gameId: string, high: boolean) => ({
@@ -164,19 +185,55 @@ const perGame = <T>(count: number, make: (game: (typeof games)[number], gi: numb
 
 const author = (gi: number, k: number) => users[(gi + k) % users.length].id;
 
-export const reviews = perGame(3, (g, gi, k) => ({
-    id: `r${gi}-${k}`,
-    authorId: author(gi, k),
-    attachedId: g.id,
-    content: ['Чудова гра, рекомендую!', 'Непогано, але є баги.', 'Найкраща гра року. ' + LOREM][k],
-    rate: [5, 3, 4][k],
-    likesCount: 10 + gi * 3 + k,
-    createdAt: daysFromNow(-k * 4 - gi),
-}));
+const cyberpunkReviews: [string, number, string][] = [
+    ['DenroyPro', 5, 'Чудова гра'],
+    ['KiriketHirik', 4, 'Імба. 10 з 10. Незважаючи на баги і проблему з економікою (купую за 50к продаю за 1к) це імба, всі любители рпг з відкритим світом і сюжетом мають в це пограти. Дякуєм за українську!'],
+    ['N.Anderson', 4, 'Топчиковий топ. Дякуємо панам та панессам з CDPR за українську локалізацію основної гри та DLC Ілюзія Свободи. Прийдеться проходити гру уже третій раз.'],
+    ['Юзернейм', 5, 'До зустрічі, Найт-Сіті'],
+];
+
+export const reviews = [
+    ...cyberpunkReviews.map(([name, rate, content], k) => ({
+        id: `r-cp-${k}`,
+        authorId: userId(name),
+        attachedId: CYBERPUNK,
+        content,
+        rate,
+        likesCount: 2500,
+        createdAt: new Date('2023-02-21T12:00:00').toISOString(),
+    })),
+    ...perGame(3, (g, gi, k) => ({
+        id: `r${gi}-${k}`,
+        authorId: author(gi, k),
+        attachedId: g.id,
+        content: ['Чудова гра, рекомендую!', 'Непогано, але є баги.', 'Найкраща гра року. ' + LOREM][k],
+        rate: [5, 3, 4][k],
+        likesCount: 10 + gi * 3 + k,
+        createdAt: daysFromNow(-k * 4 - gi),
+    })).filter((r) => r.attachedId !== CYBERPUNK),
+];
+
+// Friends of the signed-in user who want / own a game.
+const wishedNames = ['GhostRogue', 'sanya_KAL'];
+const ownedNames = ['karl_vava', 'zuzeyka', 'NikaNii', 's1imerock', 'whysxugly', 'low_owl', 'mop_riderEX', 'Rozumnichok', 'PixelHunter', 'NightOwl', 'Kozak_Gamer'];
+export const wishedFriends = (_gameId: string) => users.filter((u) => wishedNames.includes(u.name));
+export const ownedFriends = (_gameId: string) => users.filter((u) => ownedNames.includes(u.name));
 
 const avatarShots = Array.from({ length: 10 }, (_, i) => `/mock/hero/thumb-${i + 1}.jpg`);
 
+const cyberpunkShots = ['/mock/games/cyberpunk-2077.jpg', ...Array.from({ length: 6 }, (_, i) => `/mock/cyberpunk/shot-${i + 1}.jpg`)];
+
 export const screenshots = [
+    ...cyberpunkShots.map((url, k) => ({
+        id: `s-cp-${k}`,
+        title: 'Скріншот з Cyberpunk 2077',
+        description: 'Найт-Сіті',
+        likesCount: 30 + k,
+        gameId: CYBERPUNK,
+        authorId: author(1, k),
+        contentUrl: url,
+        createdAt: daysFromNow(-k),
+    })),
     ...avatarShots.map((url, k) => ({
         id: `s-avatar-${k}`,
         title: 'Скріншот з Avatar: Frontiers of Pandora',
@@ -196,7 +253,7 @@ export const screenshots = [
     authorId: author(gi, k + 1),
     contentUrl: image(`slush-shot-${gi}-${k}`, 1280, 720),
     createdAt: daysFromNow(-gi - k),
-})).filter((s) => s.gameId !== 'g1'),
+})).filter((s) => s.gameId !== 'g1' && s.gameId !== CYBERPUNK),
 ];
 
 export const videos = perGame(1, (g, gi, k) => ({

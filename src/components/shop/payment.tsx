@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { AlertOctagonIcon, HeartIcon, ShareIcon, StarIcon } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { AlertOctagonIcon, ShareIcon } from 'lucide-react';
 import { useCart } from './cart/card-context';
+import GamePrice from '@/components/main/game-price';
+import { HeartOutlineIcon } from '@/components/ui/icons';
+import { cn } from '@/shared/lib/utils';
 
 interface PaymentProps {
     className?: string;
@@ -17,6 +18,10 @@ interface PaymentProps {
     platforms: JSX.Element[];
     discount?: number;
 }
+
+const button = 'rounded-[20px] font-artifakt font-semibold text-button-1';
+
+// Purchase panel in the game page sidebar.
 const Payment: React.FC<PaymentProps> = (props) => {
     const { addToCart } = useCart();
 
@@ -27,71 +32,48 @@ const Payment: React.FC<PaymentProps> = (props) => {
         });
     };
 
+    const details = [
+        ['Дата виходу', props.releaseDate],
+        ['Розробник', props.developer],
+        ['Видавець', props.publisher],
+    ];
 
     return (
-        <div className={'pl-0' + (props.className ? ' ' + props.className : '')}>
-            <div className='flex items-center justify-end mb-5'>
-                <span className="text-heading-3 text-typography font-bold mr-2">{props.rate}</span>
-                <div className="flex space-x-1">
-                    {[...Array(Math.round(props.rate))].map((_, i) => (
-                        <StarIcon
-                            key={i}
-                            className={`text-accent w-9 h-9`}
-                            fill="currentColor"
-                        />
-                    ))}
-                    {[...Array(5 - Math.round(props.rate))].map((_, i) => (
-                        <StarIcon
-                            key={5 + i}
-                            className={`text-accent w-9 h-9`}
-                        />
-                    ))}
-                </div>
-            </div>
-            <img src={props.previewUrl} className="w-auto mb-4 rounded-xl" />
-            <div className="flex flex-col justify-between mb-4">
+        <div className={cn('flex flex-col gap-5 text-typography', props.className)}>
+            <img src={props.previewUrl} alt="" className="h-[145px] w-full object-cover rounded-[20px]" />
+            <div className="flex flex-col gap-1">
+                <GamePrice price={props.price} discount={props.discount ?? 0} size="lg" />
                 {props.discount ? (
-                    <div className='flex space-x-2 items-center'>
-                        <Badge className="text-background bg-accent hover:bg-accentHover font-artifakt">-{props.discount}%</Badge>
-                        <p className="line-through text-sign-1 text-typographySecondary font-artifakt">{props.price}₴</p>
-                        <p className="text-sign-1 text-typography font-artifakt">{Math.round(props.price - props.price * props.discount / 100)}₴</p>
+                    <span className='font-artifakt text-sign-3 tracking-[-0.01em] text-typographySecondary'>Знижка діє до {props.endDate}</span>
+                ) : null}
+            </div>
+            <div className="flex flex-col gap-3">
+                <button type="button" className={cn(button, 'w-full px-[26px] py-3 bg-primary hover:bg-primaryHover text-background')}>Купити</button>
+                <div className='flex gap-3'>
+                    <button type="button" onClick={handleAddToCart} className={cn(button, 'flex-1 px-[26px] py-3 bg-secondary hover:bg-secondaryHover')}>Додати у кошик</button>
+                    <button type="button" aria-label="Додати до бажаного" className={cn(button, 'p-3 bg-secondary hover:bg-secondaryHover')}><HeartOutlineIcon /></button>
+                </div>
+                <div className="flex gap-3">
+                    <button type="button" className={cn(button, 'w-[136px] flex items-center justify-center gap-3 py-1.5 text-primary hover:text-primaryHover')}>
+                        <ShareIcon className="size-6" />Репост
+                    </button>
+                    <button type="button" className={cn(button, 'flex-1 flex items-center justify-center gap-3 py-1.5 text-negative hover:opacity-80')}>
+                        <AlertOctagonIcon className="size-6" />Поскаржитись
+                    </button>
+                </div>
+            </div>
+            <dl className="flex flex-col gap-4 font-artifakt text-sign-2">
+                {details.map(([label, value]) => (
+                    <div key={label} className="flex justify-between items-center">
+                        <dt className='font-bold'>{label}</dt>
+                        <dd className='text-block-2 tracking-[-0.01em] text-right'>{value}</dd>
                     </div>
-                ) : (<p className="text-sign-1 font-artifakt text-typography">{props.price}</p>)}
-                <span className='text-sign-2 text-typographySecondary'>Знижка діє до {props.endDate}</span>
-            </div>
-            <Button className='bg-primary hover:bg-primaryHover !text-background rounded-2xl w-full text-button-1 font-artifakt'>Купити</Button>
-            <div className='flex mt-3'>
-                <Button className="w-full rounded-2xl bg-secondary hover:bg-secondaryHover text-typography text-button-1 border-0 mr-5 font-artifakt" onClick={handleAddToCart}>Додати у кошик</Button>
-                <Button className="w-1/4 rounded-2xl bg-secondary hover:bg-secondaryHover text-typography text-button-1 border-0 font-artifakt"><HeartIcon></HeartIcon></Button>
-            </div>
-            <div className="flex items-center justify-between mt-3">
-                <Button className="w-full mb-2 rounded-2xl bg-transparent !text-primary hover:bg-cardLight12 hover:text-primaryHover text-button-1 border-0 mr-5 font-artifakt"><ShareIcon className='mr-2' />Репост</Button>
-                <Button className="w-full mb-2 rounded-2xl bg-transparent !text-negative hover:bg-cardLight12 hover:text-negativeHover text-button-1 border-0 font-artifakt"><AlertOctagonIcon className='mr-2' />Поскаржитись</Button>
-            </div>
-            <div className="mt-4 font-artifakt text-typography">
-                <div className="flex justify-between text-sm mb-1">
-                    <p className='font-bold text-subheading-2'>Дата виходу</p>
-                    <p className='text-block-2'>{props.releaseDate}</p>
+                ))}
+                <div className="flex justify-between items-center">
+                    <dt className='font-bold'>Платформи</dt>
+                    <dd className='flex gap-3'>{props.platforms.map((platform, index) => <span key={index}>{platform}</span>)}</dd>
                 </div>
-                <div className="flex justify-between text-sm mb-1">
-                    <p className='font-bold text-subheading-2'>Розробник</p>
-                    <p className='text-block-2'>{props.developer}</p>
-                </div>
-                <div className="flex justify-between text-sm mb-1">
-                    <p className='font-bold text-subheading-2'>Видавець</p>
-                    <p className='text-block-2'>{props.publisher}</p>
-                </div>
-                <div className="flex justify-between text-sm">
-                    <p className='font-bold text-subheading-2'>Платформи</p>
-                    <div className='flex'>
-                        {props.platforms.map((platform, index) => (
-                            <div className='text-block-2' key={index}>
-                                {platform}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
+            </dl>
         </div>
     );
 };
