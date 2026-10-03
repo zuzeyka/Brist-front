@@ -19,7 +19,7 @@ const Media: React.FC<PostProps> = (props) => {
                         <video className='w-full h-[480px] rounded-2xl bg-black' src={props.postMediaUrl} poster={props.postPosterUrl} controls autoPlay />
                     )}
                     {video && !playing && (
-                        <button type="button" aria-label="Відтворити" onClick={() => setPlaying(true)} className='relative w-full h-[480px] rounded-2xl overflow-hidden bg-black'>
+                        <button type="button" aria-label="Відтворити" onClick={(e) => { e.stopPropagation(); setPlaying(true); }} className='relative w-full h-[480px] rounded-2xl overflow-hidden bg-black'>
                             {props.postPosterUrl
                                 ? <img className='size-full object-cover' src={props.postPosterUrl} alt="" />
                                 : <video className='size-full object-cover' src={props.postMediaUrl} preload="metadata" muted />}

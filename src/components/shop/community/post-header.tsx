@@ -20,7 +20,7 @@ const PostHeader: React.FC<PostHeaderProps> = (props) => (
             </div>
             <p className='font-artifakt text-sign-3 tracking-[-0.01em] text-typographySecondary'>{props.postDate}</p>
         </div>
-        <button type="button" aria-label="Більше" className='hover:text-primaryHover' onClick={(e) => e.preventDefault()}>
+        <button type="button" aria-label="Більше" className='hover:text-primaryHover' onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
             <MoreHorizontalIcon className='size-6' />
         </button>
     </div>

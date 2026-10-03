@@ -339,3 +339,22 @@ export const gameGroups = games.map((g, i) => ({
     onlineCount: g.id === CYBERPUNK ? 5267 : 40 + i * 17,
     createdAt: g.createdAt,
 }));
+
+// Comments: a handful on every piece of community content, one of them a reply.
+const COMMENT = 'Lorem ipsum dolor sit amet consectetur. Et placerat amet et viverra viverra nunc velit. Mi quis bibendum eu amet sit libero lacus. Purus ac a at id vitae. Lectus nullam eu id placerat egestas porttitor commodo.';
+const commentable = [...news, ...posts, ...guides, ...screenshots, ...videos];
+
+export const comments: {
+    id: string; gamePostId: string; content: string; authorId: string;
+    replyToId?: string; likesCount: number; createdAt: string;
+}[] = commentable.flatMap((item, i) =>
+    Array.from({ length: 5 }, (_, k) => ({
+        id: `c-${item.id}-${k}`,
+        gamePostId: item.id,
+        content: k === 0 ? 'Дякую, дуже корисно!' : COMMENT,
+        authorId: users[(i + k) % users.length].id,
+        replyToId: k === 3 ? `c-${item.id}-1` : undefined,
+        likesCount: 2500 - k * 300,
+        createdAt: daysFromNow(-k),
+    })),
+);

@@ -19,7 +19,7 @@ const PostFooter: React.FC<PostFooterProps> = (props) => (
             <span className={chip + ' text-typographySecondary'}><HeartOutlineIcon className='text-accent' />{formatCount(props.postLikes)}</span>
             <span className={chip + ' text-typographySecondary'}><CommentIcon className='text-typography' />{formatCount(props.postComments)}</span>
             {props.isShared && (
-                <button type="button" className={chip + ' text-typography hover:bg-cardLight25'} onClick={(e) => e.preventDefault()}>
+                <button type="button" className={chip + ' text-typography hover:bg-cardLight25'} onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
                     <ShareIcon />Поділитись
                 </button>
             )}

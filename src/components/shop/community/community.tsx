@@ -7,6 +7,7 @@ import Post, { PostProps } from './post';
 import Media from './media';
 import CreatePost from './create-post';
 import GameStats from './game-stats';
+import PostPage, { OpenPost } from './post-page';
 import { GameGuide, GameNews, GamePosts, Screenshot, User, Video } from '@/shared/lib/interfaces';
 import { formatDate } from '../about/review-list';
 
@@ -57,6 +58,7 @@ const Community: React.FC<CommunityContent> = (props) => {
     const [sort, setSort] = useState('popular');
     const [section, setSection] = useState('всі');
     const [search, setSearch] = useState('');
+    const [openPost, setOpenPost] = useState<OpenPost>();
 
     // Users are fetched in the same order as their content.
     const toItems = (section: Section, list: (GamePosts | GameGuide | GameNews | Screenshot | Video)[], users: User[]): FeedItem[] =>
@@ -79,16 +81,38 @@ const Community: React.FC<CommunityContent> = (props) => {
         }));
 
     const query = search.trim().toLowerCase();
-    const feed = [
+    const allItems = [
         ...toItems('новини', props.news, props.newsUserData),
         ...toItems('скріншоти', props.screenshots, props.screenshotsUserData),
         ...toItems('гайди', props.guides, props.guidesUserData),
         ...toItems('відео', props.videos, props.videosUserData),
         ...toItems('пости', props.posts, props.postsUserData),
-    ]
+    ];
+    const feed = allItems
         .filter((item) => section === 'всі' || item.section === section)
         .filter((item) => !query || `${item.props.postTitle} ${item.props.postText ?? ''}`.toLowerCase().includes(query))
         .sort(sorters[sort]);
+
+    if (openPost) {
+        // Other posts from the same section, most popular first.
+        const current = [...feed, ...allItems].find((item) => item.id === openPost.id);
+        const others = allItems
+            .filter((item) => item.id !== openPost.id && (!current || item.section === current.section))
+            .sort(sorters.popular)
+            .slice(0, 5);
+        return (
+            <PostPage
+                post={openPost}
+                others={others}
+                gameName={props.gameName}
+                subscribersCount={props.subscribersCount}
+                onlineCount={props.onlineCount}
+                onBack={() => setOpenPost(undefined)}
+                onOpen={setOpenPost}
+                onCreate={() => { setOpenPost(undefined); setCreating(true); }}
+            />
+        );
+    }
 
     if (creating) {
         return (
@@ -114,7 +138,18 @@ const Community: React.FC<CommunityContent> = (props) => {
                 <div className='w-[1092px] min-w-0 flex flex-col gap-4'>
                     {feed.map((item) => {
                         const Card = cards[item.section];
-                        return <Card key={`${item.section}-${item.id}`} {...item.props} />;
+                        return (
+                            <div
+                                key={`${item.section}-${item.id}`}
+                                role="link"
+                                tabIndex={0}
+                                className='cursor-pointer rounded-[20px] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary'
+                                onClick={() => setOpenPost(item)}
+                                onKeyDown={(e) => { if (e.key === 'Enter') setOpenPost(item); }}
+                            >
+                                <Card {...item.props} />
+                            </div>
+                        );
                     })}
                     {!feed.length && <p className='py-16 text-center font-artifakt text-block-1 text-typographySecondary'>Тут поки нічого немає</p>}
                 </div>

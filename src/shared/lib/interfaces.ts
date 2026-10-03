@@ -46,9 +46,13 @@ export interface Message {
 
 export interface GameComment {
     id: string;
+    // Id of the post, guide, news item, screenshot or video commented on.
     gamePostId: string;
     content: string;
     authorId: string;
+    // The comment this one replies to, shown quoted above it.
+    replyToId?: string;
+    likesCount?: number;
     createdAt: string;
 }
 

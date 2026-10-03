@@ -57,6 +57,9 @@ const routes: [method: string, pattern: string, handler: Handler][] = [
     ['GET', 'Friends/wished/bygameid/:id', ([id]) => db.wishedFriends(id)],
     ['GET', 'Friends/owned/bygameid/:id', ([id]) => db.ownedFriends(id)],
 
+    ['GET', 'GameComment/bypostid/:id', ([id]) => db.comments.filter((c) => c.gamePostId === id)],
+    ['POST', 'GameComment', (_, body) => ({ ...(body as object), id: `c-new-${Date.now()}`, likesCount: 0, createdAt: new Date().toISOString() })],
+
     ['GET', 'User/getbyuid/:id', ([id]) => byId(db.users)(id)],
     ['POST', 'User', (_, body) => ({ ...(body as object), id: `u${Date.now()}` })],
     // Any credentials are accepted; the token is a dummy value.
