@@ -179,6 +179,10 @@ const requirement = (gameId: string, high: boolean) => ({
 export const minRequirements = games.map((g) => requirement(g.id, false));
 export const maxRequirements = games.map((g) => requirement(g.id, true));
 
+// Date and author of every post in the community mockups.
+const DESIGN_DATE = new Date('2024-02-25T12:00:00').toISOString();
+const nika = () => userId('NikaNii');
+
 // Community content: a few items of each kind per game, authored by rotating users.
 const perGame = <T>(count: number, make: (game: (typeof games)[number], gi: number, k: number) => T) =>
     games.flatMap((g, gi) => Array.from({ length: count }, (_, k) => make(g, gi, k)));
@@ -224,6 +228,11 @@ const avatarShots = Array.from({ length: 10 }, (_, i) => `/mock/hero/thumb-${i +
 const cyberpunkShots = ['/mock/games/cyberpunk-2077.jpg', ...Array.from({ length: 6 }, (_, i) => `/mock/cyberpunk/shot-${i + 1}.jpg`)];
 
 export const screenshots = [
+    {
+        id: 's-cp-post', title: '', likesCount: 5300, commentsCount: 4500, gameId: CYBERPUNK, authorId: nika(),
+        description: 'Привіт, на попередній вечірці мені вдалося отримати цей квест.\nУ тому, що я зараз роблю, воно не хоче з’являтися. Є спосіб змусити її з\'явитися чи ні?',
+        contentUrl: '/mock/community/screenshot.jpg', createdAt: DESIGN_DATE,
+    },
     ...cyberpunkShots.map((url, k) => ({
         id: `s-cp-${k}`,
         title: 'Скріншот з Cyberpunk 2077',
@@ -252,11 +261,18 @@ export const screenshots = [
     gameId: g.id,
     authorId: author(gi, k + 1),
     contentUrl: image(`slush-shot-${gi}-${k}`, 1280, 720),
+    commentsCount: 2 + gi + k,
     createdAt: daysFromNow(-gi - k),
 })).filter((s) => s.gameId !== 'g1' && s.gameId !== CYBERPUNK),
 ];
 
-export const videos = perGame(1, (g, gi, k) => ({
+export const videos = [
+    {
+        id: 'v-cp-post', title: '', likesCount: 3100, commentsCount: 1100, gameId: CYBERPUNK, authorId: nika(),
+        description: 'Як мені вдалося зробити цей прекрасний знімок Джуді в «Чорному сапфірі» перед початком шоу…',
+        contentUrl: SAMPLE_VIDEO, previewImage: '/mock/community/video.jpg', createdAt: DESIGN_DATE,
+    },
+    ...perGame(1, (g, gi, k) => ({
     id: `v${gi}-${k}`,
     title: `Геймплей ${g.name}`,
     description: 'Перші 10 хвилин гри',
@@ -264,8 +280,10 @@ export const videos = perGame(1, (g, gi, k) => ({
     gameId: g.id,
     authorId: author(gi, k + 2),
     contentUrl: SAMPLE_VIDEO,
+    commentsCount: 4 + gi,
     createdAt: daysFromNow(-gi - 2),
-}));
+})).filter((v) => v.gameId !== CYBERPUNK),
+];
 
 const textPost = (prefix: string, title: string) => (g: (typeof games)[number], gi: number, k: number) => ({
     id: `${prefix}${gi}-${k}`,
@@ -279,9 +297,45 @@ const textPost = (prefix: string, title: string) => (g: (typeof games)[number], 
     gameTopicId: '',
     authorId: author(gi, k + 3),
     content: LOREM,
+    commentsCount: 1 + gi + k,
     createdAt: daysFromNow(-gi - k * 2),
 });
 
-export const news = perGame(2, textPost('n', 'Оновлення'));
-export const posts = perGame(2, textPost('po', 'Обговорення'));
-export const guides = perGame(1, textPost('gd', 'Гайд для новачків'));
+const notCyberpunk = <T extends { gameId: string }>(list: T[]) => list.filter((x) => x.gameId !== CYBERPUNK);
+
+// The Cyberpunk 2077 community feed from the "Community - All" mockup.
+const cyberpunkPost = (id: string, title: string, content: string, likesCount: number, commentsCount: number, contentUrl = '') => ({
+    id, title, description: content, content, likesCount, commentsCount, contentUrl,
+    discussionId: '', gameId: CYBERPUNK, gameGroupId: '', gameTopicId: '', authorId: nika(), createdAt: DESIGN_DATE,
+});
+
+export const news = [
+    cyberpunkPost('n-cp-1', 'Питання для початківців',
+        'Я трохи втратив уявлення про цю гру:\nНа даний момент у мене 9 рівень (новий у грі), і коли я переходжу на свою сторінку з кіберпрограмами, там написано, що потрібно відвідати розкопувач, щоб оновити їх. Але коли я туди потрапляю, у мене не вистачає компонентів для оновлення.',
+        1500, 500, '/mock/community/news.jpg'),
+    ...notCyberpunk(perGame(2, textPost('n', 'Оновлення'))),
+];
+export const guides = [
+    cyberpunkPost('gd-cp-1', 'Допомогти?',
+        'Чи може хтось створити навчальний посібник про те, як максимально швидко використовувати все в грі як НОВУ ГРУ з самого початку за допомогою Cheat Engine.',
+        100000, 500, '/mock/community/guide.jpg'),
+    ...notCyberpunk(perGame(1, textPost('gd', 'Гайд для новачків'))),
+];
+export const posts = [
+    cyberpunkPost('po-cp-1', 'Летальний чи нелетальний?',
+        'Чи є в цьому якісь переваги/недоліки?\nЗавжди любив стелс в іграх із кількома варіантами гри, як-от deus-ex. Повна скритність не була моєю найсильнішою стороною, більшість часу або занадто багато в одній зоні, так повно стрілянини тощо.',
+        5, 0),
+    cyberpunkPost('po-cp-2', 'Мені б хотілося, щоб ресурси відновлення та здібностей були більш уніфікованими.',
+        'Я думаю, що можна було б додати багато глибини, якби CDPR вирішив використовувати Ram як універсальний ресурс, а не використовувати його лише для швидких хаків. Якби Berzerker і Sandevistan використовували Ram замість того, щоб мати власну тривалість і час відновлення, це створило б багато цікавих збірок із використанням деяких бонусів «інтелекту», щоб дійсно максимізувати їхню функціональність.',
+        120000, 2500, '/mock/community/discussion.jpg'),
+    ...notCyberpunk(perGame(2, textPost('po', 'Обговорення'))),
+];
+
+// Subscriber and online counts for each game's community.
+export const gameGroups = games.map((g, i) => ({
+    id: `gg-${g.id}`,
+    gameId: g.id,
+    subscribersCount: g.id === CYBERPUNK ? 10000 : 800 + i * 350,
+    onlineCount: g.id === CYBERPUNK ? 5267 : 40 + i * 17,
+    createdAt: g.createdAt,
+}));

@@ -8,32 +8,36 @@ export interface PostProps {
     postText?: string;
     postDate: string;
     postMediaUrl?: string;
+    // Still frame shown over a video until it plays.
+    postPosterUrl?: string;
     postAuthor: string;
     postAuthorAvatarUrl?: string;
     postLikes: number;
     postComments: number;
     className?: string;
 }
-const Post: React.FC<PostProps> = (props) => {
-    const extensions = props.postMediaUrl?.split('.').pop()?.slice(0, 3).toLowerCase();
-    let media;
-    if (extensions === 'jpg' || extensions === 'jpeg' || extensions === 'png') {
-        media = <img className='w-full h-auto rounded-md' src={props.postMediaUrl} alt="Game screenshot"></img>;
-    } else if (extensions === 'mp4' || extensions === 'web') {
-        media = <video className='w-full h-auto rounded-md' src={props.postMediaUrl} controls></video>;
-    }
-    return (
-        <div className={'max-w-7xl space-y-3 p-4 flex bg-card1 rounded-2xl flex-col mt-4' + (props.className ? ' ' + props.className : '')}>
-            <PostHeader postInfo={props.postAuthor} postDate={props.postDate} imgUrl={props.postAuthorAvatarUrl ? props.postAuthorAvatarUrl : ''} isUser={true}></PostHeader>
-            <div className='pr-4 space-y-3'>
-                <h2 className='font-bold text-heading-3 text-typography'>{props.postTitle}</h2>
-                <p className='text-typographySecondary text-block-2 font-artifakt'>{props.postText}</p>
-                {media}
+
+export const isVideoUrl = (url?: string) => !!url && /\.(mp4|webm)(\?|$)/i.test(url);
+export const isImageUrl = (url?: string) => !!url && /\.(jpe?g|png|webp|gif)(\?|$)/i.test(url);
+
+export const cardClass = 'flex flex-col gap-6 p-6 bg-card1 rounded-[20px] text-typography';
+export const titleClass = 'font-manrope font-bold text-heading-3';
+export const textClass = 'font-artifakt text-block-2 tracking-[-0.01em] whitespace-pre-line';
+
+// "Discussion Card": title and text, with an optional 480px image underneath.
+const Post: React.FC<PostProps> = (props) => (
+    <article className={cardClass + (props.className ? ' ' + props.className : '')}>
+        <div className='flex flex-col gap-4'>
+            <PostHeader postInfo={props.postAuthor} postDate={props.postDate} imgUrl={props.postAuthorAvatarUrl ?? ''} isUser={true} />
+            <div className='flex flex-col gap-3'>
+                <h2 className={titleClass}>{props.postTitle}</h2>
+                {props.postText && <p className={textClass}>{props.postText}</p>}
+                {isImageUrl(props.postMediaUrl) && <img className='w-full h-[480px] object-cover rounded-2xl' src={props.postMediaUrl} alt="" />}
+                {isVideoUrl(props.postMediaUrl) && <video className='w-full h-[480px] rounded-2xl bg-black' src={props.postMediaUrl} poster={props.postPosterUrl} controls />}
             </div>
-            <PostFooter postLikes={props.postLikes} postComments={props.postComments} isShared={true}></PostFooter>
         </div>
-    );
-};
+        <PostFooter postLikes={props.postLikes} postComments={props.postComments} isShared={true} />
+    </article>
+);
 
 export default Post;
-

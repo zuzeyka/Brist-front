@@ -41,6 +41,8 @@ const routes: [method: string, pattern: string, handler: Handler][] = [
 
     ['GET', 'Discussion/byattachedid/:id', ([id]) => db.reviews.filter((r) => r.attachedId === id)],
 
+    ['GET', 'GameGroup/bygameid/:id', ([id]) => db.gameGroups.find((g) => g.gameId === id)],
+
     ['GET', 'Screenshot', () => db.screenshots],
     ['GET', 'Screenshot/bygameid/:id', ([id]) => byGame(db.screenshots)(id)],
     ['GET', 'Video', () => db.videos],

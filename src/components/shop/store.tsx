@@ -6,7 +6,7 @@ import PageSwitcher from './page-switcher';
 import AboutGame from './about/about-game';
 import Characteristics from './characteristics/characteristics';
 import Community from './community/community';
-import { Developer, Discussion, DlcInShop, GameBundle, GameGuide, GameInShop, GameNews, GamePosts, Publisher, Screenshot, SystemRequirement, User, Video } from '@/shared/lib/interfaces';
+import { Developer, Discussion, GameGroup, DlcInShop, GameBundle, GameGuide, GameInShop, GameNews, GamePosts, Publisher, Screenshot, SystemRequirement, User, Video } from '@/shared/lib/interfaces';
 import { BundleItem } from './about/bundle-list';
 import PageGlows from '@/components/ui/page-glows';
 
@@ -39,6 +39,7 @@ const Store: React.FC = () => {
     const [newsUsers, setNewsUsers] = useState<User[]>([]);
     const [bundleContents, setBundleContents] = useState<BundleItem[][]>([]);
     const [wishedFriends, setWishedFriends] = useState<User[]>([]);
+    const [group, setGroup] = useState<GameGroup>();
     const [ownedFriends, setOwnedFriends] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const gameRate = reviews.length > 0 ? Math.round(reviews.map(review => review.rate).reduce((a, b) => a + b, 0) / reviews.length) : 0;
@@ -63,7 +64,8 @@ const Store: React.FC = () => {
                     fetchVideo(),
                     fetchGameGuides(),
                     fetchGameNews(),
-                    fetchFriends()
+                    fetchFriends(),
+                    fetchGroup()
                 ]);
                 setLoading(false);
             } catch (error) {
@@ -297,6 +299,18 @@ const Store: React.FC = () => {
         }
     };
 
+    const fetchGroup = async () => {
+        try {
+            const res = await fetch('http://localhost:5049/api/GameGroup/bygameid/' + gameId);
+            if (!res.ok) {
+                throw new Error('Network response was not ok');
+            }
+            setGroup(await res.json() as GameGroup);
+        } catch (error) {
+            console.log('Fetch group error:', error);
+        }
+    };
+
     const fetchFriends = async () => {
         try {
             const [wished, owned] = await Promise.all([
@@ -401,7 +415,7 @@ const Store: React.FC = () => {
                 />
             )
         },
-        { title: 'Спільнота', content: <Community postsUserData={postUsers ? postUsers : []} screenshotsUserData={screenshotUsers ? screenshotUsers : []} videosUserData={videoUsers ? videoUsers : []} guidesUserData={guideUsers ? guideUsers : []} newsUserData={newsUsers ? newsUsers : []} posts={posts ? posts : []} screenshots={screenshots ? screenshots : []} videos={videos ? videos : []} guides={guides ? guides : []} news={news ? news : []} /> }
+        { title: 'Спільнота', content: <Community gameName={game ? game.name : 'Невідомо'} subscribersCount={group?.subscribersCount ?? 0} onlineCount={group?.onlineCount ?? 0} postsUserData={postUsers ? postUsers : []} screenshotsUserData={screenshotUsers ? screenshotUsers : []} videosUserData={videoUsers ? videoUsers : []} guidesUserData={guideUsers ? guideUsers : []} newsUserData={newsUsers ? newsUsers : []} posts={posts ? posts : []} screenshots={screenshots ? screenshots : []} videos={videos ? videos : []} guides={guides ? guides : []} news={news ? news : []} /> }
     ];
 
     const [content, setContent] = useState<React.ReactNode>(null);

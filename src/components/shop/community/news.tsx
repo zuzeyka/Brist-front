@@ -1,23 +1,23 @@
 import React from 'react';
-import { PostProps } from './post';
+import { PostProps, textClass, titleClass } from './post';
 import PostFooter from './post-footer';
 import PostHeader from './post-header';
 
-const News: React.FC<PostProps> = (props) => {
-    return (
-        <div className={'max-w-7xl flex flex-col mt-4' + (props.className ? ' ' + props.className : '')}>
-            <img className='w-auto h-auto rounded-t-2xl' src={props.postMediaUrl} alt="Game screenshot"></img>
-            <div className='w-auto h-full bg-card1 rounded-b-2xl'>
-                <div className='flex flex-col space-y-3 p-4'>
-                    <PostHeader postInfo={props.postAuthor} postDate={props.postDate} imgUrl='' isUser={true}></PostHeader>
-                    <h2 className='font-bold text-heading-3 text-typography'>{props.postTitle}</h2>
-                    <p className='text-typographySecondary text-block-2 font-artifakt'>{props.postText}</p>
-                    <PostFooter postLikes={props.postLikes} postComments={props.postComments} isShared={true}></PostFooter>
+// "News Card": 280px banner on top, then the usual header, title and text.
+const News: React.FC<PostProps> = (props) => (
+    <article className={'flex flex-col bg-card1 rounded-[20px] overflow-hidden text-typography' + (props.className ? ' ' + props.className : '')}>
+        {props.postMediaUrl && <img className='w-full h-[280px] object-cover' src={props.postMediaUrl} alt="" />}
+        <div className='flex flex-col gap-6 px-6 pt-4 pb-6'>
+            <div className='flex flex-col gap-4'>
+                <PostHeader postInfo={props.postAuthor} postDate={props.postDate} imgUrl={props.postAuthorAvatarUrl ?? ''} isUser={true} />
+                <div className='flex flex-col gap-3'>
+                    <h2 className={titleClass}>{props.postTitle}</h2>
+                    {props.postText && <p className={textClass}>{props.postText}</p>}
                 </div>
             </div>
+            <PostFooter postLikes={props.postLikes} postComments={props.postComments} isShared={true} />
         </div>
-    );
-};
+    </article>
+);
 
 export default News;
-

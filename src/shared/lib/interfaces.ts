@@ -55,6 +55,8 @@ export interface GameComment {
 export interface GameGroup {
     id: string;
     gameId: string;
+    subscribersCount?: number;
+    onlineCount?: number;
     createdAt: string;
 }
 
@@ -70,6 +72,7 @@ export interface GameGuide {
     gameGroupId: string;
     content: string;
     createdAt: Date;
+    commentsCount?: number;
 }
 
 export interface GameNews {
@@ -84,6 +87,7 @@ export interface GameNews {
     gameGroupId: string;
     content: string;
     createdAt: Date;
+    commentsCount?: number;
 }
 
 export interface GamePosts {
@@ -98,6 +102,7 @@ export interface GamePosts {
     authorId: string;
     content: string;
     createdAt: Date;
+    commentsCount?: number;
 }
 
 export interface GameTopic {
@@ -192,7 +197,10 @@ export interface Video {
     gameId: string;
     authorId: string;
     contentUrl: string;
+    // Still frame shown before the video plays.
+    previewImage?: string;
     createdAt: Date;
+    commentsCount?: number;
 }
 
 export interface WishedGame {
@@ -212,6 +220,7 @@ export interface Screenshot {
     authorId: string;
     contentUrl: string;
     createdAt: Date;
+    commentsCount?: number;
 }
 
 export interface Developer {

@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import Filters from './filters';
-import { Button } from '@/components/ui/button';
-import { BellPlusIcon, CircleEllipsisIcon, PlusIcon } from 'lucide-react';
+import { BellPlusIcon, MoreHorizontalIcon, PlusIcon } from 'lucide-react';
 import News from './news';
 import Guide from './guide';
-import Post from './post';
+import Post, { PostProps } from './post';
 import Media from './media';
 import CreatePost from './create-post';
 import GameStats from './game-stats';
 import { GameGuide, GameNews, GamePosts, Screenshot, User, Video } from '@/shared/lib/interfaces';
+import { formatDate } from '../about/review-list';
 
 interface CommunityContent {
+    gameName: string;
+    subscribersCount: number;
+    onlineCount: number;
     posts: GamePosts[];
     postsUserData: User[];
     guides: GameGuide[];
@@ -23,177 +26,104 @@ interface CommunityContent {
     videosUserData: User[];
 }
 
-const Community: React.FC<CommunityContent> = ({ posts, guides, news, screenshots, videos, postsUserData, guidesUserData, newsUserData, screenshotsUserData, videosUserData }) => {
-    const [PostComponent, setActiveComponent] = useState(false);
-    const [selectedSort, setSelectedSort] = useState<string>('popular');
-    const [selectedCommand, setSelectedCommand] = useState<string>('всі');
+type Section = 'пости' | 'гайди' | 'новини' | 'скріншоти' | 'відео';
 
-    const handleButtonClick = () => {
-        setActiveComponent(!PostComponent);
-    };
+interface FeedItem {
+    id: string;
+    section: Section;
+    createdAt: Date;
+    likes: number;
+    props: PostProps;
+}
 
-    const getPostDate = (data: Date) => {
-        const date = new Date(data);
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}.${month}.${year}`
-    }
+const cards: Record<Section, React.FC<PostProps>> = {
+    'пости': Post,
+    'гайди': Guide,
+    'новини': News,
+    'скріншоти': Media,
+    'відео': Media,
+};
 
-    const combinedContent = [
-        ...posts.map((post, index) => ({ ...post, type: 'post', userData: postsUserData[index] })),
-        ...guides.map((guide, index) => ({ ...guide, type: 'guide', userData: guidesUserData[index] })),
-        ...news.map((newsItem, index) => ({ ...newsItem, type: 'news', userData: newsUserData[index] })),
-        ...screenshots.map((screenshot, index) => ({ ...screenshot, type: 'screenshot', userData: screenshotsUserData[index] })),
-        ...videos.map((video, index) => ({ ...video, type: 'video', userData: videosUserData[index] })),
-    ];
+const sorters: Record<string, (a: FeedItem, b: FeedItem) => number> = {
+    popular: (a, b) => b.likes - a.likes,
+    recent: (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    old: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+};
 
-    if (selectedSort === 'recent') {
-        combinedContent.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    } else if (selectedSort === 'rated') {
-        combinedContent.sort((a, b) => b.likesCount - a.likesCount);
-    } else if (selectedSort === 'old') {
-        combinedContent.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-    }
+const secondaryIconButton = 'p-3 rounded-[20px] bg-secondary hover:bg-secondaryHover text-typography';
 
-    if (PostComponent) {
+const Community: React.FC<CommunityContent> = (props) => {
+    const [creating, setCreating] = useState(false);
+    const [sort, setSort] = useState('popular');
+    const [section, setSection] = useState('всі');
+    const [search, setSearch] = useState('');
+
+    // Users are fetched in the same order as their content.
+    const toItems = (section: Section, list: (GamePosts | GameGuide | GameNews | Screenshot | Video)[], users: User[]): FeedItem[] =>
+        list.map((item, index) => ({
+            id: item.id,
+            section,
+            createdAt: item.createdAt,
+            likes: item.likesCount,
+            props: {
+                postTitle: item.title || '',
+                postText: section === 'пости' || section === 'гайди' || section === 'новини' ? (item as GamePosts).content || item.description : item.description,
+                postDate: formatDate(item.createdAt),
+                postMediaUrl: 'contentUrl' in item ? item.contentUrl : undefined,
+                postPosterUrl: (item as Video).previewImage,
+                postAuthor: users[index]?.name ?? '',
+                postAuthorAvatarUrl: users[index]?.image,
+                postLikes: item.likesCount,
+                postComments: item.commentsCount ?? 0,
+            },
+        }));
+
+    const query = search.trim().toLowerCase();
+    const feed = [
+        ...toItems('новини', props.news, props.newsUserData),
+        ...toItems('скріншоти', props.screenshots, props.screenshotsUserData),
+        ...toItems('гайди', props.guides, props.guidesUserData),
+        ...toItems('відео', props.videos, props.videosUserData),
+        ...toItems('пости', props.posts, props.postsUserData),
+    ]
+        .filter((item) => section === 'всі' || item.section === section)
+        .filter((item) => !query || `${item.props.postTitle} ${item.props.postText ?? ''}`.toLowerCase().includes(query))
+        .sort(sorters[sort]);
+
+    if (creating) {
         return (
-            <div className='max-w-7xl mx-auto py-4'>
-                <CreatePost gameName='Якась гра, яка дуже всім сподобається' cancel={handleButtonClick} />
+            <div className='py-4'>
+                <CreatePost gameName={props.gameName} cancel={() => setCreating(false)} />
             </div>
         );
     }
-    else {
-        return (
-            <div className='max-w-7xl mx-auto py-4'>
-                <div className="col-span-2 flex justify-between">
-                    <div className='flex flex-col mr-4 w-full'>
-                        <GameStats gameName='Якась гра, яка дуже всім сподобається' subscribersCount={1000} onlineCount={500}></GameStats>
 
-                        {selectedCommand === "всі" && combinedContent.map((item, index) => {
-                            switch (item.type) {
-                                case 'post':
-                                    console.log("item", item);
-                                    return (
-                                        <Post
-                                            key={index}
-                                            gameName='Якась гра, яка дуже всім сподобається'
-                                            postTitle={item.title || 'Без назви'}
-                                            postText={item.description || ''}
-                                            postDate={getPostDate(item.createdAt)}
-                                            postAuthor={item.userData.name}
-                                            postAuthorAvatarUrl={item.userData.image ? item.userData.image : ''}
-                                            postComments={Math.floor(Math.random() * 100)}
-                                            postLikes={item.likesCount}
-                                            postMediaUrl={item.contentUrl}
-                                        />
-                                    );
-                                case 'guide':
-                                    return (
-                                        <Guide
-                                            key={index}
-                                            className='bg-card1 mb-4'
-                                            gameName='Якась гра, яка дуже всім сподобається'
-                                            postTitle={item.title || 'Без назви'}
-                                            postText={item.description || ''}
-                                            postDate={getPostDate(item.createdAt)}
-                                            postAuthor={item.userData.name}
-                                            postAuthorAvatarUrl={item.userData.image ? item.userData.image : ''}
-                                            postComments={Math.floor(Math.random() * 100)}
-                                            postLikes={item.likesCount}
-                                            postMediaUrl={item.contentUrl}
-                                        />
-                                    );
-                                case 'news':
-                                    return (
-                                        <News
-                                            key={index}
-                                            gameName='Якась гра, яка дуже всім сподобається'
-                                            postTitle={item.title || 'Без назви'}
-                                            postText={item.description || ''}
-                                            postDate={getPostDate(item.createdAt)}
-                                            postAuthor={item.userData.name}
-                                            postAuthorAvatarUrl={item.userData.image ? item.userData.image : ''}
-                                            postComments={Math.floor(Math.random() * 100)}
-                                            postLikes={item.likesCount}
-                                            postMediaUrl={item.contentUrl}
-                                        />
-                                    );
-                                case 'screenshot':
-                                    return (
-                                        <Media
-                                            key={index}
-                                            gameName='Якась гра, яка дуже всім сподобається'
-                                            postTitle={item.title ? item.title : 'Без назви'}
-                                            postText={item.description ? item.description : ""}
-                                            postDate={getPostDate(item.createdAt)}
-                                            postAuthor={item.userData.name}
-                                            postAuthorAvatarUrl={item.userData.image ? item.userData.image : ''}
-                                            postComments={Math.floor(Math.random() * 100)}
-                                            postLikes={item.likesCount}
-                                            postMediaUrl={item.contentUrl ? item.contentUrl : ''}
-                                        />
-                                    );
-                                case 'video':
-                                    return (
-                                        <Media
-                                            key={index}
-                                            gameName='Якась гра, яка дуже всім сподобається'
-                                            postTitle={item.title ? item.title : 'Без назви'}
-                                            postText={item.description ? item.description : ""}
-                                            postDate={getPostDate(item.createdAt)}
-                                            postAuthor={item.userData.name}
-                                            postAuthorAvatarUrl={item.userData.image ? item.userData.image : ''}
-                                            postComments={Math.floor(Math.random() * 100)}
-                                            postLikes={item.likesCount}
-                                            postMediaUrl={item.contentUrl ? item.contentUrl : ''}
-                                        />
-                                    );
-                                default:
-                                    return null;
-                            }
-                        })}
-
-                        {selectedCommand === 'новини' && (news.map((item, index) =>
-                            <News key={index} gameName='Якась гра, яка дуже всім сподобається' postTitle={item.title} postText={item.content} postDate={getPostDate(item.createdAt)} postAuthor={newsUserData[index].name} postAuthorAvatarUrl={newsUserData[index].image ? newsUserData[index].image : ''} postComments={Math.floor(Math.random() * 100)} postLikes={item.likesCount} postMediaUrl={item.contentUrl}></News>
-                        ))}
-                        {selectedCommand === 'гайди' && (guides.map((guide, index) =>
-                            <Guide key={index} className='bg-card1 mb-4' gameName='Якась гра, яка дуже всім сподобається' postTitle={guide.title} postText={guide.content} postDate={getPostDate(guide.createdAt)} postAuthor={guidesUserData[index].name} postAuthorAvatarUrl={guidesUserData[index].image ? guidesUserData[index].image : ''} postComments={Math.floor(Math.random() * 100)} postLikes={guide.likesCount} postMediaUrl={guide.contentUrl}></Guide>
-                        ))}
-                        {selectedCommand === "пости" && (posts.map((post, index) =>
-                            <Post key={index} gameName='Якась гра, яка дуже всім сподобається' postTitle={post.title} postText={post.content} postDate={getPostDate(post.createdAt)} postAuthorAvatarUrl={postsUserData[index].image ? postsUserData[index].image : ''} postAuthor={postsUserData[index].name} postComments={Math.floor(Math.random() * 100)} postLikes={post.likesCount}></Post>
-                        ))}
-                        {selectedCommand === "відео" && (videos.map((video, index) =>
-                            <Media key={index} gameName='Якась гра, яка дуже всім сподобається' postTitle={video.title ? video.title : 'Без назви'} postText={video.description ? video.description : ""} postDate={getPostDate(video.createdAt)} postAuthor={videosUserData[index].name} postAuthorAvatarUrl={videosUserData[index].image ? videosUserData[index].image : ''} postComments={Math.floor(Math.random() * 100)} postLikes={video.likesCount} postMediaUrl={video.contentUrl ? video.contentUrl : ''}></Media>
-                        ))}
-                        {selectedCommand === "скріншоти" && (screenshots.map((screenshot, index) =>
-                            <Media key={index} gameName='Якась гра, яка дуже всім сподобається' postTitle={screenshot.title ? screenshot.title : 'Без назви'} postText={screenshot.description ? screenshot.description : ""} postDate={getPostDate(screenshot.createdAt)} postAuthor={screenshotsUserData[index].name} postAuthorAvatarUrl={screenshotsUserData[index].image ? screenshotsUserData[index].image : ''} postComments={Math.floor(Math.random() * 100)} postLikes={screenshot.likesCount} postMediaUrl={screenshot.contentUrl ? screenshot.contentUrl : ''}></Media>
-                        ))}
-                    </div>
-                    <div className='flex flex-col mt-2'>
-                        <div className='sticky top-24 z-9'>
-                            <div className="flex justify-between items-center mb-4 space-x-4">
-                                <Button className="w-full rounded-2xl bg-primary hover:bg-primaryHover !text-background text-button-1 border-0 font-artifakt" onClick={handleButtonClick}>
-                                    <PlusIcon />
-                                    <p>Створити пост</p>
-                                </Button>
-                                <div className="flex space-x-2">
-                                    <Button className="bg-secondary hover:bg-secondaryHover text-typography text-button-1 border-0 font-artifakt p-2 rounded-2xl">
-                                        <BellPlusIcon className="text-black" />
-                                    </Button>
-                                    <Button className="bg-secondary hover:bg-secondaryHover text-typography text-button-1 border-0 font-artifakt p-2 rounded-2xl">
-                                        <CircleEllipsisIcon className="text-black" />
-                                    </Button>
-                                </div>
-                            </div>
-                            <Filters onCommandChange={setSelectedCommand} onSelectChange={setSelectedSort}></Filters>
-                        </div>
-                    </div>
+    return (
+        <div className='flex flex-col gap-6 pt-8'>
+            <div className='flex items-center justify-between'>
+                <GameStats gameName={props.gameName} subscribersCount={props.subscribersCount} onlineCount={props.onlineCount} />
+                <div className='w-[348px] flex gap-3'>
+                    <button type="button" onClick={() => setCreating(true)} className='flex-1 flex items-center justify-center gap-3 pl-4 pr-[26px] py-3 rounded-[20px] bg-primary hover:bg-primaryHover text-background font-artifakt font-semibold text-button-1'>
+                        <PlusIcon className='size-6' />Створити пост
+                    </button>
+                    <button type="button" aria-label="Підписатися на сповіщення" className={secondaryIconButton}><BellPlusIcon className='size-6' /></button>
+                    <button type="button" aria-label="Більше" className={secondaryIconButton}><MoreHorizontalIcon className='size-6' /></button>
                 </div>
             </div>
-        );
-    }
-
+            <div className='flex gap-6 items-start'>
+                <div className='w-[1092px] min-w-0 flex flex-col gap-4'>
+                    {feed.map((item) => {
+                        const Card = cards[item.section];
+                        return <Card key={`${item.section}-${item.id}`} {...item.props} />;
+                    })}
+                    {!feed.length && <p className='py-16 text-center font-artifakt text-block-1 text-typographySecondary'>Тут поки нічого немає</p>}
+                </div>
+                <aside className='w-[348px] shrink-0 sticky top-6'>
+                    <Filters onCommandChange={setSection} onSelectChange={setSort} onSearchChange={setSearch} />
+                </aside>
+            </div>
+        </div>
+    );
 };
 
 export default Community;

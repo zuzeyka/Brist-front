@@ -1,5 +1,6 @@
 import React from 'react';
-import { HeartIcon, MessageSquareIcon, Share2Icon } from 'lucide-react';
+import { CommentIcon, HeartOutlineIcon, ShareIcon } from '@/components/ui/icons';
+import { formatCount } from '../about/review-list';
 
 interface PostFooterProps {
     postLikes: number;
@@ -9,26 +10,22 @@ interface PostFooterProps {
     className?: string;
 }
 
-const PostFooter: React.FC<PostFooterProps> = (props) => {
-    return (
-        <div className={'flex space-x-4 mt-4 items-center text-typography' + (props.isShared ? '' : ' justify-between') + (props.className ? ' ' + props.className : '')}>
-            <div className='flex space-x-2'>
-                <div className='flex items-center space-x-2 bg-cardLight12 p-2 rounded-md w-16 justify-center'>
-                    <HeartIcon className='shrink-0 p-0.5 text-accent'></HeartIcon>
-                    <p className='cursor-pointer text-button-2 text-typographySecondary font-artifakt mr-1'>{props.postLikes >= 1000 ? props.postLikes / 1000 + 'k' : props.postLikes}</p>
-                </div>
-                <div className='flex items-center space-x-2 bg-cardLight12 p-2 rounded-md w-16 justify-center'>
-                    <MessageSquareIcon></MessageSquareIcon>
-                    <p className='cursor-pointer text-button-2 text-typographySecondary font-artifakt mr-1'>{props.postComments >= 1000 ? props.postComments / 1000 + 'k' : props.postComments}</p>
-                </div>
-            </div>
-            {props.isShared ? (<div className='flex space-x-2'>
-                <Share2Icon></Share2Icon>
-                <p className='cursor-pointer'>Поділитись</p>
-            </div>) : <p className='text-typographySecondary'>{props.postDate}</p>}
+const chip = 'flex items-center gap-2 rounded-lg bg-cardLight12 px-2 py-1 font-artifakt font-semibold text-button-2';
+
+// Likes, comments and share ("Post button" chips).
+const PostFooter: React.FC<PostFooterProps> = (props) => (
+    <div className={'flex items-center gap-3' + (props.isShared ? '' : ' justify-between') + (props.className ? ' ' + props.className : '')}>
+        <div className='flex items-center gap-3'>
+            <span className={chip + ' text-typographySecondary'}><HeartOutlineIcon className='text-accent' />{formatCount(props.postLikes)}</span>
+            <span className={chip + ' text-typographySecondary'}><CommentIcon className='text-typography' />{formatCount(props.postComments)}</span>
+            {props.isShared && (
+                <button type="button" className={chip + ' text-typography hover:bg-cardLight25'} onClick={(e) => e.preventDefault()}>
+                    <ShareIcon />Поділитись
+                </button>
+            )}
         </div>
-    );
-};
+        {!props.isShared && <p className='font-artifakt text-sign-3 text-typographySecondary'>{props.postDate}</p>}
+    </div>
+);
 
 export default PostFooter;
-
