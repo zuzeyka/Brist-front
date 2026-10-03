@@ -182,13 +182,11 @@ const Library: React.FC = () => {
         ...videos.map((video, index) => ({ ...video, type: 'video', userData: videoUsers[index] })),
     ];
 
-    const users = [...postUsers, ...guideUsers, ...screenshotUsers, ...videoUsers];
-
     const combinedContentJSX: JSX.Element[] = combinedContent && games
         ? combinedContent.map((item, index) => {
             const commonProps = {
                 key: index,
-                gameName: users[index].name,
+                gameName: games.find((game) => game.id === item.gameId)?.name ?? '',
                 postTitle: item.title || 'Без назви',
                 postText: item.description || '',
                 postDate: getPostDate(item.createdAt),

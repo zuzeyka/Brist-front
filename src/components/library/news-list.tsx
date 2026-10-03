@@ -30,11 +30,14 @@ const NewsList: React.FC<NewsListProps> = (props) => {
                 loop: true,
             }}>
                 <CarouselContent className="-ml-1">
-                    {props.gameNews.map((news, index) => (
-                        <CarouselItem className="pl-1 md:basis-1/2 lg:basis-1/3" key={news.id}>
-                            <News className="mx-2" postgameName={props.gameInfo[index].name} postTitle={news.title} postText={news.content} postDate={getPostDate(news.createdAt)} postGameImageUrl={props.gameInfo[index].previeImage} postMediaUrl={news.contentUrl} postLikes={news.likesCount} postComments={news.likesCount} ></News>
-                        </CarouselItem>
-                    ))}
+                    {props.gameNews.map((news) => {
+                        const game = props.gameInfo.find((g) => g.id === news.gameId);
+                        return (
+                            <CarouselItem className="pl-1 md:basis-1/2 lg:basis-1/3" key={news.id}>
+                                <News className="mx-2" postgameName={game?.name ?? ''} postTitle={news.title} postText={news.content} postDate={getPostDate(news.createdAt)} postGameImageUrl={game?.previeImage ?? ''} postMediaUrl={news.contentUrl} postLikes={news.likesCount} postComments={news.likesCount} ></News>
+                            </CarouselItem>
+                        );
+                    })}
                 </CarouselContent>
                 <CarouselNext className='-right-3 text-black'></CarouselNext>
                 <CarouselPrevious className='-left-3 text-black'></CarouselPrevious>

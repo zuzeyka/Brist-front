@@ -38,6 +38,19 @@ Follow these steps to set up and run the project locally:
 
 4. Build and run the application.
 
+## Running without a backend
+
+The front end ships with a mock API (`src/shared/lib/mock-api.ts`) that answers
+requests to `http://localhost:5049/api/...` with placeholder data from
+`src/shared/lib/mock-data.ts`. It is on by default. The route list in
+`mock-api.ts` is the set of endpoints a real backend must implement.
+
+To use a real backend, create `.env.local` with:
+
+```
+VITE_USE_MOCK_API=false
+```
+
 ## Contribution
 
 We welcome contributions! If you'd like to help improve Slush or fix any issues, please feel free to submit an Issue or a Pull Request. All contributions, whether they are ideas, bug fixes, or new features, are greatly appreciated.
