@@ -1,19 +1,29 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { LayoutGridIcon, ListIcon } from 'lucide-react';
+import { LayoutGridIcon, ListIcon, ChevronDownIcon } from 'lucide-react';
 import Head from '../main/head';
 import Search from '../main/search';
 import Footer from '../main/footer';
 import PageGlows from '@/components/ui/page-glows';
 import GameCard from '../main/game-card';
-import GamePrice from '../main/game-price';
+import GamePrice, { discountedPrice } from '../main/game-price';
 import FilterSidebar, { priceTiers } from './filter-sidebar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Link } from 'react-router-dom';
 import { Categories, CategoryForGame, GameInShop } from '@/shared/lib/interfaces';
 
 const glows = [
     { left: 1472, top: 108, large: true },
     { left: 4, top: 1200, large: true },
+];
+
+const sortOptions: { id: string; label: string; compare?: (a: GameInShop, b: GameInShop) => number }[] = [
+    { id: 'relevance', label: 'За релевантністю' },
+    { id: 'price-asc', label: 'Спочатку дешевші', compare: (a, b) => discountedPrice(a.price, a.discount) - discountedPrice(b.price, b.discount) },
+    { id: 'price-desc', label: 'Спочатку дорожчі', compare: (a, b) => discountedPrice(b.price, b.discount) - discountedPrice(a.price, a.discount) },
+    { id: 'discount', label: 'За розміром знижки', compare: (a, b) => b.discount - a.discount },
+    { id: 'newest', label: 'Спочатку новіші', compare: (a, b) => new Date(b.dateOfRelease).getTime() - new Date(a.dateOfRelease).getTime() },
+    { id: 'name', label: 'За назвою (А-Я)', compare: (a, b) => a.name.localeCompare(b.name, 'uk') },
 ];
 
 const Category: React.FC = () => {
@@ -26,6 +36,7 @@ const Category: React.FC = () => {
     const [tagSearch, setTagSearch] = useState('');
     const [priceTier, setPriceTier] = useState('any');
     const [discountOnly, setDiscountOnly] = useState(false);
+    const [sortId, setSortId] = useState('relevance');
     const [selectedGenres, setSelectedGenres] = useState<string[]>(() => {
         const genre = searchParams.get('genre');
         return genre ? [genre] : [];
@@ -75,12 +86,15 @@ const Category: React.FC = () => {
     };
 
     const tier = priceTiers.find((t) => t.id === priceTier)!;
-    const visible = useMemo(() => games
-        .filter((g) => !query || g.name.toLowerCase().includes(query.toLowerCase()))
-        .filter((g) => tier.test(g.price))
-        .filter((g) => !discountOnly || g.discount > 0)
-        .filter((g) => selectedGenres.length === 0 || selectedGenres.some((id) => genreIdsByGame.get(g.id)?.has(id))),
-    [games, query, tier, discountOnly, selectedGenres, genreIdsByGame]);
+    const sort = sortOptions.find((s) => s.id === sortId)!;
+    const visible = useMemo(() => {
+        const filtered = games
+            .filter((g) => !query || g.name.toLowerCase().includes(query.toLowerCase()))
+            .filter((g) => tier.test(g.price))
+            .filter((g) => !discountOnly || g.discount > 0)
+            .filter((g) => selectedGenres.length === 0 || selectedGenres.some((id) => genreIdsByGame.get(g.id)?.has(id)));
+        return sort.compare ? [...filtered].sort(sort.compare) : filtered;
+    }, [games, query, tier, discountOnly, selectedGenres, genreIdsByGame, sort]);
 
     return (
         <div className="relative bg-background">
@@ -92,7 +106,22 @@ const Category: React.FC = () => {
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2.5">
                             <span className="font-artifakt text-block-2 text-typographySecondary">Сортування:</span>
-                            <span className="font-artifakt font-semibold text-button-2">За релевантністю</span>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger className="flex items-center gap-1 font-artifakt font-semibold text-button-2 hover:text-primaryHover">
+                                    {sort.label}<ChevronDownIcon className="size-4" />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="bg-card2 text-typography">
+                                    {sortOptions.map((option) => (
+                                        <DropdownMenuItem
+                                            key={option.id}
+                                            onClick={() => setSortId(option.id)}
+                                            className={'font-artifakt text-sign-2 cursor-pointer focus:bg-cardLight12 focus:text-typography' + (option.id === sortId ? ' text-primary' : '')}
+                                        >
+                                            {option.label}
+                                        </DropdownMenuItem>
+                                    ))}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="font-artifakt text-block-2 text-typographySecondary">Вид:</span>
