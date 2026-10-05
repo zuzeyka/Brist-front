@@ -6,7 +6,7 @@ import PageGlows from '@/components/ui/page-glows';
 import FilterSidebar, { priceTiers } from './filter-sidebar';
 import Game from '../user/elements/game';
 import { GameProps } from '../user/pages/wished';
-import { Categories, CategoryForGame, GameInShop } from '@/shared/lib/interfaces';
+import { Categories, CategoryForGame, GameEvent, GameEventForGame, GameInShop } from '@/shared/lib/interfaces';
 
 const glows = [
     { left: 1472, top: 108, large: true },
@@ -17,25 +17,32 @@ const Wishlist: React.FC = () => {
     const [games, setGames] = useState<GameInShop[]>([]);
     const [genres, setGenres] = useState<Categories[]>([]);
     const [categoriesForGame, setCategoriesForGame] = useState<CategoryForGame[]>([]);
+    const [events, setEvents] = useState<GameEvent[]>([]);
+    const [eventsForGame, setEventsForGame] = useState<GameEventForGame[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [tagSearch, setTagSearch] = useState('');
     const [priceTier, setPriceTier] = useState('any');
     const [discountOnly, setDiscountOnly] = useState(false);
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+    const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
 
     useEffect(() => {
         async function load() {
             setLoading(true);
             try {
-                const [gamesRes, genresRes, categoriesForGameRes] = await Promise.all([
+                const [gamesRes, genresRes, categoriesForGameRes, eventsRes, eventsForGameRes] = await Promise.all([
                     fetch('http://localhost:5049/api/GamesInShop'),
                     fetch('http://localhost:5049/api/Categories'),
                     fetch('http://localhost:5049/api/CategoriesForGame'),
+                    fetch('http://localhost:5049/api/GameEvent'),
+                    fetch('http://localhost:5049/api/GameEventForGame'),
                 ]);
                 if (gamesRes.ok) setGames(await gamesRes.json() as GameInShop[]);
                 if (genresRes.ok) setGenres(await genresRes.json() as Categories[]);
                 if (categoriesForGameRes.ok) setCategoriesForGame(await categoriesForGameRes.json() as CategoryForGame[]);
+                if (eventsRes.ok) setEvents(await eventsRes.json() as GameEvent[]);
+                if (eventsForGameRes.ok) setEventsForGame(await eventsForGameRes.json() as GameEventForGame[]);
             } catch (error) {
                 console.log('Fetch wishlist error:', error);
             } finally {
@@ -59,14 +66,28 @@ const Wishlist: React.FC = () => {
         setSelectedGenres((current) => current.includes(id) ? current.filter((g) => g !== id) : [...current, id]);
     };
 
+    const eventIdsByGame = useMemo(() => {
+        const map = new Map<string, Set<string>>();
+        for (const link of eventsForGame) {
+            if (!map.has(link.gameId)) map.set(link.gameId, new Set());
+            map.get(link.gameId)!.add(link.eventId);
+        }
+        return map;
+    }, [eventsForGame]);
+
+    const toggleEvent = (id: string) => {
+        setSelectedEvents((current) => current.includes(id) ? current.filter((e) => e !== id) : [...current, id]);
+    };
+
     const tier = priceTiers.find((t) => t.id === priceTier)!;
     const visible = useMemo(() => games
         .filter((g) => !search || g.name.toLowerCase().includes(search.trim().toLowerCase()))
         .filter((g) => tier.test(g.price))
         .filter((g) => !discountOnly || g.discount > 0)
         .filter((g) => selectedGenres.length === 0 || selectedGenres.some((id) => genreIdsByGame.get(g.id)?.has(id)))
+        .filter((g) => selectedEvents.length === 0 || selectedEvents.some((id) => eventIdsByGame.get(g.id)?.has(id)))
         .sort((a, b) => (b.discount ?? 0) - (a.discount ?? 0)),
-    [games, search, tier, discountOnly, selectedGenres, genreIdsByGame]);
+    [games, search, tier, discountOnly, selectedGenres, genreIdsByGame, selectedEvents, eventIdsByGame]);
 
     const wishedGames: GameProps[] = visible.map((game) => ({
         name: game.name,
@@ -92,13 +113,16 @@ const Wishlist: React.FC = () => {
                             genres={genres}
                             selectedGenres={selectedGenres}
                             onGenreToggle={toggleGenre}
+                            events={events}
+                            selectedEvents={selectedEvents}
+                            onEventToggle={toggleEvent}
                             tagSearch={tagSearch}
                             onTagSearchChange={setTagSearch}
                             priceTier={priceTier}
                             onPriceTierChange={setPriceTier}
                             discountOnly={discountOnly}
                             onDiscountOnlyChange={setDiscountOnly}
-                            onReset={() => { setPriceTier('any'); setDiscountOnly(false); setTagSearch(''); setSelectedGenres([]); }}
+                            onReset={() => { setPriceTier('any'); setDiscountOnly(false); setTagSearch(''); setSelectedGenres([]); setSelectedEvents([]); }}
                         />
                         <div className="flex-1 min-w-0 flex flex-col gap-5">
                             <div className="flex items-center justify-between">

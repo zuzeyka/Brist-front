@@ -2,7 +2,25 @@ export interface Categories {
     id: string;
     name: string;
     description: string;
+    // "genre" (default when absent), "platform", "type" (player count) or "feature".
+    kind?: string;
     createdAt: string;
+}
+
+export interface GameEvent {
+    id: string;
+    name: string;
+    description?: string;
+    startAt: string;
+    endAt: string;
+    createdAt?: string;
+}
+
+export interface GameEventForGame {
+    id: string;
+    gameId: string;
+    eventId: string;
+    createdAt?: string;
 }
 
 export interface CategoryByAuthor {

@@ -10,7 +10,7 @@ import GamePrice, { discountedPrice } from '../main/game-price';
 import FilterSidebar, { priceTiers } from './filter-sidebar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Link } from 'react-router-dom';
-import { Categories, CategoryForGame, GameInShop } from '@/shared/lib/interfaces';
+import { Categories, CategoryForGame, GameEvent, GameEventForGame, GameInShop } from '@/shared/lib/interfaces';
 
 const glows = [
     { left: 1472, top: 108, large: true },
@@ -31,12 +31,15 @@ const Category: React.FC = () => {
     const [games, setGames] = useState<GameInShop[]>([]);
     const [genres, setGenres] = useState<Categories[]>([]);
     const [categoriesForGame, setCategoriesForGame] = useState<CategoryForGame[]>([]);
+    const [events, setEvents] = useState<GameEvent[]>([]);
+    const [eventsForGame, setEventsForGame] = useState<GameEventForGame[]>([]);
     const [loading, setLoading] = useState(true);
     const [isList, setIsList] = useState(false);
     const [tagSearch, setTagSearch] = useState('');
     const [priceTier, setPriceTier] = useState('any');
     const [discountOnly, setDiscountOnly] = useState(false);
     const [sortId, setSortId] = useState('relevance');
+    const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
     const [selectedGenres, setSelectedGenres] = useState<string[]>(() => {
         const genre = searchParams.get('genre');
         return genre ? [genre] : [];
@@ -54,14 +57,18 @@ const Category: React.FC = () => {
         async function load() {
             setLoading(true);
             try {
-                const [gamesRes, genresRes, categoriesForGameRes] = await Promise.all([
+                const [gamesRes, genresRes, categoriesForGameRes, eventsRes, eventsForGameRes] = await Promise.all([
                     fetch('http://localhost:5049/api/GamesInShop'),
                     fetch('http://localhost:5049/api/Categories'),
                     fetch('http://localhost:5049/api/CategoriesForGame'),
+                    fetch('http://localhost:5049/api/GameEvent'),
+                    fetch('http://localhost:5049/api/GameEventForGame'),
                 ]);
                 if (gamesRes.ok) setGames(await gamesRes.json() as GameInShop[]);
                 if (genresRes.ok) setGenres(await genresRes.json() as Categories[]);
                 if (categoriesForGameRes.ok) setCategoriesForGame(await categoriesForGameRes.json() as CategoryForGame[]);
+                if (eventsRes.ok) setEvents(await eventsRes.json() as GameEvent[]);
+                if (eventsForGameRes.ok) setEventsForGame(await eventsForGameRes.json() as GameEventForGame[]);
             } catch (error) {
                 console.log('Fetch catalog error:', error);
             } finally {
@@ -85,6 +92,19 @@ const Category: React.FC = () => {
         setSelectedGenres((current) => current.includes(id) ? current.filter((g) => g !== id) : [...current, id]);
     };
 
+    const eventIdsByGame = useMemo(() => {
+        const map = new Map<string, Set<string>>();
+        for (const link of eventsForGame) {
+            if (!map.has(link.gameId)) map.set(link.gameId, new Set());
+            map.get(link.gameId)!.add(link.eventId);
+        }
+        return map;
+    }, [eventsForGame]);
+
+    const toggleEvent = (id: string) => {
+        setSelectedEvents((current) => current.includes(id) ? current.filter((e) => e !== id) : [...current, id]);
+    };
+
     const tier = priceTiers.find((t) => t.id === priceTier)!;
     const sort = sortOptions.find((s) => s.id === sortId)!;
     const visible = useMemo(() => {
@@ -92,9 +112,10 @@ const Category: React.FC = () => {
             .filter((g) => !query || g.name.toLowerCase().includes(query.toLowerCase()))
             .filter((g) => tier.test(g.price))
             .filter((g) => !discountOnly || g.discount > 0)
-            .filter((g) => selectedGenres.length === 0 || selectedGenres.some((id) => genreIdsByGame.get(g.id)?.has(id)));
+            .filter((g) => selectedGenres.length === 0 || selectedGenres.some((id) => genreIdsByGame.get(g.id)?.has(id)))
+            .filter((g) => selectedEvents.length === 0 || selectedEvents.some((id) => eventIdsByGame.get(g.id)?.has(id)));
         return sort.compare ? [...filtered].sort(sort.compare) : filtered;
-    }, [games, query, tier, discountOnly, selectedGenres, genreIdsByGame, sort]);
+    }, [games, query, tier, discountOnly, selectedGenres, genreIdsByGame, selectedEvents, eventIdsByGame, sort]);
 
     return (
         <div className="relative bg-background">
@@ -134,13 +155,16 @@ const Category: React.FC = () => {
                             genres={genres}
                             selectedGenres={selectedGenres}
                             onGenreToggle={toggleGenre}
+                            events={events}
+                            selectedEvents={selectedEvents}
+                            onEventToggle={toggleEvent}
                             tagSearch={tagSearch}
                             onTagSearchChange={setTagSearch}
                             priceTier={priceTier}
                             onPriceTierChange={setPriceTier}
                             discountOnly={discountOnly}
                             onDiscountOnlyChange={setDiscountOnly}
-                            onReset={() => { setPriceTier('any'); setDiscountOnly(false); setTagSearch(''); setSelectedGenres([]); }}
+                            onReset={() => { setPriceTier('any'); setDiscountOnly(false); setTagSearch(''); setSelectedGenres([]); setSelectedEvents([]); }}
                         />
                         <div className="flex-1 min-w-0">
                             {loading ? (

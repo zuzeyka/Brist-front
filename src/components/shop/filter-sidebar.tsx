@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ChevronDownIcon, XIcon } from 'lucide-react';
-import { Categories } from '@/shared/lib/interfaces';
+import { Categories, GameEvent } from '@/shared/lib/interfaces';
 
 export const priceTiers = [
     { id: 'free', label: 'Безкоштовно', test: (p: number) => p === 0 },
@@ -10,9 +10,6 @@ export const priceTiers = [
     { id: '900', label: 'До 900 гривень', test: (p: number) => p <= 900 },
     { id: 'any', label: 'Без обмежень', test: () => true },
 ];
-
-// Placeholder sections — no backend data for type/features/platform/events yet (see WORKLOG).
-const emptySections = ['Тип', 'Особливості', 'Платформа', 'Івенти'];
 
 const FilterSection: React.FC<{ title: string; children?: React.ReactNode }> = ({ title, children }) => {
     const [open, setOpen] = useState(!!children);
@@ -26,10 +23,33 @@ const FilterSection: React.FC<{ title: string; children?: React.ReactNode }> = (
     );
 };
 
+// Genre/Platform/Type/Feature are all the same Categories + join-table shape,
+// distinguished only by `kind` — one checkbox-list renderer covers all four.
+const TagCheckboxList: React.FC<{ items: { id: string; name: string }[]; selected: string[]; onToggle: (id: string) => void }> = ({ items, selected, onToggle }) => (
+    items.length > 0 ? (
+        <div className="flex flex-col gap-2">
+            {items.map((item) => (
+                <label key={item.id} className="flex items-center gap-2.5 font-artifakt text-sign-2 text-typographySecondary cursor-pointer">
+                    <input
+                        type="checkbox"
+                        checked={selected.includes(item.id)}
+                        onChange={() => onToggle(item.id)}
+                        className="accent-primary size-4"
+                    />
+                    {item.name}
+                </label>
+            ))}
+        </div>
+    ) : null
+);
+
 interface FilterSidebarProps {
     genres: Categories[];
     selectedGenres: string[];
     onGenreToggle: (id: string) => void;
+    events: GameEvent[];
+    selectedEvents: string[];
+    onEventToggle: (id: string) => void;
     tagSearch: string;
     onTagSearchChange: (value: string) => void;
     priceTier: string;
@@ -39,10 +59,14 @@ interface FilterSidebarProps {
     onReset: () => void;
 }
 
-// "Фільтри" sidebar from the Category/Wishlist frames — price, discount and genre
-// actually filter; type/features/platform/events are presentational (see WORKLOG known gaps).
+// "Фільтри" sidebar from the Category/Wishlist frames.
 const FilterSidebar: React.FC<FilterSidebarProps> = (props) => {
-    const visibleGenres = props.genres.filter((g) => g.name.toLowerCase().includes(props.tagSearch.trim().toLowerCase()));
+    const search = props.tagSearch.trim().toLowerCase();
+    const byKind = (kind: string) => props.genres
+        .filter((g) => (g.kind ?? 'genre') === kind)
+        .filter((g) => g.name.toLowerCase().includes(search));
+    const visibleEvents = props.events.filter((e) => e.name.toLowerCase().includes(search));
+
     return (
         <aside className="w-[280px] shrink-0 flex flex-col gap-4 bg-card2 rounded-[20px] p-5">
             <div className="flex items-center justify-between">
@@ -59,21 +83,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = (props) => {
                 {props.tagSearch && <button type="button" aria-label="Очистити" onClick={() => props.onTagSearchChange('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-typographySecondary hover:text-typography"><XIcon className="size-4" /></button>}
             </div>
             <FilterSection title="Жанр">
-                {visibleGenres.length > 0 && (
-                    <div className="flex flex-col gap-2">
-                        {visibleGenres.map((g) => (
-                            <label key={g.id} className="flex items-center gap-2.5 font-artifakt text-sign-2 text-typographySecondary cursor-pointer">
-                                <input
-                                    type="checkbox"
-                                    checked={props.selectedGenres.includes(g.id)}
-                                    onChange={() => props.onGenreToggle(g.id)}
-                                    className="accent-primary size-4"
-                                />
-                                {g.name}
-                            </label>
-                        ))}
-                    </div>
-                )}
+                <TagCheckboxList items={byKind('genre')} selected={props.selectedGenres} onToggle={props.onGenreToggle} />
             </FilterSection>
             <FilterSection title="Ціна">
                 <div className="flex flex-col gap-2.5">
@@ -89,7 +99,18 @@ const FilterSidebar: React.FC<FilterSidebarProps> = (props) => {
                     </label>
                 </div>
             </FilterSection>
-            {emptySections.map((title) => <FilterSection key={title} title={title} />)}
+            <FilterSection title="Тип">
+                <TagCheckboxList items={byKind('type')} selected={props.selectedGenres} onToggle={props.onGenreToggle} />
+            </FilterSection>
+            <FilterSection title="Особливості">
+                <TagCheckboxList items={byKind('feature')} selected={props.selectedGenres} onToggle={props.onGenreToggle} />
+            </FilterSection>
+            <FilterSection title="Платформа">
+                <TagCheckboxList items={byKind('platform')} selected={props.selectedGenres} onToggle={props.onGenreToggle} />
+            </FilterSection>
+            <FilterSection title="Івенти">
+                <TagCheckboxList items={visibleEvents} selected={props.selectedEvents} onToggle={props.onEventToggle} />
+            </FilterSection>
         </aside>
     );
 };
