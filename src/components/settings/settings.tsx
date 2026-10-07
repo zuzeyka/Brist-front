@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../authorization/auth-context';
 import Head from '../main/head';
 import Footer from '../main/footer';
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
@@ -27,12 +29,21 @@ interface PageContent {
 
 const Settings: React.FC = () => {
     const { t } = useTranslation();
+    const { isAuthenticated, authReady } = useAuth();
+    const navigate = useNavigate();
     const [theme, setTheme] = useState(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
     const [selectedPageId, setSelectedPageId] = useState<string | null>(null);
 
     const toggleTheme = () => {
         setTheme(theme === 'light' ? 'dark' : 'light');
     };
+
+    // Catches both a direct visit while logged out and logging out while already
+    // on this page — authReady avoids bouncing an already-logged-in user on a hard
+    // refresh, when isAuthenticated briefly starts false before it's restored.
+    useEffect(() => {
+        if (authReady && !isAuthenticated) navigate('/login');
+    }, [authReady, isAuthenticated, navigate]);
 
 
     const pages: PageContent[] = [
@@ -54,6 +65,8 @@ const Settings: React.FC = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [theme]);
+
+    if (!authReady || !isAuthenticated) return null;
 
     return (
         <div className="relative bg-background">

@@ -2,6 +2,10 @@ import { createContext, useContext, useState, useMemo, useCallback, ReactNode, u
 
 interface AuthContextType {
     isAuthenticated: boolean;
+    // False until the stored-token restore effect below has run once. Pages that
+    // redirect away when logged out must wait for this, otherwise they'd bounce an
+    // already-logged-in user on a hard refresh (isAuthenticated starts false).
+    authReady: boolean;
     token?: string;
     userId?: string;
     userName?: string;
@@ -31,6 +35,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [authReady, setAuthReady] = useState<boolean>(false);
     const [token, setToken] = useState<string | undefined>(undefined);
     const userId = useMemo(() => (token ? decodeUserId(token) : undefined), [token]);
     const [userName, setUserName] = useState<string | undefined>(undefined);
@@ -68,6 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setToken(storedToken);
             setIsAuthenticated(storedAuthState);
         }
+        setAuthReady(true);
     }, []);
 
     const login = async (credentials: LoginValidationModel) => {
@@ -105,7 +111,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, token, userId, userName, userAvatarUrl, login, logout, refreshUser }}>
+        <AuthContext.Provider value={{ isAuthenticated, authReady, token, userId, userName, userAvatarUrl, login, logout, refreshUser }}>
             {children}
         </AuthContext.Provider>
     );
