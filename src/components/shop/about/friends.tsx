@@ -19,7 +19,7 @@ const FriendsBox: React.FC<{ title: string; friends: UserData[] }> = ({ title, f
                 {friends.slice(0, MAX_SHOWN).map((friend) => (
                     // "Username card"
                     <div key={friend.name} className='flex items-center gap-3 pr-4 bg-card2 rounded-[20px]'>
-                        <Avatar src={friend.avatarUrl} alt='' className='size-9' />
+                        <Avatar src={friend.avatarUrl} alt='' name={friend.name} className='size-9' />
                         <span className='font-artifakt font-bold text-sign-2 tracking-[-0.01em]'>{friend.name}</span>
                     </div>
                 ))}
