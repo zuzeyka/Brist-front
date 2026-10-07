@@ -375,6 +375,7 @@ const Store: React.FC = () => {
             content: (
                 <AboutGame
                     gameId={game ? game.id : ''}
+                    onReviewPublished={fetchReviews}
                     releaseDate={game && game.dateOfRelease ? getPostDate(game.dateOfRelease) : 'No release date'}
                     reviews={reviews ? reviews : []}
                     users={reviewUsers ? reviewUsers : []}

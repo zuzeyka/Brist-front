@@ -3,14 +3,19 @@ import { useTranslation } from 'react-i18next';
 import Avatar from '@/components/ui/avatar/avatar';
 import { MoreHorizontalIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Discussion, User } from '@/shared/lib/interfaces';
 import StarRating from '@/components/ui/star-rating';
 import { ChevronDownIcon, CommentIcon, HeartOutlineIcon } from '@/components/ui/icons';
+import NewReview from '@/components/popups/new-review';
 
 interface ReviewListProps {
     className?: string;
     userData: User[];
     reviewData: Discussion[];
+    gameId: string;
+    gameName: string;
+    onReviewPublished?: () => void;
 }
 
 const sorters: Record<string, (a: Discussion, b: Discussion) => number> = {
@@ -63,6 +68,7 @@ const ReviewList: React.FC<ReviewListProps> = (props) => {
     const { t } = useTranslation();
     const [showMore, setShowMore] = useState(false);
     const [selectedSort, setSelectedSort] = useState<string>('popular');
+    const [writeOpen, setWriteOpen] = useState(false);
 
     // Users are fetched in the same order as the reviews.
     const reviews = props.reviewData
@@ -76,9 +82,21 @@ const ReviewList: React.FC<ReviewListProps> = (props) => {
         <section className={"flex flex-col items-center gap-5" + (props.className ? ' ' + props.className : '')}>
             <div className='w-full flex items-center justify-between'>
                 <h2 className='font-manrope font-bold text-heading-1 text-typography'>{t('shop.about.reviews')}</h2>
-                <button type="button" className='h-10 px-5 rounded-[20px] bg-primary hover:bg-primaryHover text-background font-artifakt font-semibold text-button-2'>
-                    {t('shop.about.writeReview')}
-                </button>
+                <Dialog open={writeOpen} onOpenChange={setWriteOpen}>
+                    <DialogTrigger asChild>
+                        <button type="button" className='h-10 px-5 rounded-[20px] bg-primary hover:bg-primaryHover text-background font-artifakt font-semibold text-button-2'>
+                            {t('shop.about.writeReview')}
+                        </button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-[720px] !bg-card2">
+                        <NewReview
+                            gameId={props.gameId}
+                            gameName={props.gameName}
+                            onPublished={props.onReviewPublished}
+                            onClose={() => setWriteOpen(false)}
+                        />
+                    </DialogContent>
+                </Dialog>
             </div>
             <div className='w-full flex flex-col gap-3'>
                 <div className='flex items-center gap-2.5'>

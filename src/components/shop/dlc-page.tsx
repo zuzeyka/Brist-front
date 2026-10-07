@@ -129,6 +129,22 @@ const DlcPage: React.FC = () => {
         load();
     }, [dlcName]);
 
+    const fetchReviews = async () => {
+        if (!dlcIdRef.current) return;
+        try {
+            const res = await fetch('http://localhost:5049/api/Discussion/byattachedid/' + dlcIdRef.current);
+            if (!res.ok) return;
+            const data = await res.json() as Discussion[];
+            setReviews(data);
+            setReviewUsers(await Promise.all(data.map(async (r) => {
+                const u = await fetch('http://localhost:5049/api/User/getbyuid/' + r.authorId, { credentials: 'include' });
+                return u.ok ? await u.json() as User : { name: '' } as User;
+            })));
+        } catch (error) {
+            console.log('Fetch reviews error:', error);
+        }
+    };
+
     const [content, setContent] = useState<React.ReactNode>(null);
 
     if (loading || !dlc) {
@@ -178,7 +194,7 @@ const DlcPage: React.FC = () => {
                         </div>
                     )}
                     <DlcList dlc={siblingDlcs} gameName={baseGame?.name} />
-                    <ReviewList userData={reviewUsers} reviewData={reviews} />
+                    <ReviewList userData={reviewUsers} reviewData={reviews} gameId={dlc.id} gameName={dlc.name} onReviewPublished={fetchReviews} />
                 </div>
                 <aside className='w-[348px] shrink-0 sticky top-6 flex flex-col gap-8'>
                     <Payment

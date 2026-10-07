@@ -37,6 +37,7 @@ interface AboutGameProps {
     publisher: string;
     gameCategorys: string[];
     discountEnd: (date?: Date) => string | undefined;
+    onReviewPublished?: () => void;
     className?: string;
 }
 
@@ -89,7 +90,7 @@ const AboutGame: React.FC<AboutGameProps> = (props) => {
                     <div className="flex flex-col gap-8 mt-9">
                         <BundleList bundles={props.bundles} contents={props.bundleContents} discountEnd={props.discountEnd} />
                         <DlcList dlc={props.DLC} gameName={props.gameName} />
-                        <ReviewList userData={props.users} reviewData={props.reviews} />
+                        <ReviewList userData={props.users} reviewData={props.reviews} gameId={props.gameId} gameName={props.gameName} onReviewPublished={props.onReviewPublished} />
                     </div>
                 </div>
                 <aside className='w-[348px] shrink-0 sticky top-6 flex flex-col gap-8'>

@@ -1,83 +1,103 @@
 import React, { useState } from "react";
-import { XIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { StarFilledIcon, StarOutlineIcon } from "@/components/ui/icons";
+import { useAuth } from "../authorization/auth-context";
 
-// No Figma frame for this flow yet (see PROJECT_STATUS.md) — kept the existing
-// light scaffold as-is rather than guess a dark-theme redesign, but replaced the
-// dead `cdn.builder.io` placeholder images (broken since this was generated) with
-// real, working pieces: a clickable star rating and a close icon.
-const NewReview: React.FC = () => {
+interface NewReviewProps {
+    gameId: string;
+    gameName: string;
+    onPublished?: () => void;
+    onClose?: () => void;
+}
+
+const NewReview: React.FC<NewReviewProps> = (props) => {
     const { t } = useTranslation();
+    const { userId } = useAuth();
     const [rating, setRating] = useState(0);
+    const [content, setContent] = useState("");
+    const [disableComments, setDisableComments] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+
+    const canPublish = rating > 0 && content.trim().length > 0 && !submitting;
+
+    const handlePublish = async () => {
+        if (!userId || !canPublish) return;
+        setSubmitting(true);
+        try {
+            const res = await fetch('http://localhost:5049/api/Discussion', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    authorId: userId,
+                    attachedId: props.gameId,
+                    content: content.trim(),
+                    likesCount: 0,
+                    rate: rating,
+                }),
+            });
+            if (res.ok) {
+                props.onPublished?.();
+                props.onClose?.();
+            }
+        } catch (error) {
+            console.log('Publish review error:', error);
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     return (
-        <div className="flex flex-col px-10 py-8 rounded-3xl bg-zinc-100 max-md:px-5">
-            <div className="flex gap-5 justify-between text-black max-md:flex-wrap max-md:max-w-full">
-                <div className="flex flex-col max-md:max-w-full">
-                    <div className="text-xl max-md:max-w-full">{t('popups.newReview.yourReviewFor')}</div>
-                    <div className="mt-1.5 text-2xl font-bold max-md:max-w-full">
-                        {t('settings.walletSamplePurchase')}
-                    </div>
-                </div>
-                <button type="button" aria-label={t('popups.newReview.close')} className="shrink-0 self-start text-black hover:opacity-60">
-                    <XIcon className="size-6" />
-                </button>
+        <div className="flex flex-col text-typography">
+            <div className="flex flex-col">
+                <div className="font-artifakt text-block-2 text-typographySecondary">{t('popups.newReview.yourReviewFor')}</div>
+                <div className="mt-1 font-manrope font-bold text-heading-3">{props.gameName}</div>
             </div>
-            <div className="mt-8 max-md:max-w-full">
-                <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-                    <div className="flex flex-col w-[65%] max-md:ml-0 max-md:w-full">
-                        <div className="flex flex-col grow self-stretch max-md:mt-6 max-md:max-w-full">
-                            <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
-                                <div className="my-auto text-xl text-black">
-                                    {t('popups.newReview.yourRating')}
-                                </div>
-                                <div className="flex gap-2">
-                                    {[1, 2, 3, 4, 5].map((value) => {
-                                        const Star = value <= rating ? StarFilledIcon : StarOutlineIcon;
-                                        return (
-                                            <button type="button" key={value} aria-label={t('common.ratingOutOf5', { rate: value })} onClick={() => setRating(value)} className="shrink-0 w-[30px] aspect-square text-black hover:opacity-70">
-                                                <Star />
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                            <div className="flex flex-col items-start p-4 mt-4 rounded-3xl bg-stone-300 max-md:pr-5 max-md:max-w-full">
-                                <div className="mt-5 mb-40 text-base text-black max-md:mb-10">
-                                    {t('popups.newReview.whatDidYouThink')}
-                                </div>
-                            </div>
-                            <div className="flex gap-2.5 self-start mt-4 text-base text-black">
-                                <div className="shrink-0 w-6 h-6 bg-gray-200 rounded-md border border-solid border-neutral-600" />
-                                <div className="my-auto">{t('popups.newReview.disableComments')}</div>
-                            </div>
+            <div className="mt-6 flex gap-5 max-md:flex-col">
+                <div className="flex flex-col flex-1">
+                    <div className="flex items-center justify-between">
+                        <div className="font-artifakt text-block-1">{t('popups.newReview.yourRating')}</div>
+                        <div className="flex gap-2">
+                            {[1, 2, 3, 4, 5].map((value) => {
+                                const Star = value <= rating ? StarFilledIcon : StarOutlineIcon;
+                                return (
+                                    <button type="button" key={value} aria-label={t('common.ratingOutOf5', { rate: value })} onClick={() => setRating(value)} className="shrink-0 w-[26px] aspect-square text-accent hover:opacity-70">
+                                        <Star />
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
-                    <div className="flex flex-col ml-5 w-[35%] max-md:ml-0 max-md:w-full">
-                        <div className="flex flex-col grow text-black max-md:mt-6">
-                            <div className="text-xl">{t('popups.newReview.reviewRules')}</div>
-                            <div className="flex flex-col px-4 pb-5 mt-4 text-base rounded-3xl bg-zinc-300">
-                                <div className="justify-center py-4 border-b border-solid border-black border-opacity-40">
-                                    {t('popups.newReview.rule1')}
-                                </div>
-                                <div className="justify-center py-4 border-b border-solid border-black border-opacity-40">
-                                    {t('shop.createPost.rule3')}
-                                </div>
-                                <div className="justify-center py-4 border-b border-solid border-black border-opacity-40">
-                                    {t('popups.newReview.rule3')}
-                                </div>
-                                <div className="mt-4">
-                                    {t('popups.newReview.rule4')}
-                                </div>
-                            </div>
-                        </div>
+                    <textarea
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                        placeholder={t('popups.newReview.whatDidYouThink')}
+                        rows={6}
+                        className="mt-4 w-full rounded-2xl bg-secondary p-4 font-artifakt text-block-2 text-typography placeholder:text-typographySecondary resize-none focus:outline-none"
+                    />
+                    <label className="mt-4 flex items-center gap-2.5 font-artifakt text-block-2 text-typographySecondary cursor-pointer">
+                        <input type="checkbox" checked={disableComments} onChange={(e) => setDisableComments(e.target.checked)} className="accent-primary size-4" />
+                        {t('popups.newReview.disableComments')}
+                    </label>
+                </div>
+                <div className="flex flex-col w-[260px] shrink-0 max-md:w-full">
+                    <div className="font-artifakt text-block-1">{t('popups.newReview.reviewRules')}</div>
+                    <div className="mt-3 flex flex-col gap-3 rounded-2xl bg-secondary p-4 font-artifakt text-sign-2 text-typographySecondary">
+                        <p className="pb-3 border-b border-cardLight12">{t('popups.newReview.rule1')}</p>
+                        <p className="pb-3 border-b border-cardLight12">{t('shop.createPost.rule3')}</p>
+                        <p className="pb-3 border-b border-cardLight12">{t('popups.newReview.rule3')}</p>
+                        <p>{t('popups.newReview.rule4')}</p>
                     </div>
                 </div>
             </div>
-            <div className="justify-center self-center px-9 py-3.5 mt-8 text-xl text-white rounded-3xl bg-zinc-800 max-md:px-5">
+            <button
+                type="button"
+                onClick={handlePublish}
+                disabled={!canPublish}
+                className="self-center mt-6 px-9 py-3.5 rounded-[20px] bg-primary hover:bg-primaryHover disabled:opacity-50 disabled:pointer-events-none text-background font-artifakt font-semibold text-button-1"
+            >
                 {t('popups.newReview.publishReview')}
-            </div>
+            </button>
         </div>
     );
 }
