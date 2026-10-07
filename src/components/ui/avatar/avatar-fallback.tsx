@@ -1,14 +1,13 @@
 import { Link } from "react-router-dom";
 
 interface AvatarFallbackProps {
-    className?: string;
     name?: string;
 }
 
 // Only links to a profile when we actually know whose it is — an avatar with no
 // `name` (a game cover, a not-yet-loaded header avatar, ...) just renders in place.
 const AvatarFallback: React.FC<AvatarFallbackProps> = (props) => {
-    const className = "rounded-full bg-card3 text-typographySecondary text-xl flex items-center justify-center" + (props.className ? ' ' + props.className : '');
+    const className = "rounded-full bg-card3 text-typographySecondary text-xl flex items-center justify-center w-full h-full";
     const content = "U";
     return props.name ? (
         <Link to={"/user/" + props.name} className={className}>{content}</Link>
