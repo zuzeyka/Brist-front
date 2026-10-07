@@ -1,10 +1,12 @@
+import { useTranslation } from "react-i18next";
 import { cn } from "@/shared/lib/utils";
+import i18n from "@/shared/lib/i18n";
 
 // Price row from the "Game Card short" component: discount label, final price,
 // then the original price struck through.
 
 export const formatPrice = (price: number) =>
-    price === 0 ? 'Безкоштовно' : `${price.toLocaleString('uk-UA').replace(/\s/g, ' ')}₴`;
+    price === 0 ? i18n.t('price.free') : `${price.toLocaleString('uk-UA').replace(/\s/g, ' ')}₴`;
 
 export const discountedPrice = (price: number, discount: number) =>
     Math.floor(price - price * discount / 100);
@@ -19,6 +21,9 @@ interface GamePriceProps {
 }
 
 const GamePrice: React.FC<GamePriceProps> = ({ price, discount, size = 'md', bold, className }) => {
+    // Subscribes to language changes so "Безкоштовно"/"Free" re-renders on switch,
+    // even though formatPrice() itself reads i18n.t() outside the component tree.
+    useTranslation();
     const large = size === 'lg';
     return (
         <div className={cn("flex items-center", large ? "gap-4" : "gap-3", className)}>

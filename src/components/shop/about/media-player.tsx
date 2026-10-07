@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronLeftIcon, ChevronRightIcon } from '@/components/ui/icons';
 import { cn } from '@/shared/lib/utils';
 
@@ -11,6 +12,7 @@ const isVideo = (url: string) => /\.(mp4|webm)$/i.test(url);
 
 // Large viewer with a strip of 180×88 thumbnails and a scroll indicator under it.
 const MediaPlayer: React.FC<MediaPlayerProps> = (props) => {
+    const { t } = useTranslation();
     const [current, setCurrent] = useState(0);
     const [scroll, setScroll] = useState({ left: 0, ratio: 1 });
     const strip = useRef<HTMLDivElement>(null);
@@ -59,10 +61,10 @@ const MediaPlayer: React.FC<MediaPlayerProps> = (props) => {
                                 </button>
                             ))}
                         </div>
-                        <button type="button" aria-label="Попередній" className={cn(arrow, "left-0")} onClick={() => select(current - 1)}>
+                        <button type="button" aria-label={t('shop.about.previous')} className={cn(arrow, "left-0")} onClick={() => select(current - 1)}>
                             <ChevronLeftIcon />
                         </button>
-                        <button type="button" aria-label="Наступний" className={cn(arrow, "left-full")} onClick={() => select(current + 1)}>
+                        <button type="button" aria-label={t('shop.about.next')} className={cn(arrow, "left-full")} onClick={() => select(current + 1)}>
                             <ChevronRightIcon />
                         </button>
                     </div>

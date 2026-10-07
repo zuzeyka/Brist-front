@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Payment from '../payment';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import CharacteristicsList from './characteristics-list';
@@ -32,6 +33,7 @@ const platforms = [
 const toUserData = (users: User[]) => users.map((u) => ({ name: u.name, avatarUrl: u.image }));
 
 const Characteristics: React.FC<CharacteristicsProps> = (props) => {
+    const { t } = useTranslation();
     const [platform, setPlatform] = useState(platforms[0].id);
     const current = platforms.find((p) => p.id === platform)!;
 
@@ -51,8 +53,8 @@ const Characteristics: React.FC<CharacteristicsProps> = (props) => {
                         </SelectContent>
                     </Select>
                     <div className='grid grid-cols-2 gap-6'>
-                        <CharacteristicsList title='Мінімальні налаштування' data={props.minOs[0]} />
-                        <CharacteristicsList title='Рекомендовані налаштування' data={props.maxOs[0]} />
+                        <CharacteristicsList title={t('shop.characteristics.minimum')} data={props.minOs[0]} />
+                        <CharacteristicsList title={t('shop.characteristics.recommended')} data={props.maxOs[0]} />
                     </div>
                 </div>
                 <aside className='w-[348px] shrink-0 sticky top-6 flex flex-col gap-8'>

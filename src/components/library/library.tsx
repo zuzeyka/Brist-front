@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Footer from '../main/footer';
 import Head from '../main/head';
 import CommunityList from './community-list';
@@ -7,16 +8,29 @@ import Search from './search';
 import ListOfSmallGames from './list-of-small-games';
 import { GameInfo } from './small-game';
 import { GameGuide, GameInShop, GameNews, GamePosts, Screenshot, User, Video } from '@/shared/lib/interfaces';
-import Post from './post';
-import Guide from './guide';
-import Media from './media';
+import Post from '../shop/community/post';
+import Guide from '../shop/community/guide';
+import Media from '../shop/community/media';
 import AllGames from './all-games';
+import { PlusIcon } from 'lucide-react';
+import PageGlows from '@/components/ui/page-glows';
+import { formatDate } from '../shop/about/review-list';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-const collections: string[] = ['Test collection 1', 'Test collection 2', 'Test collection 3'];
+const glows = [
+    { left: 1472, top: 108, large: true },
+    { left: 4, top: 1200, large: true },
+];
+
+// Scrollable tabs so extra collections overflow sideways instead of wrapping or getting clipped.
+const tabsListClass = 'ml-2 bg-transparent max-w-full overflow-x-auto flex-nowrap justify-start [scrollbar-width:none] [&::-webkit-scrollbar]:hidden';
+const tabTriggerClass = 'shrink-0 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=inactive]:text-typographySecondary data-[state=active]:underline !text-heading-2';
 
 const Library: React.FC = () => {
+    const { t } = useTranslation();
+    // Placeholder — the backend has no collections entity yet (see WORKLOG "Known gaps").
+    const collections: string[] = [t('library.myCollection')];
     const [games, setGames] = useState<GameInShop[]>([]);
     const [isLoading, setLoading] = useState(true);
     const [isFilter, setIsFilter] = useState(false);
@@ -70,7 +84,6 @@ const Library: React.FC = () => {
             }
             const data = await res.json() as Screenshot[];
             setScreenshots(data);
-            console.log("screenshots", data);
         } catch (error) {
             console.log('Fetch screenshots error:', error);
         }
@@ -84,7 +97,6 @@ const Library: React.FC = () => {
             }
             const data = await res.json() as GameNews[];
             setNews(data);
-            console.log("news", data);
         } catch (error) {
             console.error('Error fetching categories:', error);
         }
@@ -98,7 +110,6 @@ const Library: React.FC = () => {
             }
             const data = await res.json() as GamePosts[];
             setPosts(data);
-            console.log("posts", data);
         } catch (error) {
             console.error('Error fetching categories:', error);
         }
@@ -112,7 +123,6 @@ const Library: React.FC = () => {
             }
             const data = await res.json() as Video[];
             setVideos(data);
-            console.log("videos", data);
         } catch (error) {
             console.error('Error fetching categories:', error);
         }
@@ -126,7 +136,6 @@ const Library: React.FC = () => {
             }
             const data = await res.json() as GameGuide[];
             setGuides(data);
-            console.log("guides", data);
         } catch (error) {
             console.error('Error fetching categories:', error);
         }
@@ -138,7 +147,7 @@ const Library: React.FC = () => {
                 const users: User[] = [];
                 if (info?.length) {
                     await Promise.all(info.map(async (inf) => {
-                        const userres = await fetch('http://localhost:5049/api/User/getbyuid/' + inf.authorId);
+                        const userres = await fetch('http://localhost:5049/api/User/getbyuid/' + inf.authorId, { credentials: 'include' });
                         if (!userres.ok) {
                             throw new Error('Network response was not ok');
                         }
@@ -156,7 +165,7 @@ const Library: React.FC = () => {
         if (guides) fetchUsers(guides, setGuideUsers);
         if (posts) fetchUsers(posts, setPostUsers);
         setLoading(false);
-    }, [videos, screenshots, guides, posts]);
+    }, [videos, screenshots, guides, posts, news]);
 
     const gamesInfo: GameInfo[] = games.map((game: GameInShop) => {
         const { previeImage, name } = game;
@@ -167,87 +176,86 @@ const Library: React.FC = () => {
         };
     });
 
-    const getPostDate = (data: Date) => {
-        const date = new Date(data);
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}.${month}.${year}`;
-    }
-
-    const combinedContent = posts && guides && screenshots && videos && screenshotUsers.length && videoUsers.length && postUsers.length && guideUsers.length && [
+    const combinedContent = posts && guides && screenshots && videos ? [
         ...posts.map((post, index) => ({ ...post, type: 'post', userData: postUsers[index] })),
         ...guides.map((guide, index) => ({ ...guide, type: 'guide', userData: guideUsers[index] })),
         ...screenshots.map((screenshot, index) => ({ ...screenshot, type: 'screenshot', userData: screenshotUsers[index] })),
         ...videos.map((video, index) => ({ ...video, type: 'video', userData: videoUsers[index] })),
-    ];
+    ] : [];
 
-    const combinedContentJSX: JSX.Element[] = combinedContent && games
-        ? combinedContent.map((item, index) => {
+    const combinedContentJSX: JSX.Element[] = combinedContent
+        .map((item, index) => {
             const commonProps = {
                 key: index,
-                gameName: games.find((game) => game.id === item.gameId)?.name ?? '',
-                postTitle: item.title || 'Без назви',
+                postTitle: item.title || t('library.untitled'),
                 postText: item.description || '',
-                postDate: getPostDate(item.createdAt),
-                postAuthor: item.userData.name,
-                postGameImageUrl: item.contentUrl || '',
-                postAuthorAvatarUrl: item.userData.image || '',
-                postComments: 0,
+                postDate: formatDate(item.createdAt),
+                postAuthor: item.userData?.name ?? '',
+                postAuthorAvatarUrl: item.userData?.image,
+                postMediaUrl: item.contentUrl || '',
+                postPosterUrl: item.type === 'video' ? (item as unknown as Video).previewImage : undefined,
+                postComments: item.commentsCount ?? 0,
                 postLikes: item.likesCount,
-                postMediaUrl: item.contentUrl || ''
+                isShared: false,
             };
 
             switch (item.type) {
                 case 'post':
                     return <Post {...commonProps} />;
                 case 'guide':
-                    return <Guide {...commonProps} className='bg-card1 mb-4' />;
+                    return <Guide {...commonProps} className='bg-card1' />;
                 case 'screenshot':
                 case 'video':
                     return <Media {...commonProps} />;
                 default:
                     return null;
             }
-        }).filter((content): content is JSX.Element => content !== null) : [];
+        }).filter((content): content is JSX.Element => content !== null);
 
     return (
-        <>
-            <Head></Head>
-            <div className="bg-background flex">
-                <ResizablePanelGroup
-                    direction="horizontal"
-                    className="flex h-full w-full">
-                    <ResizablePanel defaultSize={25}>
-                        <ListOfSmallGames games={!isLoading ? gamesInfo : []} />
-                    </ResizablePanel>
-                    <ResizableHandle />
-                    <ResizablePanel defaultSize={75}>
-                        <div className="flex flex-col p-5 text-typography">
-                            <Search isFilter={isFilter} onFilterChange={setIsFilter}></Search>
-                            <NewsList gameInfo={games} gameNews={news ? news : []}></NewsList>
-                            <CommunityList comunityContent={combinedContentJSX}></CommunityList>
-                            <Tabs defaultValue="all" className="w-full mt-5">
-                                <TabsList className='ml-2 bg-transparent'>
-                                    <TabsTrigger className='bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=inactive]:text-typographySecondary data-[state=active]:underline !text-heading-2' value="all">All games</TabsTrigger>
-                                    <TabsTrigger className='data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=inactive]:text-typographySecondary data-[state=active]:underline !text-heading-2 ' value="favorites">Favorites</TabsTrigger>
-                                    {collections.map((collection) => (
-                                        <TabsTrigger className='data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary data-[state=inactive]:text-typographySecondary data-[state=active]:underline !text-heading-2' key={collection} value={collection}>{collection}</TabsTrigger>
-                                    ))}
-                                </TabsList>
-                                <TabsContent value="all"><AllGames list={isFilter} games={!isLoading ? games : []}></AllGames></TabsContent>
-                                <TabsContent value="favorites"><AllGames list={isFilter} games={!isLoading ? games.slice(0, 5) : []}></AllGames></TabsContent>
-                                <TabsContent value={collections[0]}><AllGames list={isFilter} games={!isLoading ? games.slice(5, 15) : []}></AllGames></TabsContent>
-                                <TabsContent value={collections[1]}><AllGames list={isFilter} games={!isLoading ? games.slice(2, 7) : []}></AllGames></TabsContent>
-                                <TabsContent value={collections[2]}><AllGames list={isFilter} games={!isLoading ? games.slice(5, 10) : []}></AllGames></TabsContent>
-                            </Tabs>
-
-                        </div>
-                    </ResizablePanel>
-                </ResizablePanelGroup>
+        <div className="relative bg-background">
+            <PageGlows glows={glows} />
+            <div className="relative">
+                <Head></Head>
+                {isLoading ? (
+                    <div className='h-screen flex justify-center items-center text-heading-1 text-typography'>{t('common.loading')}</div>
+                ) : (
+                    <ResizablePanelGroup
+                        direction="horizontal"
+                        className="flex w-full">
+                        <ResizablePanel defaultSize={25}>
+                            <ListOfSmallGames games={gamesInfo} />
+                        </ResizablePanel>
+                        <ResizableHandle />
+                        <ResizablePanel defaultSize={75}>
+                            <div className="flex flex-col p-5 text-typography">
+                                <Search isFilter={isFilter} onFilterChange={setIsFilter}></Search>
+                                {news.length > 0 && <NewsList gameNews={news} games={games}></NewsList>}
+                                {combinedContentJSX.length > 0 && <CommunityList comunityContent={combinedContentJSX}></CommunityList>}
+                                <Tabs defaultValue="all" className="w-full mt-5">
+                                    <div className="flex items-center gap-2">
+                                        <TabsList className={tabsListClass}>
+                                            <TabsTrigger className={tabTriggerClass} value="all">{t('library.allGames')}</TabsTrigger>
+                                            <TabsTrigger className={tabTriggerClass} value="favorites">{t('library.favorites')}</TabsTrigger>
+                                            {collections.map((collection) => (
+                                                <TabsTrigger className={tabTriggerClass} key={collection} value={collection}>{collection}</TabsTrigger>
+                                            ))}
+                                        </TabsList>
+                                        <button type="button" aria-label={t('library.createCollection')} className="shrink-0 text-typographySecondary hover:text-typography">
+                                            <PlusIcon className="size-5" />
+                                        </button>
+                                    </div>
+                                    <TabsContent value="all"><AllGames list={isFilter} games={games}></AllGames></TabsContent>
+                                    <TabsContent value="favorites"><AllGames list={isFilter} games={games.slice(0, 5)}></AllGames></TabsContent>
+                                    <TabsContent value={collections[0]}><AllGames list={isFilter} games={games.slice(5, 15)}></AllGames></TabsContent>
+                                </Tabs>
+                            </div>
+                        </ResizablePanel>
+                    </ResizablePanelGroup>
+                )}
+                <Footer></Footer>
             </div>
-            <Footer></Footer>
-        </>
+        </div>
     );
 };
 

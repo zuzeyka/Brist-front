@@ -1,5 +1,6 @@
 import { ChevronRightIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { GameInShop, GameNews } from "@/shared/lib/interfaces";
@@ -14,12 +15,13 @@ interface NewsListProps {
 
 // Library home's "Новини" row: a game-branded preview carousel (date in the footer, no share button).
 const NewsList: React.FC<NewsListProps> = (props) => {
+    const { t } = useTranslation();
     return (
         <>
             <div className={"flex items-center justify-between" + (props.className ? ' ' + props.className : '')}>
-                <h2 className="text-heading-2 font-bold px-2">Новини</h2>
+                <h2 className="text-heading-2 font-bold px-2">{t('search.news')}</h2>
                 <Button asChild className="bg-transparent hover:bg-transparent text-button-1 font-artifakt p-0 px-2">
-                    <Link to="/news">Всі новини<ChevronRightIcon className="w-5 h-5" /></Link>
+                    <Link to="/news">{t('library.allNews')}<ChevronRightIcon className="w-5 h-5" /></Link>
                 </Button>
             </div>
             <Carousel className="w-full" opts={{

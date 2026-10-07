@@ -1,5 +1,6 @@
 import { File } from "lucide-react";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { MessageProps } from "../chat-content";
 import { Button } from "@/components/ui/button";
 
@@ -9,6 +10,7 @@ interface FileMessageProps extends MessageProps {
 }
 
 const FileMessage: React.FC<FileMessageProps> = (props) => {
+    const { t } = useTranslation();
     const [isDownloading, setIsDownloading] = useState(false);
 
     const handleDownload = () => {
@@ -45,7 +47,7 @@ const FileMessage: React.FC<FileMessageProps> = (props) => {
                     onClick={handleDownload}
                 >
                     {isDownloading ? (
-                        <span className="text-white">Завантаження...</span>
+                        <span className="text-background">{t('common.loading')}</span>
                     ) : (
                         <File className="w-6 aspect-square text-background" />
                     )}

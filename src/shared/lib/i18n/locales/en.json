@@ -1,0 +1,678 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "viewMore": "View more",
+    "ratingOutOf5": "Rating {{rate}} out of 5"
+  },
+  "price": {
+    "free": "Free"
+  },
+  "header": {
+    "store": "Store",
+    "library": "Library",
+    "chat": "Chat",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "login": "Log in"
+  },
+  "footer": {
+    "terms": "Terms of use",
+    "privacy": "Privacy policy",
+    "refund": "Store refund policy"
+  },
+  "search": {
+    "placeholder": "Search the Store...",
+    "searchLabel": "Search",
+    "catalog": "Catalog",
+    "news": "News",
+    "wishlist": "Wishlist",
+    "cart": "Cart"
+  },
+  "main": {
+    "specialOffers": "Special offers",
+    "recommended": "Recommended for you",
+    "under100": "Under 100₴",
+    "bestSellers": "Best sellers",
+    "newestReleases": "New releases",
+    "free": "Free games",
+    "discountUntil": "Discount ends {{date}}",
+    "prevGame": "Previous game",
+    "nextGame": "Next game"
+  },
+  "allNews": {
+    "title": "News",
+    "loading": "Loading...",
+    "empty": "No news yet."
+  },
+  "settings": {
+    "general": "General settings",
+    "password": "Password",
+    "notifications": "Notifications",
+    "wallet": "Wallet",
+    "deleteAccount": "Delete account",
+    "walletSamplePurchase": "Some game everyone really liked",
+    "walletSampleTopUp": "Balance top-up",
+    "searchPlaceholder": "Search settings...",
+    "nothingFound": "Nothing found",
+    "darkTheme": "Dark theme",
+    "imageUploadError": "Failed to upload the image.",
+    "saveError": "Failed to save changes. Please try again.",
+    "backgroundAlt": "User profile background",
+    "avatarAlt": "User avatar",
+    "nickname": "Nickname",
+    "email": "Email",
+    "about": "About",
+    "language": "Site language",
+    "languageUkrainian": "Українська",
+    "languageEnglish": "English",
+    "confirmEmail": "Confirm email",
+    "logout": "Log out",
+    "saved": "Saved",
+    "discard": "Discard",
+    "saving": "Saving...",
+    "save": "Save",
+    "delete": {
+      "warning": "Click <bold>delete my account</bold> to start permanently deleting your Brist account, including all personal information and purchased content. After your Brist account is deleted, your wallet balance will also be irrecoverably deleted.",
+      "nicknamePlaceholder": "Your nickname",
+      "passwordPlaceholder": "Your current password",
+      "passwordConfirmPlaceholder": "Repeat password",
+      "button": "Delete my account"
+    },
+    "notif": {
+      "silentTitle": "Silent notifications",
+      "bigSale": "Big sale",
+      "wishSale": "Discount on games from my wishlist",
+      "newComment": "New comment on my profile",
+      "newFriendRequest": "New friend request",
+      "friendRequestAccepted": "My friend request was accepted",
+      "friendRequestDeclined": "My friend request was declined",
+      "newChatMessage": "New chat message",
+      "sound": "Sound"
+    },
+    "pwd": {
+      "title": "Change password",
+      "ruleNoReuse": "Don't reuse any of your last 5 passwords",
+      "ruleLength": "Use 7+ characters",
+      "ruleLetter": "Use at least 1 letter",
+      "ruleDigit": "Use at least 1 digit",
+      "ruleNoSpaces": "No spaces",
+      "oldPassword": "Old password",
+      "newPassword": "New password",
+      "newPasswordPlaceholder": "Create a new password",
+      "newPasswordConfirmPlaceholder": "Repeat the new password"
+    },
+    "walletPage": {
+      "myBalance": "My balance",
+      "amount": "Amount",
+      "topUpButton": "Top up",
+      "history": "Transaction history",
+      "name": "Name",
+      "date": "Date"
+    }
+  },
+  "auth": {
+    "continue": "Continue",
+    "password": "Password",
+    "email": "Email",
+    "loginButton": "Log in",
+    "login": {
+      "title": "Log in to continue",
+      "identifierLabel": "Username or email",
+      "identifierPlaceholder": "Enter your username or email...",
+      "passwordPlaceholder": "Enter your password...",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Sign up",
+      "invalidCredentials": "Invalid username, email, or password",
+      "noAccountPopup": "No account?",
+      "registerLinkPopup": "Create one"
+    },
+    "register": {
+      "title": "Create a new account",
+      "loginLabel": "Username",
+      "loginPlaceholder": "Choose a username...",
+      "emailPlaceholder": "Enter your email...",
+      "passwordPlaceholder": "Create a new password...",
+      "passwordConfirmLabel": "Repeat password",
+      "passwordConfirmPlaceholder": "Type the password again...",
+      "agreeToTerms": "I agree to the <u>Terms of Use</u>",
+      "haveAccount": "Have an account?",
+      "loginLink": "Log in",
+      "passwordsMismatch": "Passwords don't match",
+      "createFailed": "Failed to create an account. The user might already exist.",
+      "createError": "Failed to create an account. Please try again."
+    },
+    "forgotPassword": {
+      "title": "Forgot your password?"
+    },
+    "changePassword": {
+      "title": "Create a new password"
+    },
+    "emailConfirm": {
+      "title": "Enter the code",
+      "message": "A 5-digit code was sent to your email"
+    }
+  },
+  "cart": {
+    "title": "My cart",
+    "empty": "Your cart is empty",
+    "moveToWishlist": "Move to wishlist",
+    "youSave": "You save",
+    "total": "Total",
+    "taxNote": "If applicable, sales tax will be calculated at checkout.",
+    "checkout": "Go to checkout",
+    "continueShopping": "Continue shopping",
+    "clearCart": "Clear cart"
+  },
+  "wishlist": {
+    "title": "My wishlist",
+    "searchPlaceholder": "Search your wishlist...",
+    "sorting": "Sort by:",
+    "sortDiscountsFirst": "Discounts first"
+  },
+  "shop": {
+    "unknown": "Unknown",
+    "noCategories": "No categories",
+    "tabs": {
+      "about": "About the game",
+      "characteristics": "Specifications",
+      "community": "Community"
+    },
+    "payment": {
+      "releaseDate": "Release date",
+      "developer": "Developer",
+      "publisher": "Publisher",
+      "buy": "Buy",
+      "addToCart": "Add to cart",
+      "addToWishlist": "Add to wishlist",
+      "repost": "Repost",
+      "report": "Report",
+      "platforms": "Platforms"
+    },
+    "category": {
+      "sortRelevance": "By relevance",
+      "sortPriceAsc": "Cheapest first",
+      "sortPriceDesc": "Most expensive first",
+      "sortDiscount": "By discount size",
+      "sortNewest": "Newest first",
+      "sortName": "By name (A-Z)",
+      "view": "View:",
+      "grid": "Grid",
+      "list": "List"
+    },
+    "filters": {
+      "none": "No filters available",
+      "title": "Filters",
+      "reset": "Reset",
+      "searchTags": "Search tags...",
+      "clear": "Clear",
+      "genre": "Genre",
+      "price": "Price",
+      "discounts": "Discounts",
+      "type": "Type",
+      "features": "Features",
+      "platform": "Platform",
+      "events": "Events",
+      "priceFree": "Free",
+      "priceUnder100": "Under 100 hryvnias",
+      "priceUnder300": "Under 300 hryvnias",
+      "priceUnder600": "Under 600 hryvnias",
+      "priceUnder900": "Under 900 hryvnias",
+      "priceAny": "No limit"
+    },
+    "toCart": "Add to cart",
+    "dlc": {
+      "gameNotFound": "Game not found",
+      "downloadableContentFor": "Downloadable content for",
+      "searchPlaceholder": "Search...",
+      "dlcNotFound": "DLC not found",
+      "baseGame": "Base game"
+    },
+    "about": {
+      "allTags": "All tags",
+      "collapse": "Collapse",
+      "expand": "Expand",
+      "bundles": "Bundles",
+      "contents": "Contents:",
+      "otherDlc": "Other DLC",
+      "allDlc": "All DLC",
+      "addAllDlcToCart": "Add all DLC to cart",
+      "friendsWish": "Friends who want this game",
+      "friendsOwn": "Friends who own this game",
+      "previous": "Previous",
+      "next": "Next",
+      "player": "Player",
+      "more": "More",
+      "reviews": "Reviews",
+      "writeReview": "Write a review",
+      "sortPopular": "Most popular first",
+      "sortNew": "Newest first",
+      "sortOld": "Oldest first",
+      "sortPositive": "Positive first",
+      "sortNegative": "Negative first",
+      "showMore": "Show more"
+    },
+    "characteristics": {
+      "minimum": "Minimum requirements",
+      "recommended": "Recommended requirements",
+      "osVersion": "OS version",
+      "memory": "Memory",
+      "diskSpace": "Storage"
+    },
+    "community": {
+      "allSections": "All sections",
+      "forum": "Forum",
+      "screenshots": "Screenshots",
+      "videos": "Videos",
+      "guides": "Guides",
+      "news": "News",
+      "sortPopular": "Popular",
+      "sortRecent": "Newest",
+      "sortOldItems": "Oldest",
+      "searchIn": "Search: {{section}}",
+      "createPost": "Create a post",
+      "subscribeNotifications": "Subscribe to notifications",
+      "nothingYet": "Nothing here yet",
+      "subscribers": "subscribers",
+      "play": "Play",
+      "share": "Share",
+      "you": "You",
+      "back": "Back",
+      "writeReplyPlaceholder": "Write a reply...",
+      "send": "Send",
+      "reply": "Reply",
+      "otherDiscussions": "Other discussions"
+    },
+    "createPost": {
+      "title": "Creating a post",
+      "tabPost": "Discussion",
+      "tabScreenshot": "Screenshot",
+      "tabGuide": "Guide",
+      "titleLabel": "Title",
+      "discussionTopicPlaceholder": "The topic of your discussion...",
+      "dragDropOr": "Drag a file here or",
+      "upload": "Upload",
+      "textLabel": "Text",
+      "discussionTextPlaceholder": "What do you want to discuss?",
+      "publish": "Publish",
+      "caption": "Caption",
+      "screenshotCommentPlaceholder": "Your comment on the screenshot...",
+      "videoCommentPlaceholder": "Your comment on the video...",
+      "noVideoSupport": "Your browser doesn't support the video tag.",
+      "cover": "Cover",
+      "guideTopicPlaceholder": "What is your guide about? ",
+      "description": "Description",
+      "guideDescriptionPlaceholder": "Describe the topic in more detail...",
+      "guideTextPlaceholder": "Your guide's text...",
+      "communityRules": "Community rules",
+      "rule1": "Post only original content.",
+      "rule2": "Don't allow insults or humiliation of other players, developers, or groups.",
+      "rule3": "Don't include threats or encouragement to cause harm.",
+      "rule4": "Don't upload content you don't have the rights to.",
+      "rule5": "Don't advertise commercial content",
+      "rule6": "Make sure the content you post fits the place where it's posted.",
+      "needLogin": "You need to log in to publish.",
+      "publishError": "Failed to publish. Please try again.",
+      "fillTitleAndText": "Fill in the title and text.",
+      "addImage": "Add an image.",
+      "addVideo": "Add a video.",
+      "fillGuideTitleAndText": "Fill in the guide's title and text."
+    }
+  },
+  "user": {
+    "online": "online",
+    "offline": "offline",
+    "addFriend": "Add friend",
+    "cancelRequest": "Cancel request",
+    "removeFriend": "Remove friend",
+    "editProfile": "Edit profile",
+    "sendMessage": "Send a message",
+    "notFound": "User not found",
+    "inLibrary": "In Library",
+    "noActivity": "This user hasn't been active yet",
+    "friendsPage": {
+      "all": "All friends",
+      "onlineTab": "Online",
+      "searchByNickname": "Search by nickname...",
+      "searchByGame": "Search by game"
+    },
+    "listPage": {
+      "searchByGame": "Search by game name",
+      "sortRated": "By rating",
+      "sortCommented": "By comment count",
+      "loadMore": "Load more",
+      "shared": "Shared"
+    },
+    "levelPage": {
+      "points": "points",
+      "achieved": "Achieved",
+      "notAchieved": "Not achieved",
+      "all": "All"
+    },
+    "showcase": {
+      "badgeGallery": "Badge gallery",
+      "badges": "Badges",
+      "badge": "Badge",
+      "comments": "Comments",
+      "yourComment": "Your comment...",
+      "discussionsGallery": "Discussion gallery",
+      "gameCollection": "Game collection",
+      "gamesCount": "Games",
+      "wishedCount": "Wishlisted",
+      "guidesGallery": "Guide gallery",
+      "reviewsGallery": "Review gallery",
+      "screenshotsGallery": "Screenshot gallery",
+      "videosGallery": "Video gallery"
+    },
+    "menu": {
+      "home": "Home",
+      "badges": "Badges",
+      "discussions": "Discussions",
+      "level": "Level",
+      "friends": "Friends",
+      "moreFriends": "{{count}} more friends",
+      "gameNamePlaceholder": "Game Name",
+      "screenshotTitle": "Screenshot {{n}}",
+      "achievements": {
+        "goldFishName": "Golden Fishy",
+        "goldFishDesc": "10 years on the site",
+        "socialBirdName": "Social Butterfly",
+        "socialBirdDesc": "Published 20 posts of each type in the Community",
+        "gamerName": "True Gamer",
+        "gamerDesc": "Bought 50 games",
+        "silverFishName": "Silver Fishy",
+        "silverFishDesc": "5 years on the site",
+        "criticName": "Critic",
+        "criticDesc": "Published 25 reviews",
+        "cardPlayerName": "Card Shark",
+        "cardPlayerDesc": "Added 10 \"card game\" titles to your library",
+        "bronzeFishName": "Bronze Fishy",
+        "bronzeFishDesc": "1 year on the site",
+        "lightWarriorName": "Warrior of Light",
+        "lightWarriorDesc": "Wrote 15 guides"
+      },
+      "discussion1Title": "Oswald, the outrageous, unkillable",
+      "discussion1Text": "I was playing the Nuka World DLC and ended up in the kiddie kingdom — everything was fine until I reached Oswald in the theater. It stayed fine until I died, which kicked off Oswald's quests, and I finished the Fun House, but when I went back to the theater, Oswald's cutscene started playing again, and now I can't kill him or restart the quest. Should I just reload an earlier save and start over?",
+      "discussion2Title": "Fallout 4 or Dying Light?",
+      "discussion2Text": "Which one did you like more? Which game do you think is better?",
+      "guide1Title": "Fallout 4: How to get the X-01 power armor",
+      "guide1Text": "In this guide I'll show you how to get a full set of X-01 power armor — it's fairly easy, and it's the toughest power armor in the game.",
+      "guide2Title": "Skyrim Requiem buffs and debuffs guide",
+      "guide2Text": "This is a beginner's guide to Requiem, written by a fellow beginner, to make build choices easier.",
+      "review1Text": "Sent to find a missing billionaire on a remote island, you'll end up in a hell full of cannibals. Craft, build, and fight to survive, alone or with friends, in this terrifying new open-world survival simulator.",
+      "review2Text": "Step into the role of a monster slayer and set out on the path: from role-playing adventures to card-game duels. Leave your mark on the world of \"The Witcher\".",
+      "comment1": "This is incredible! Thanks for such useful content! It's always interesting to read your posts, since they're always packed with useful information and new ideas. Keep it up!",
+      "comment2": "I completely agree! This is exactly what I needed to hear today. Your perspective is really inspiring and helps me understand the topic better. Thanks for your effort!",
+      "comment3": "Very interesting! Looking forward to more posts from you. It's always a pleasure to read your thoughts and learn something new. Keep sharing your experience and knowledge!"
+    }
+  },
+  "chat": {
+    "notFound": "Chat not found",
+    "infoNotFound": "Chat information not found",
+    "textFormatting": "Text formatting",
+    "yourMessage": "Your message...",
+    "photos": "Photos",
+    "files": "Files",
+    "voiceMessages": "Voice messages",
+    "removeFromFriends": "Remove from friends",
+    "clearHistory": "Clear history",
+    "block": "Block",
+    "searchChats": "Search chats",
+    "preview": {
+      "date": "Apr 02",
+      "noMessages": "No messages",
+      "msg1": "Hey! How's it going?",
+      "msg2": "Can you help me with something?",
+      "msg3": "You: Want to play a game together today?",
+      "msg4": "You: Got any plans for the weekend?",
+      "msg5": "Got time for a quick call?",
+      "msg6": "How's your project coming along?",
+      "msg7": "Planning a small get-together, you in..."
+    },
+    "mock": {
+      "mz1": "Check out what I made",
+      "mz2": "Wow, I'd actually use this",
+      "mz3": "Thanks",
+      "fp1": "Check out this image",
+      "fp2": "Awesome",
+      "fp3": "Here's my image",
+      "fp4": "Nice",
+      "ds1": "Check out the track I made",
+      "ds2": "Whoa, you can send audio here?",
+      "ds3": "Of course",
+      "ds4": "Even this works",
+      "ds5": "This is the coolest chat I know",
+      "tc1": "Wanna go farm points?",
+      "tc2": "sure",
+      "ba1": "fox",
+      "ba2": "did you draw it yourself?",
+      "ba3": "yep"
+    }
+  },
+  "library": {
+    "myCollection": "My collection",
+    "untitled": "Untitled",
+    "allGames": "All games",
+    "favorites": "Favorites",
+    "createCollection": "Create a collection",
+    "download": "Download",
+    "sizeOnDisk": "Size on disk",
+    "fromCommunity": "From the community",
+    "myFeed": "My feed",
+    "toLibrary": "To library",
+    "gb": "GB",
+    "favorite": "Favorite",
+    "information": "Information",
+    "storePage": "Store page",
+    "developerPage": "Developer page",
+    "myReview": "My review",
+    "whatsNew": "What's new",
+    "allNews": "All news",
+    "noGames": "No games"
+  },
+  "popups": {
+    "genres": "Genres",
+    "notif": {
+      "wishlistSale": "Discounts on your wishlist",
+      "gameNamePlaceholder": "Game Name",
+      "username": "Username",
+      "newFriendRequest": "New friend request",
+      "requestAccepted": "Your friend request was accepted",
+      "requestDeclined": "Your friend request was declined",
+      "winterSale2024": "Winter Sale 2024",
+      "gamesUpTo80Off": "Games up to 80% off until 22.10.2022",
+      "clearAll": "Clear all"
+    },
+    "newCollection": {
+      "title": "New collection",
+      "nameLabel": "Collection name",
+      "namePlaceholder": "Name your collection...",
+      "addGames": "Add games",
+      "searchGamesPlaceholder": "Search games by name...",
+      "addLater": "You can add games to the collection later"
+    },
+    "newReview": {
+      "yourReviewFor": "Your review for",
+      "close": "Close",
+      "yourRating": "Your rating for this game",
+      "whatDidYouThink": "What did you like or dislike?",
+      "disableComments": "Disable comments",
+      "reviewRules": "Review rules",
+      "rule1": "Don't allow insults or humiliation of other players, developers, or groups.",
+      "rule3": "Don't use reviews for commercial purposes. Examples include: advertising, referrals, or promotions.",
+      "rule4": "Don't artificially influence review ratings. Examples: using multiple accounts to leave reviews; pressuring other players to leave reviews; accepting payment or other compensation for leaving reviews.",
+      "publishReview": "Publish review"
+    }
+  },
+  "legal": {
+    "terms": {
+      "pageTitle": "Terms of Use",
+      "intro": "Welcome to our website! By using our site, you agree to the following terms of use. Please read these terms carefully before using the site. If you do not agree with these terms, please do not use our site.",
+      "s1": {
+        "title": "1. General provisions",
+        "p1": "1.1. These Terms of Use (hereinafter — \"Terms\") govern your use of our website (hereinafter — \"Site\").",
+        "p2": "1.2. Using the Site means you accept and agree to abide by these Terms."
+      },
+      "s2": {
+        "title": "2. Using the Site",
+        "p1": "2.1. You agree to use the Site only for lawful purposes and in a way that does not infringe the rights of other users.",
+        "p2": "2.2. It is prohibited to use the Site to distribute any illegal, harmful, offensive, defamatory, or unacceptable materials."
+      },
+      "s3": {
+        "title": "3. Registration and account",
+        "p1": "3.1. Registration may be required to access some features of the Site. You must provide truthful and accurate information during registration.",
+        "p2": "3.2. You are responsible for keeping your account and password confidential."
+      },
+      "s4": {
+        "title": "4. Intellectual property",
+        "p1": "4.1. All content presented on the Site, including text, graphics, logos, icons, images, audio and video materials, is the property of our site or its licensors and is protected by copyright law.",
+        "p2": "4.2. It is prohibited to use the Site's content without our prior written consent."
+      },
+      "s5": {
+        "title": "5. Liability",
+        "p1": "5.1. We are not liable for any direct, indirect, incidental, special, or consequential damages arising from the use or inability to use the Site.",
+        "p2": "5.2. We do not guarantee uninterrupted and error-free operation of the Site."
+      },
+      "s6": {
+        "title": "6. Changes to the Terms",
+        "p1": "6.1. We reserve the right to modify these Terms at any time. Changes take effect from the moment they are published on the Site.",
+        "p2": "6.2. By continuing to use the Site after changes to the Terms are made, you agree to the new Terms."
+      },
+      "s7": {
+        "title": "7. Privacy Policy",
+        "p1": "7.1. Your privacy matters to us. Any information you provide through the Site is subject to our Privacy Policy."
+      },
+      "s8": {
+        "title": "8. Dispute resolution",
+        "p1": "8.1. All disputes arising in connection with the use of the Site shall be resolved in accordance with applicable law."
+      },
+      "s9": {
+        "title": "9. Contact",
+        "p1": "9.1. If you have any questions or comments regarding these Terms, please contact us using the contact information provided on the Site."
+      },
+      "s10": {
+        "title": "10. Disclaimer",
+        "p1": "10.1. Use of the Site is at your own risk. All content is provided \"as is\" without any warranties."
+      },
+      "effectiveDate": "Effective date: 06/10/2024",
+      "closing": "We hope you enjoy using our Slush!"
+    },
+    "privacy": {
+      "pageTitle": "Privacy Policy",
+      "intro": "This Privacy Policy describes how we collect, use, store, and protect your personal information when using our website (hereinafter — \"Site\"). By using our Site, you agree to the terms of this Privacy Policy.",
+      "s1": {
+        "title": "1. Information collection",
+        "p1": "1.1. We collect information that you provide directly, for example, when registering on the Site, subscribing to our newsletter, filling out forms, or communicating with us.",
+        "p2": "1.2. We may also collect information automatically when you use the Site, such as IP address, browser type, operating system, pages you visit, visit times, and other statistical information."
+      },
+      "s2": {
+        "title": "2. Use of information",
+        "p1": "2.1. The information we collect is used to:",
+        "items": [
+          "Provide and improve our services;",
+          "Administer your account;",
+          "Send you updates, newsletters, and promotional materials;",
+          "Respond to your inquiries and provide customer support;",
+          "Analyze Site usage to improve our content and services."
+        ]
+      },
+      "s3": {
+        "title": "3. Sharing information",
+        "p1": "3.1. We do not sell, transfer, or disclose your personal information to third parties without your consent, except in the following cases:",
+        "items": [
+          "With our service providers who help us operate the Site and provide services;",
+          "If required by law or in response to a lawful request from government authorities;",
+          "To protect our rights, safety, and property, or the rights, safety, and property of others."
+        ]
+      },
+      "s4": {
+        "title": "4. Information protection",
+        "p1": "4.1. We take appropriate measures to protect your personal information from unauthorized access, loss, use, disclosure, alteration, or destruction.",
+        "p2": "4.2. However, no method of transmitting information over the Internet or method of electronic storage is 100% secure. Therefore, while we strive to use commercially acceptable means to protect your personal information, we cannot guarantee its absolute security."
+      },
+      "s5": {
+        "title": "5. Cookies",
+        "p1": "5.1. We use cookies and other similar technologies to improve your experience on the Site, analyze Site usage, and provide personalized content and advertising.",
+        "p2": "5.2. You can manage cookies through your browser settings. Disabling cookies may affect your experience using the Site."
+      },
+      "s6": {
+        "title": "6. Links to third-party sites",
+        "p1": "6.1. Our Site may contain links to third-party sites that are not operated by us. We are not responsible for the content or privacy policies of these third-party sites."
+      },
+      "s7": {
+        "title": "7. User rights",
+        "p1": "7.1. You have the right to:",
+        "items": [
+          "Access the personal information we hold about you;",
+          "Correct inaccuracies in your personal information;",
+          "Delete your personal information;",
+          "Restrict the processing of your personal information;",
+          "Object to the processing of your personal information;",
+          "Transfer your personal information to another service provider."
+        ]
+      },
+      "s8": {
+        "title": "8. Changes to the Privacy Policy",
+        "p1": "8.1. We reserve the right to modify this Privacy Policy at any time. Changes take effect from the moment they are published on the Site.",
+        "p2": "8.2. By continuing to use the Site after changes to the Privacy Policy are made, you agree to the new terms."
+      },
+      "s9": {
+        "title": "9. Contact",
+        "p1": "9.1. If you have any questions or comments regarding this Privacy Policy, please contact us using the contact information provided on the Site."
+      },
+      "closing": "We hope our Site brings you nothing but a positive experience!"
+    },
+    "refund": {
+      "pageTitle": "Game Store Refund Policy",
+      "intro": "We strive to provide our customers with the best products and services. If you are not satisfied with your purchase, please review our refund policy to understand how you can get a refund.",
+      "s1": {
+        "title": "1. General provisions",
+        "p1": "1.1. This Refund Policy governs the process of returns and refunds for purchases made at our game store (hereinafter — \"Store\").",
+        "p2": "1.2. This Policy applies to all Store customers."
+      },
+      "s2": {
+        "title": "2. Returning products",
+        "p1": "2.1. You may return physical items purchased at the Store within [30] days of the purchase date, provided the items are in their original packaging and have not been used.",
+        "p2": "2.2. For digital items (such as game keys, digital downloads), returns and refunds are only possible if the item has not been activated or downloaded."
+      },
+      "s3": {
+        "title": "3. Return procedure",
+        "p1": "3.1. To initiate a return, contact our customer support team via [specify contact method: email, phone, website form].",
+        "p2": "3.2. Once we receive your request, we will provide you with instructions for returning the item.",
+        "p3": "3.3. You are responsible for return shipping costs unless otherwise stated in our Policy."
+      },
+      "s4": {
+        "title": "4. Processing returns",
+        "p1": "4.1. Once we receive and inspect the returned item, we will send you a notification about the status of your return.",
+        "p2": "4.2. If the return is approved, we will process your refund within [10] business days. The refund will be issued using the same method used for the original payment."
+      },
+      "s5": {
+        "title": "5. Refunds",
+        "p1": "5.1. We will refund the full price of the item, excluding shipping costs, unless the item was defective.",
+        "p2": "5.2. If the item is returned due to a defect or an error on our part, we will also refund the shipping costs."
+      },
+      "s6": {
+        "title": "6. Exclusions",
+        "p1": "6.1. Some items are not eligible for return, including but not limited to the following:",
+        "items": [
+          "Unpackaged software products;",
+          "Discounted or sale items;",
+          "Gift cards;",
+          "Items showing clear signs of use or damage caused by the customer."
+        ]
+      },
+      "s7": {
+        "title": "7. Exchanging items",
+        "p1": "7.1. We offer item exchanges only if the item turns out to be defective or was sent in error. To arrange an exchange, contact our customer support team."
+      },
+      "s8": {
+        "title": "8. Contact",
+        "p1": "8.1. If you have any questions or comments regarding this Refund Policy, please contact us using the contact information provided on our site."
+      },
+      "closing1": "Thank you for your purchases at our Store!",
+      "closing2": "We value your trust and strive to ensure your satisfaction with our products and services."
+    }
+  }
+}

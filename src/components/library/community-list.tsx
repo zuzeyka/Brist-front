@@ -1,4 +1,6 @@
 import { ChevronRightIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
@@ -8,11 +10,14 @@ interface CommunityListProps {
 }
 
 const CommunityList: React.FC<CommunityListProps> = (props) => {
+    const { t } = useTranslation();
     return (
         <>
             <div className={"flex items-center justify-between" + (props.className ? ' ' + props.className : '')}>
-                <h2 className="text-heading-2 font-bold px-2">Цікаве від Спільноти</h2>
-                <Button className="bg-transparent hover:bg-transparent text-button-1 font-artifakt p-0 px-2">Моя стрічка<ChevronRightIcon className="w-5 h-5" /></Button>
+                <h2 className="text-heading-2 font-bold px-2">{t('library.fromCommunity')}</h2>
+                <Button asChild className="bg-transparent hover:bg-transparent text-button-1 font-artifakt p-0 px-2">
+                    <Link to="/library/feed">{t('library.myFeed')}<ChevronRightIcon className="w-5 h-5" /></Link>
+                </Button>
             </div>
             <Carousel className="w-full" opts={{
                 align: "start",

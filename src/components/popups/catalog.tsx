@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { DialogClose } from "@/components/ui/dialog";
 import { Categories } from "@/shared/lib/interfaces";
 
@@ -8,6 +9,7 @@ import { Categories } from "@/shared/lib/interfaces";
 // real seeded categories; picking one closes the popup and opens the full
 // catalog page pre-filtered to that genre.
 const Catalog: React.FC = () => {
+    const { t } = useTranslation();
     const [genres, setGenres] = useState<Categories[]>([]);
 
     useEffect(() => {
@@ -19,7 +21,7 @@ const Catalog: React.FC = () => {
 
     return (
         <div className="px-8 pt-5 pb-6 rounded-3xl bg-card2 max-w-auto">
-            <div className="text-heading-3 font-bold font-manrope leading-7">Жанри</div>
+            <div className="text-heading-3 font-bold font-manrope leading-7">{t('popups.genres')}</div>
             <div className="mt-4 flex flex-wrap gap-3">
                 {genres.map((genre) => (
                     <DialogClose key={genre.id} asChild>

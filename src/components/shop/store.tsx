@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Footer from '../main/footer';
 import Head from '../main/head';
 import Search from '../main/search';
@@ -17,6 +18,7 @@ const glows = [
 ];
 
 const Store: React.FC = () => {
+    const { t } = useTranslation();
     const [game, setGame] = useState<GameInShop>();
     const [gameDLC, setDLC] = useState<GameInShop[]>([]);
     const [reviews, setReviews] = useState<Discussion[]>([]);
@@ -43,7 +45,7 @@ const Store: React.FC = () => {
     const [ownedFriends, setOwnedFriends] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const gameRate = reviews.length > 0 ? Math.round(reviews.map(review => review.rate).reduce((a, b) => a + b, 0) / reviews.length) : 0;
-    let gameId: string;
+    const gameIdRef = useRef<string>('');
     let developerId: string;
     let publisherId: string;
 
@@ -84,7 +86,7 @@ const Store: React.FC = () => {
             }
             const data = await res.json() as GameInShop;
             setGame(data);
-            gameId = data.id;
+            gameIdRef.current = data.id;
             publisherId = data.publisherId;
             developerId = data.developerId;
         } catch (error) {
@@ -94,8 +96,8 @@ const Store: React.FC = () => {
 
     const fetchRequirements = async () => {
         try {
-            const resmax = await fetch('http://localhost:5049/api/MaximumSystemRequirements/bygameid/' + gameId);
-            const resmin = await fetch('http://localhost:5049/api/MinimalSystemRequirements/bygameid/' + gameId);
+            const resmax = await fetch('http://localhost:5049/api/MaximumSystemRequirements/bygameid/' + gameIdRef.current);
+            const resmin = await fetch('http://localhost:5049/api/MinimalSystemRequirements/bygameid/' + gameIdRef.current);
             if (!resmax.ok || !resmin.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -110,7 +112,7 @@ const Store: React.FC = () => {
 
     const fetchDLC = async () => {
         try {
-            const res = await fetch('http://localhost:5049/api/DLCInShop/bygameid/' + gameId);
+            const res = await fetch('http://localhost:5049/api/DLCInShop/bygameid/' + gameIdRef.current);
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -149,7 +151,7 @@ const Store: React.FC = () => {
 
     const fetchScreenshots = async () => {
         try {
-            const res = await fetch('http://localhost:5049/api/Screenshot/bygameid/' + gameId);
+            const res = await fetch('http://localhost:5049/api/Screenshot/bygameid/' + gameIdRef.current);
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -162,7 +164,7 @@ const Store: React.FC = () => {
 
     const fetchGameNews = async () => {
         try {
-            const res = await fetch('http://localhost:5049/api/GameNews/bygameid/' + gameId);
+            const res = await fetch('http://localhost:5049/api/GameNews/bygameid/' + gameIdRef.current);
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -175,7 +177,7 @@ const Store: React.FC = () => {
 
     const fetchGamePosts = async () => {
         try {
-            const res = await fetch('http://localhost:5049/api/GamePost/bygameid/' + gameId);
+            const res = await fetch('http://localhost:5049/api/GamePost/bygameid/' + gameIdRef.current);
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -188,7 +190,7 @@ const Store: React.FC = () => {
 
     const fetchVideo = async () => {
         try {
-            const res = await fetch('http://localhost:5049/api/Video/bygameid/' + gameId);
+            const res = await fetch('http://localhost:5049/api/Video/bygameid/' + gameIdRef.current);
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -201,7 +203,7 @@ const Store: React.FC = () => {
 
     const fetchGameGuides = async () => {
         try {
-            const res = await fetch('http://localhost:5049/api/GameGuide/bygameid/' + gameId);
+            const res = await fetch('http://localhost:5049/api/GameGuide/bygameid/' + gameIdRef.current);
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -214,7 +216,7 @@ const Store: React.FC = () => {
 
     const fetchCategories = async () => {
         try {
-            const res = await fetch('http://localhost:5049/api/CategoriesForGame/bygameid/' + gameId);
+            const res = await fetch('http://localhost:5049/api/CategoriesForGame/bygameid/' + gameIdRef.current);
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -236,7 +238,7 @@ const Store: React.FC = () => {
 
     const fetchReviews = async () => {
         try {
-            const reviewres = await fetch('http://localhost:5049/api/Discussion/byattachedid/' + gameId);
+            const reviewres = await fetch('http://localhost:5049/api/Discussion/byattachedid/' + gameIdRef.current);
             if (!reviewres.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -249,7 +251,7 @@ const Store: React.FC = () => {
 
     const fetchBundles = async () => {
         try {
-            const res = await fetch('http://localhost:5049/api/GameBundleCollection/bygameid/' + gameId);
+            const res = await fetch('http://localhost:5049/api/GameBundleCollection/bygameid/' + gameIdRef.current);
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -301,7 +303,7 @@ const Store: React.FC = () => {
 
     const fetchGroup = async () => {
         try {
-            const res = await fetch('http://localhost:5049/api/GameGroup/bygameid/' + gameId);
+            const res = await fetch('http://localhost:5049/api/GameGroup/bygameid/' + gameIdRef.current);
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -314,8 +316,8 @@ const Store: React.FC = () => {
     const fetchFriends = async () => {
         try {
             const [wished, owned] = await Promise.all([
-                fetch('http://localhost:5049/api/Friends/wished/bygameid/' + gameId),
-                fetch('http://localhost:5049/api/Friends/owned/bygameid/' + gameId),
+                fetch('http://localhost:5049/api/Friends/wished/bygameid/' + gameIdRef.current),
+                fetch('http://localhost:5049/api/Friends/owned/bygameid/' + gameIdRef.current),
             ]);
             if (!wished.ok || !owned.ok) {
                 throw new Error('Network response was not ok');
@@ -333,7 +335,7 @@ const Store: React.FC = () => {
                 const users: User[] = [];
                 if (info) {
                     await Promise.all(info.map(async (inf) => {
-                        const userres = await fetch('http://localhost:5049/api/User/getbyuid/' + inf.authorId);
+                        const userres = await fetch('http://localhost:5049/api/User/getbyuid/' + inf.authorId, { credentials: 'include' });
                         if (!userres.ok) {
                             throw new Error('Network response was not ok');
                         }
@@ -353,7 +355,7 @@ const Store: React.FC = () => {
         fetchUsers(guides, setGuideUsers);
         fetchUsers(posts, setPostUsers);
         fetchUsers(news, setNewsUsers);
-    }, [reviews]);
+    }, [reviews, videos, screenshots, guides, posts, news]);
 
     const getPostDate = (data: Date) => {
         const date = new Date(data);
@@ -369,7 +371,7 @@ const Store: React.FC = () => {
     }
     const pages = [
         {
-            title: 'Про ігру',
+            title: t('shop.tabs.about'),
             content: (
                 <AboutGame
                     releaseDate={game && game.dateOfRelease ? getPostDate(game.dateOfRelease) : 'No release date'}
@@ -380,15 +382,15 @@ const Store: React.FC = () => {
                     wishedFriends={wishedFriends}
                     ownedFriends={ownedFriends}
                     discountEnd={getDiscountEnd}
-                    publisher={publisher ? publisher.name : 'Невідомо'}
-                    developer={developer ? developer.name : 'Невідомо'}
+                    publisher={publisher ? publisher.name : t('shop.unknown')}
+                    developer={developer ? developer.name : t('shop.unknown')}
                     previewUrl={game && game.previeImage ? game.previeImage : ""}
                     DLC={gameDLC ? gameDLC : []}
                     price={game ? game.price : 0}
                     discount={game ? game.discount : 0}
-                    gameName={game ? game.name : 'Невідомо'}
-                    gameDescription={game && game.description ? game.description : 'Невідомо'}
-                    gameCategorys={categories ? categories : ['Немає категорій']}
+                    gameName={game ? game.name : t('shop.unknown')}
+                    gameDescription={game && game.description ? game.description : t('shop.unknown')}
+                    gameCategorys={categories ? categories : [t('shop.noCategories')]}
                     mediaUrl={screenshots.map(x => x.contentUrl)}
                     rate={gameRate}
                     endDate={getDiscountEnd(game?.discountFinish)}
@@ -396,10 +398,10 @@ const Store: React.FC = () => {
             )
         },
         {
-            title: 'Характеристики',
+            title: t('shop.tabs.characteristics'),
             content: (
                 <Characteristics
-                    gameName={game ? game.name : 'Невідомо'}
+                    gameName={game ? game.name : t('shop.unknown')}
                     wishedFriends={wishedFriends}
                     ownedFriends={ownedFriends}
                     maxOs={maxrequirements}
@@ -410,12 +412,12 @@ const Store: React.FC = () => {
                     rate={gameRate}
                     endDate={getDiscountEnd(game?.discountFinish)}
                     releaseDate={game && game.dateOfRelease ? getPostDate(game.dateOfRelease) : 'No release date'}
-                    publisher={publisher ? publisher.name : 'Невідомо'}
-                    developer={developer ? developer.name : 'Невідомо'}
+                    publisher={publisher ? publisher.name : t('shop.unknown')}
+                    developer={developer ? developer.name : t('shop.unknown')}
                 />
             )
         },
-        { title: 'Спільнота', content: <Community gameName={game ? game.name : 'Невідомо'} subscribersCount={group?.subscribersCount ?? 0} onlineCount={group?.onlineCount ?? 0} postsUserData={postUsers ? postUsers : []} screenshotsUserData={screenshotUsers ? screenshotUsers : []} videosUserData={videoUsers ? videoUsers : []} guidesUserData={guideUsers ? guideUsers : []} newsUserData={newsUsers ? newsUsers : []} posts={posts ? posts : []} screenshots={screenshots ? screenshots : []} videos={videos ? videos : []} guides={guides ? guides : []} news={news ? news : []} /> }
+        { title: t('shop.tabs.community'), content: <Community gameId={game?.id ?? ''} gameGroupId={group?.id ?? ''} onPostCreated={() => Promise.all([fetchGamePosts(), fetchScreenshots(), fetchVideo(), fetchGameGuides()])} gameName={game ? game.name : t('shop.unknown')} subscribersCount={group?.subscribersCount ?? 0} onlineCount={group?.onlineCount ?? 0} postsUserData={postUsers ? postUsers : []} screenshotsUserData={screenshotUsers ? screenshotUsers : []} videosUserData={videoUsers ? videoUsers : []} guidesUserData={guideUsers ? guideUsers : []} newsUserData={newsUsers ? newsUsers : []} posts={posts ? posts : []} screenshots={screenshots ? screenshots : []} videos={videos ? videos : []} guides={guides ? guides : []} news={news ? news : []} /> }
     ];
 
     const [content, setContent] = useState<React.ReactNode>(null);

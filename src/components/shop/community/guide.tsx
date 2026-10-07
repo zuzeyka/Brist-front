@@ -14,7 +14,7 @@ const Guide: React.FC<PostProps> = (props) => (
                 {props.postText && <p className={textClass + ' line-clamp-3'}>{props.postText}</p>}
             </div>
         </div>
-        <PostFooter postLikes={props.postLikes} postComments={props.postComments} isShared={true} />
+        <PostFooter postLikes={props.postLikes} postComments={props.postComments} postDate={props.postDate} isShared={props.isShared ?? true} />
     </article>
 );
 

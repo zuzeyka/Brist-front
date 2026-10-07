@@ -1,27 +1,20 @@
 import React from "react";
 import Catalog from "./catalog";
 import NewCollection from "./new-collection";
-import NewDiscussion from "./new-discussion";
-import NewGuide from "./new-guide";
 import NewReview from "./new-review";
-import NewScreenshot from "./new-screenshot";
-import NewVideo from "./new-video";
-import WishedFriends from "./wished-friends";
 import Notifications from "./notifications";
 
-
+// Dev sandbox for popups that don't have a live entry point yet. Discussion/guide/
+// screenshot/video creation and the friends list moved to the real, matched
+// components (shop/community/create-post.tsx, shop/about/friends.tsx) and were
+// removed from here — see WORKLOG.
 const Test: React.FC = () => {
     return (
         <div className="flex flex-col gap-5">
             <Catalog></Catalog>
             <Notifications></Notifications>
             <NewCollection></NewCollection>
-            <NewDiscussion></NewDiscussion>
-            <NewGuide></NewGuide>
             <NewReview></NewReview>
-            <NewScreenshot></NewScreenshot>
-            <NewVideo></NewVideo>
-            <WishedFriends></WishedFriends>
         </div>
     );
 };

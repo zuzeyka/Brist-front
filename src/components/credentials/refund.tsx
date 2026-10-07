@@ -1,153 +1,118 @@
+import { useTranslation } from "react-i18next";
 import Head from "../main/head";
 import Footer from "../main/footer";
 
 
 const Refund: React.FC = () => {
+    const { t } = useTranslation();
+    const exclusionItems = t('legal.refund.s6.items', { returnObjects: true }) as string[];
     return (
         <>
             <Head></Head>
             <div className="flex items-center justify-center px-72 py-12">
                 <div className="flex flex-col p-16 text-block-2 bg-card1 rounded-[30px] max-md:px-5">
                     <div className="text-3xl max-md:max-w-full text-heading-2 font-bold font-manrope">
-                        Політика повернення коштів ігрового магазину
+                        {t('legal.refund.pageTitle')}
                     </div>
                     <div className="mt-12 text-2xl leading-7 max-md:mt-10 max-md:max-w-full">
-                        Політика повернення коштів ігрового магазину
+                        {t('legal.refund.pageTitle')}
                         <br />
-                        Ми прагнемо забезпечити наших клієнтів найкращими продуктами та
-                        послугами. Якщо ви не задоволені своєю покупкою, будь ласка, ознайомтеся
-                        з нашою політикою повернення коштів, щоб зрозуміти, як ви можете
-                        отримати відшкодування.
+                        {t('legal.refund.intro')}
                         <br />
                         <br />
-                        <span className="text-xl leading-6">1. Загальні положення </span>
+                        <span className="text-xl leading-6">{t('legal.refund.s1.title')} </span>
                         <br />
                         <span className="text-xl leading-6">
-                            1.1. Ця Політика повернення коштів регулює процес повернення та
-                            відшкодування коштів за покупки, здійснені в нашому ігровому магазині
-                            (далі — &quot;Магазин&quot;).{" "}
+                            {t('legal.refund.s1.p1')}{" "}
                         </span>
                         <br />
                         <span className="text-xl leading-6">
-                            1.2. Політика застосовується до всіх клієнтів Магазину.
+                            {t('legal.refund.s1.p2')}
                         </span>
                         <br />
                         <br />
-                        <span className="text-xl leading-6">2. Повернення товарів </span>
+                        <span className="text-xl leading-6">{t('legal.refund.s2.title')} </span>
                         <br />
                         <span className="text-xl leading-6">
-                            2.1. Ви можете повернути фізичні товари, придбані в Магазині, протягом
-                            [30] днів з дати покупки за умови, що товари знаходяться в
-                            оригінальній упаковці та не були використані.
+                            {t('legal.refund.s2.p1')}
                         </span>
                         <br />
                         <span className="text-xl leading-6">
-                            2.2. Для цифрових товарів (наприклад, ігрових ключів, цифрових
-                            завантажень) повернення та відшкодування можливе лише у випадку, якщо
-                            товар не був активований або завантажений.
+                            {t('legal.refund.s2.p2')}
                         </span>
                         <br />
                         <br />
-                        <span className="text-xl leading-6">3. Процедура повернення </span>
+                        <span className="text-xl leading-6">{t('legal.refund.s3.title')} </span>
                         <br />
                         <span className="text-xl leading-6">
-                            3.1. Щоб ініціювати повернення, зв'яжіться з нашою службою підтримки
-                            клієнтів через [вкажіть контактний метод: електронну пошту, телефон,
-                            форму на сайті].{" "}
+                            {t('legal.refund.s3.p1')}{" "}
                         </span>
                         <br />
                         <span className="text-xl leading-6">
-                            3.2. Після отримання вашого запиту ми надамо вам інструкції щодо
-                            повернення товару.{" "}
+                            {t('legal.refund.s3.p2')}{" "}
                         </span>
                         <br />
                         <span className="text-xl leading-6">
-                            3.3. Ви несете відповідальність за витрати на повернення товару, якщо
-                            інше не зазначено в нашій Політиці.
+                            {t('legal.refund.s3.p3')}
                         </span>
                         <br />
                         <br />
-                        <span className="text-xl leading-6">4. Обробка повернень </span>
+                        <span className="text-xl leading-6">{t('legal.refund.s4.title')} </span>
                         <br />
                         <span className="text-xl leading-6">
-                            4.1. Після отримання та перевірки поверненого товару ми надішлемо вам
-                            повідомлення про статус вашого повернення.{" "}
+                            {t('legal.refund.s4.p1')}{" "}
                         </span>
                         <br />
                         <span className="text-xl leading-6">
-                            4.2. Якщо повернення затверджено, ми обробимо ваше відшкодування
-                            протягом [10] робочих днів. Відшкодування буде здійснено тим же
-                            методом, який використовувався для початкової оплати.
+                            {t('legal.refund.s4.p2')}
                         </span>
                         <br />
                         <br />
-                        <span className="text-xl leading-6">5. Відшкодування </span>
+                        <span className="text-xl leading-6">{t('legal.refund.s5.title')} </span>
                         <br />
                         <span className="text-xl leading-6">
-                            5.1. Ми повернемо повну вартість товару, за винятком витрат на
-                            доставку, якщо товар не був дефектним.{" "}
+                            {t('legal.refund.s5.p1')}{" "}
                         </span>
                         <br />
                         <span className="text-xl leading-6">
-                            5.2. Якщо товар повернуто через дефект або помилку з нашого боку, ми
-                            також відшкодуємо витрати на доставку.
+                            {t('legal.refund.s5.p2')}
                         </span>
                         <br />
                         <br />
-                        <span className="text-xl leading-6">6. Виключення </span>
+                        <span className="text-xl leading-6">{t('legal.refund.s6.title')} </span>
                         <br />
                         <span className="text-xl leading-6">
-                            6.1. Деякі товари не підлягають поверненню, включаючи, але не
-                            обмежуючись, наступні:
+                            {t('legal.refund.s6.p1')}
                         </span>
                         <ul>
-                            <li>
-                                <span className="text-xl leading-6">
-                                    Розпаковані програмні продукти;
-                                </span>
-                            </li>
-                            <li>
-                                <span className="text-xl leading-6">
-                                    Товари зі знижками або розпродажів;
-                                </span>
-                            </li>
-                            <li>
-                                <span className="text-xl leading-6">Подарункові картки;</span>
-                            </li>
-                            <li>
-                                <span className="text-xl leading-6">
-                                    Товари, які мають явні сліди використання або пошкодження,
-                                    спричинені клієнтом.
-                                </span>
-                            </li>
+                            {exclusionItems.map((item, i) => (
+                                <li key={i}>
+                                    <span className="text-xl leading-6">{item}</span>
+                                </li>
+                            ))}
                         </ul>
                         <br />
-                        <span className="text-xl leading-6">7. Обмін товарів </span>
+                        <span className="text-xl leading-6">{t('legal.refund.s7.title')} </span>
                         <br />
                         <span className="text-xl leading-6">
-                            7.1. Ми пропонуємо обмін товарів лише в разі, якщо товар виявився
-                            дефектним або помилково надісланим. Для обміну зв'яжіться з нашою
-                            службою підтримки клієнтів.
+                            {t('legal.refund.s7.p1')}
                         </span>
                         <br />
                         <br />
-                        <span className="text-xl leading-6">8. Контакти </span>
+                        <span className="text-xl leading-6">{t('legal.refund.s8.title')} </span>
                         <br />
                         <span className="text-xl leading-6">
-                            8.1. Якщо у вас є будь-які питання або коментарі щодо цієї Політики
-                            повернення коштів, будь ласка, зв'яжіться з нами за допомогою
-                            контактної інформації, вказаної на нашому сайті.
+                            {t('legal.refund.s8.p1')}
                         </span>
                         <br />
                         <br />
                         <span className="text-xl leading-6">
-                            Дата набрання чинності: 10.06.2024
+                            {t('legal.terms.effectiveDate')}
                         </span>
                         <br />
                         <br />
-                        Дякуємо за ваші покупки в нашому Магазині! <br />
-                        Ми цінуємо вашу довіру і прагнемо забезпечити ваше задоволення від наших
-                        продуктів та послуг.
+                        {t('legal.refund.closing1')} <br />
+                        {t('legal.refund.closing2')}
                     </div>
                 </div>
             </div>

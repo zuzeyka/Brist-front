@@ -23,7 +23,9 @@ const routes: [method: string, pattern: string, handler: Handler][] = [
     ['GET', 'GamesInShop/byname/:name', ([name]) => db.games.find((g) => g.name === name)],
     ['GET', 'GamesInShop/:id', ([id]) => byId(db.games)(id)],
 
+    ['GET', 'DLCInShop', () => db.dlcs],
     ['GET', 'DLCInShop/bygameid/:id', ([id]) => byGame(db.dlcs)(id)],
+    ['GET', 'DLCInShop/:id', ([id]) => byId(db.dlcs)(id)],
     ['POST', 'DLCInShop/getall', byIds(db.dlcs)],
 
     ['GET', 'GameBundleCollection/bygameid/:id', ([id]) => byGame(db.bundleCollections)(id)],
@@ -37,6 +39,7 @@ const routes: [method: string, pattern: string, handler: Handler][] = [
     ['GET', 'MaximumSystemRequirements/bygameid/:id', ([id]) => byGame(db.maxRequirements)(id)[0]],
 
     ['GET', 'CategoriesForGame/bygameid/:id', ([id]) => byGame(db.categoriesForGames)(id)],
+    ['GET', 'Categories', () => db.categories],
     ['POST', 'Categories/getall', byIds(db.categories)],
 
     ['GET', 'Discussion/byattachedid/:id', ([id]) => db.reviews.filter((r) => r.attachedId === id)],

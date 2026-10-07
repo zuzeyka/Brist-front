@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { CardProps } from "./slider-categories";
 import GamePrice from "./game-price";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/ui/icons";
@@ -13,6 +14,7 @@ interface DealProps extends CardProps {
 const AUTOPLAY_MS = 4000;
 
 const TopDeals: React.FC<{ games: DealProps[]; className?: string }> = ({ games, className }) => {
+    const { t } = useTranslation();
     const [activeIndex, setActiveIndex] = useState(0);
     const [paused, setPaused] = useState(false);
     const deals = games.slice(0, 10);
@@ -44,7 +46,7 @@ const TopDeals: React.FC<{ games: DealProps[]; className?: string }> = ({ games,
                             <GamePrice price={currentGame.price} discount={currentGame.discount} size="lg" />
                             {currentGame.discount > 0 && currentGame.discountEnd && (
                                 <p className="font-artifakt text-sign-2 tracking-[-0.01em] text-typographySecondary">
-                                    Знижка діє до {currentGame.discountEnd}
+                                    {t('main.discountUntil', { date: currentGame.discountEnd })}
                                 </p>
                             )}
                         </div>
@@ -55,10 +57,10 @@ const TopDeals: React.FC<{ games: DealProps[]; className?: string }> = ({ games,
                     </div>
                 </Link>
                 <div className="absolute inset-0 mx-auto max-w-[1464px] pointer-events-none">
-                    <button type="button" aria-label="Попередня гра" className={cn(arrowClass, "-left-9 pointer-events-auto")} onClick={() => go(-1)}>
+                    <button type="button" aria-label={t('main.prevGame')} className={cn(arrowClass, "-left-9 pointer-events-auto")} onClick={() => go(-1)}>
                         <ChevronLeftIcon />
                     </button>
-                    <button type="button" aria-label="Наступна гра" className={cn(arrowClass, "-right-9 pointer-events-auto")} onClick={() => go(1)}>
+                    <button type="button" aria-label={t('main.nextGame')} className={cn(arrowClass, "-right-9 pointer-events-auto")} onClick={() => go(1)}>
                         <ChevronRightIcon />
                     </button>
                 </div>

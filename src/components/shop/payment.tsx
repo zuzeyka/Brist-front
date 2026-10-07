@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertOctagonIcon, ShareIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useCart } from './cart/card-context';
 import GamePrice from '@/components/main/game-price';
 import { HeartOutlineIcon } from '@/components/ui/icons';
@@ -23,6 +24,7 @@ const button = 'rounded-[20px] font-artifakt font-semibold text-button-1';
 
 // Purchase panel in the game page sidebar.
 const Payment: React.FC<PaymentProps> = (props) => {
+    const { t } = useTranslation();
     const { addToCart } = useCart();
 
     const handleAddToCart = () => {
@@ -33,9 +35,9 @@ const Payment: React.FC<PaymentProps> = (props) => {
     };
 
     const details = [
-        ['Дата виходу', props.releaseDate],
-        ['Розробник', props.developer],
-        ['Видавець', props.publisher],
+        [t('shop.payment.releaseDate'), props.releaseDate],
+        [t('shop.payment.developer'), props.developer],
+        [t('shop.payment.publisher'), props.publisher],
     ];
 
     return (
@@ -44,21 +46,21 @@ const Payment: React.FC<PaymentProps> = (props) => {
             <div className="flex flex-col gap-1">
                 <GamePrice price={props.price} discount={props.discount ?? 0} size="lg" />
                 {props.discount ? (
-                    <span className='font-artifakt text-sign-3 tracking-[-0.01em] text-typographySecondary'>Знижка діє до {props.endDate}</span>
+                    <span className='font-artifakt text-sign-3 tracking-[-0.01em] text-typographySecondary'>{t('main.discountUntil', { date: props.endDate })}</span>
                 ) : null}
             </div>
             <div className="flex flex-col gap-3">
-                <button type="button" className={cn(button, 'w-full px-[26px] py-3 bg-primary hover:bg-primaryHover text-background')}>Купити</button>
+                <button type="button" className={cn(button, 'w-full px-[26px] py-3 bg-primary hover:bg-primaryHover text-background')}>{t('shop.payment.buy')}</button>
                 <div className='flex gap-3'>
-                    <button type="button" onClick={handleAddToCart} className={cn(button, 'flex-1 px-[26px] py-3 bg-secondary hover:bg-secondaryHover')}>Додати у кошик</button>
-                    <button type="button" aria-label="Додати до бажаного" className={cn(button, 'p-3 bg-secondary hover:bg-secondaryHover')}><HeartOutlineIcon /></button>
+                    <button type="button" onClick={handleAddToCart} className={cn(button, 'flex-1 px-[26px] py-3 bg-secondary hover:bg-secondaryHover')}>{t('shop.payment.addToCart')}</button>
+                    <button type="button" aria-label={t('shop.payment.addToWishlist')} className={cn(button, 'p-3 bg-secondary hover:bg-secondaryHover')}><HeartOutlineIcon /></button>
                 </div>
                 <div className="flex gap-3">
                     <button type="button" className={cn(button, 'w-[136px] flex items-center justify-center gap-3 py-1.5 text-primary hover:text-primaryHover')}>
-                        <ShareIcon className="size-6" />Репост
+                        <ShareIcon className="size-6" />{t('shop.payment.repost')}
                     </button>
                     <button type="button" className={cn(button, 'flex-1 flex items-center justify-center gap-3 py-1.5 text-negative hover:opacity-80')}>
-                        <AlertOctagonIcon className="size-6" />Поскаржитись
+                        <AlertOctagonIcon className="size-6" />{t('shop.payment.report')}
                     </button>
                 </div>
             </div>
@@ -70,7 +72,7 @@ const Payment: React.FC<PaymentProps> = (props) => {
                     </div>
                 ))}
                 <div className="flex justify-between items-center">
-                    <dt className='font-bold'>Платформи</dt>
+                    <dt className='font-bold'>{t('shop.payment.platforms')}</dt>
                     <dd className='flex gap-3'>{props.platforms.map((platform, index) => <span key={index}>{platform}</span>)}</dd>
                 </div>
             </dl>

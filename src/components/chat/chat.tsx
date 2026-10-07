@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Head from "../main/head";
 import {
     ResizableHandle,
@@ -10,159 +11,164 @@ import ChatContent, { MessageProps } from "./chat-content";
 import InfoBar from "./info-bar";
 import { useParams } from "react-router-dom";
 
-const chatData: { [key: string]: { messages: MessageProps[], info: { filesCount: number, photosCount: number, voicesCount: number, username: string, isOnline: boolean, avatarUrl: string } } } = {
-    frostbyte: {
-        messages: [
-            {
-                fileName: "Slust.tsx",
-                fileSize: "5 ZB",
-                datetime: new Date().toLocaleString(),
-                isMyMessage: true,
-                media: "https://i.imgur.com/ufBjnf8.png"
-            },
-            {
-                isMyMessage: true,
-                datetime: new Date().toLocaleString(),
-                text: "Дивись шо зробив"
-            },
-            {
-                isMyMessage: false,
-                datetime: new Date().toLocaleString(),
-                text: "Вау, я би користувався цим",
-                media: "https://i.imgur.com/7Kd964d.png"
-            },
+const useChatData = (): { [key: string]: { messages: MessageProps[], info: { filesCount: number, photosCount: number, voicesCount: number, username: string, isOnline: boolean, avatarUrl: string } } } => {
+    const { t } = useTranslation();
+    return {
+        MrsZubarikessa: {
+            messages: [
+                {
+                    fileName: "Slust.tsx",
+                    fileSize: "5 ZB",
+                    datetime: "10:30",
+                    isMyMessage: true,
+                    media: "https://i.imgur.com/ufBjnf8.png"
+                },
+                {
+                    isMyMessage: true,
+                    datetime: "10:30",
+                    text: t('chat.mock.mz1')
+                },
+                {
+                    isMyMessage: false,
+                    datetime: "10:30",
+                    text: t('chat.mock.mz2'),
+                    media: "https://i.imgur.com/7Kd964d.png"
+                },
 
-            {
-                isMyMessage: true,
-                datetime: new Date().toLocaleString(),
-                text: "Дякую",
-                media: "https://i.imgur.com/Sqw9Z5u.png"
-            }
-        ],
-        info: { filesCount: 1, photosCount: 2, voicesCount: 0, username: "frostbyte", isOnline: true, avatarUrl: "https://i.pravatar.cc/400?user1" }
-    },
-    eisera: {
-        messages: [
-            {
-                media: "https://i.imgur.com/ufBjnf8.png",
-                text: "Дивись яке зображення",
-                datetime: new Date().toLocaleString(),
-                isMyMessage: true
-            },
-            {
-                isMyMessage: false,
-                datetime: new Date().toLocaleString(),
-                text: "Супер"
-            },
-            {
-                isMyMessage: false,
-                datetime: new Date().toLocaleString(),
-                text: "А ось моє зображення",
-                media: "https://i.imgur.com/5Hds4bh.png"
-            },
-            {
-                isMyMessage: true,
-                datetime: new Date().toLocaleString(),
-                text: "Класс"
-            }
-        ],
-        info: { filesCount: 0, photosCount: 2, voicesCount: 0, username: "eisera", isOnline: false, avatarUrl: "https://i.pravatar.cc/400?user2" }
-    },
-    arctiq: {
-        messages: [
-            {
-                datetime: new Date().toLocaleString(),
-                isMyMessage: true,
-                text: "Дивись який трек зробив"
-            },
-            {
-                isMyMessage: true,
-                datetime: new Date().toLocaleString(),
-                media: "https://s.muzrecord.com/files/eternxlkz-slay.mp3"
-            },
-            {
-                datetime: new Date().toLocaleString(),
-                isMyMessage: false,
-                text: "Воу, тут можно скидувати аудіо?"
-            },
-            {
-                datetime: new Date().toLocaleString(),
-                isMyMessage: true,
-                text: "Ну звичайно",
-                media: "https://i.imgur.com/zBGnWYS.png"
-            },
-            {
-                datetime: new Date().toLocaleString(),
-                isMyMessage: false,
-                text: "OMG"
-            },
-            {
-                fileName: "my.png",
-                fileSize: "15 MB",
-                datetime: new Date().toLocaleString(),
-                isMyMessage: true,
-                media: "https://i.imgur.com/ufBjnf8.png"
-            },
-            {
-                datetime: new Date().toLocaleString(),
-                isMyMessage: true,
-                text: "Навіть так можно"
-            },
-            {
-                datetime: new Date().toLocaleString(),
-                isMyMessage: false,
-                text: "Це самий классний чат що я знаю"
-            }
-        ],
-        info: { filesCount: 1, photosCount: 1, voicesCount: 1, username: "arctiq", isOnline: true, avatarUrl: "https://i.pravatar.cc/400?user3" }
-    },
-    coldedge: {
-        messages: [
-            {
-                datetime: new Date().toLocaleString(),
-                isMyMessage: false,
-                text: "Го очівки фармити?"
-            },
-            {
-                datetime: new Date().toLocaleString(),
-                isMyMessage: true,
-                text: "го"
-            }
-        ],
-        info: { filesCount: 0, photosCount: 0, voicesCount: 0, username: "coldedge", isOnline: false, avatarUrl: "https://i.pravatar.cc/400?user4" }
-    },
-    brist: {
-        messages: [
-            {
-                media: "https://i.imgur.com/QBPxaVk.png",
-                text: "лис",
-                datetime: new Date().toLocaleString(),
-                isMyMessage: false
-            },
-            {
-                isMyMessage: true,
-                datetime: new Date().toLocaleString(),
-                text: "сам малював?"
-            },
-            {
-                isMyMessage: false,
-                datetime: new Date().toLocaleString(),
-                text: "так"
-            },
-            {
-                media: "https://i.imgur.com/HpZviAT.png",
-                text: "nice",
-                datetime: new Date().toLocaleString(),
-                isMyMessage: true
-            }
-        ],
-        info: { filesCount: 0, photosCount: 2, voicesCount: 0, username: "brist", isOnline: false, avatarUrl: "https://i.pravatar.cc/400?user5" }
-    }
+                {
+                    isMyMessage: true,
+                    datetime: "10:30",
+                    text: t('chat.mock.mz3'),
+                    media: "https://i.imgur.com/Sqw9Z5u.png"
+                }
+            ],
+            info: { filesCount: 1, photosCount: 2, voicesCount: 0, username: "MrsZubarikessa", isOnline: true, avatarUrl: "https://i.pravatar.cc/400?user1" }
+        },
+        FirePhoenix: {
+            messages: [
+                {
+                    media: "https://i.imgur.com/ufBjnf8.png",
+                    text: t('chat.mock.fp1'),
+                    datetime: "10:30",
+                    isMyMessage: true
+                },
+                {
+                    isMyMessage: false,
+                    datetime: "10:30",
+                    text: t('chat.mock.fp2')
+                },
+                {
+                    isMyMessage: false,
+                    datetime: "10:30",
+                    text: t('chat.mock.fp3'),
+                    media: "https://i.imgur.com/5Hds4bh.png"
+                },
+                {
+                    isMyMessage: true,
+                    datetime: "10:30",
+                    text: t('chat.mock.fp4')
+                }
+            ],
+            info: { filesCount: 0, photosCount: 2, voicesCount: 0, username: "FirePhoenix", isOnline: false, avatarUrl: "https://i.pravatar.cc/400?user2" }
+        },
+        DragonSlayer: {
+            messages: [
+                {
+                    datetime: "10:30",
+                    isMyMessage: true,
+                    text: t('chat.mock.ds1')
+                },
+                {
+                    isMyMessage: true,
+                    datetime: "10:30",
+                    media: "https://s.muzrecord.com/files/eternxlkz-slay.mp3"
+                },
+                {
+                    datetime: "10:30",
+                    isMyMessage: false,
+                    text: t('chat.mock.ds2')
+                },
+                {
+                    datetime: "10:30",
+                    isMyMessage: true,
+                    text: t('chat.mock.ds3'),
+                    media: "https://i.imgur.com/zBGnWYS.png"
+                },
+                {
+                    datetime: "10:30",
+                    isMyMessage: false,
+                    text: "OMG"
+                },
+                {
+                    fileName: "my.png",
+                    fileSize: "15 MB",
+                    datetime: "10:30",
+                    isMyMessage: true,
+                    media: "https://i.imgur.com/ufBjnf8.png"
+                },
+                {
+                    datetime: "10:30",
+                    isMyMessage: true,
+                    text: t('chat.mock.ds4')
+                },
+                {
+                    datetime: "10:30",
+                    isMyMessage: false,
+                    text: t('chat.mock.ds5')
+                }
+            ],
+            info: { filesCount: 1, photosCount: 1, voicesCount: 1, username: "DragonSlayer", isOnline: true, avatarUrl: "https://i.pravatar.cc/400?user3" }
+        },
+        TitanCrusher: {
+            messages: [
+                {
+                    datetime: "10:30",
+                    isMyMessage: false,
+                    text: t('chat.mock.tc1')
+                },
+                {
+                    datetime: "10:30",
+                    isMyMessage: true,
+                    text: t('chat.mock.tc2')
+                }
+            ],
+            info: { filesCount: 0, photosCount: 0, voicesCount: 0, username: "TitanCrusher", isOnline: false, avatarUrl: "https://i.pravatar.cc/400?user4" }
+        },
+        BlazingArrow: {
+            messages: [
+                {
+                    media: "https://i.imgur.com/QBPxaVk.png",
+                    text: t('chat.mock.ba1'),
+                    datetime: "10:30",
+                    isMyMessage: false
+                },
+                {
+                    isMyMessage: true,
+                    datetime: "10:30",
+                    text: t('chat.mock.ba2')
+                },
+                {
+                    isMyMessage: false,
+                    datetime: "10:30",
+                    text: t('chat.mock.ba3')
+                },
+                {
+                    media: "https://i.imgur.com/HpZviAT.png",
+                    text: "nice",
+                    datetime: "10:30",
+                    isMyMessage: true
+                }
+            ],
+            info: { filesCount: 0, photosCount: 2, voicesCount: 0, username: "BlazingArrow", isOnline: false, avatarUrl: "https://i.pravatar.cc/400?user5" }
+        }
+    };
 };
 
 const Chat: React.FC = () => {
+    const { t } = useTranslation();
+    const chatData = useChatData();
     const { userName } = useParams<{ userName: string }>();
-    const [selectedChat, setSelectedChat] = useState(userName || "user1");
+    const [selectedChat, setSelectedChat] = useState(userName || "MrsZubarikessa");
 
     const handleSelectChat = (newUserName: string) => {
         setSelectedChat(newUserName);
@@ -186,7 +192,7 @@ const Chat: React.FC = () => {
                         {selectedChatData ? (
                             <ChatContent messages={selectedChatData.messages} />
                         ) : (
-                            <div>Чат не найден</div>
+                            <div>{t('chat.notFound')}</div>
                         )}
                     </div>
                 </ResizablePanel>
@@ -196,7 +202,7 @@ const Chat: React.FC = () => {
                         {selectedChatData ? (
                             <InfoBar {...selectedChatData.info} />
                         ) : (
-                            <div>Информация о чате не найдена</div>
+                            <div>{t('chat.infoNotFound')}</div>
                         )}
                     </div>
                 </ResizablePanel>

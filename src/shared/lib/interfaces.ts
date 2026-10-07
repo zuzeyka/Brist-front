@@ -195,6 +195,29 @@ export interface OwnedGame {
     createdAt: string;
 }
 
+export interface OwnedDlc {
+    id: string;
+    ownedDlcId: string;
+    userId: string;
+    createdAt: string;
+}
+
+export interface Achievement {
+    id: string;
+    urlForImage?: string;
+    description: string;
+    amountOfExperience: number;
+    createdAt: string;
+}
+
+export interface AchievementByUser {
+    id: string;
+    userId: string;
+    achievementId: string;
+    awardTime?: string;
+    createdAt: string;
+}
+
 export interface UserCategory {
     id: string;
     userId: string;
@@ -325,6 +348,7 @@ export interface User {
     description: string;
     email: string;
     image: string;
+    backgroundImage?: string;
     verified: boolean;
     amountOfMoney: number;
     amountOfXp: number;

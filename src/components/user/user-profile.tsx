@@ -1,31 +1,291 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Footer from '../main/footer';
 import Head from '../main/head';
 import UserHeader from './user-header';
-import UserMenu from './user-menu';
+import UserMenu, { AchievementEntry, CommentEntry, ReviewProps } from './user-menu';
+import PageGlows from '@/components/ui/page-glows';
+import { useAuth } from '../authorization/auth-context';
+import {
+    Achievement,
+    AchievementByUser,
+    Discussion,
+    GameGuide,
+    GameInShop,
+    GamePosts,
+    OwnedDlc,
+    OwnedGame,
+    Screenshot,
+    User,
+    UserComment,
+    Video,
+    WishedGame,
+} from '@/shared/lib/interfaces';
+import { PostProps } from '../shop/community/post';
+import { formatDate } from '../shop/about/review-list';
+
+const glows = [
+    { left: 1472, top: 108, large: true },
+    { left: 4, top: 1200, large: true },
+];
+
+// No "Друзі" backend endpoint yet — placeholder list matching the Figma sidebar.
+const friends = [
+    { name: 'GhostRogue', isOnline: true, levelPoints: 4000, avatarUrl: '/mock/games/duck-simulator.jpg' },
+    { name: 's1imerock', isOnline: true, levelPoints: 4000, avatarUrl: '/mock/games/duck-simulator.jpg' },
+    { name: 'NikaNii', isOnline: true, levelPoints: 4000, avatarUrl: '/mock/games/duck-simulator.jpg' },
+    { name: 'whysxugly', isOnline: true, levelPoints: 4000, avatarUrl: '/mock/games/duck-simulator.jpg' },
+    { name: 'zuzeyka', isOnline: true, levelPoints: 4000, avatarUrl: '/mock/games/duck-simulator.jpg' },
+];
+
+type UserWithId = User & { id: string };
+
+interface GameAuthoredItem {
+    title?: string;
+    description?: string;
+    content?: string;
+    gameId: string;
+    contentUrl?: string;
+    createdAt: Date | string;
+    likesCount: number;
+    commentsCount?: number;
+}
+
+interface ProfileContent {
+    ownedGames: GameInShop[];
+    wishedGames: GameInShop[];
+    dlcCount: number;
+    screenshots: PostProps[];
+    videos: PostProps[];
+    discussions: PostProps[];
+    guides: PostProps[];
+    reviews: ReviewProps[];
+    comments: CommentEntry[];
+    achievements: AchievementEntry[];
+}
+
+const emptyProfileContent: ProfileContent = {
+    ownedGames: [],
+    wishedGames: [],
+    dlcCount: 0,
+    screenshots: [],
+    videos: [],
+    discussions: [],
+    guides: [],
+    reviews: [],
+    comments: [],
+    achievements: [],
+};
 
 const UserProfile: React.FC = () => {
-    const userBackgroundUrl: string = '';
+    const { t } = useTranslation();
+    const { userName } = useParams<{ userName: string }>();
+    const { isAuthenticated, userId } = useAuth();
+    const [user, setUser] = useState<UserWithId>();
+    const [games, setGames] = useState<GameInShop[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [profileContent, setProfileContent] = useState<ProfileContent>(emptyProfileContent);
     const [content, setContent] = useState<React.ReactNode>(null);
 
-    const handleMoveContentToParent = (node: React.ReactNode) => {
+    useEffect(() => {
+        async function load() {
+            setLoading(true);
+            try {
+                const [usersRes, gamesRes] = await Promise.all([
+                    fetch('http://localhost:5049/api/User', { credentials: 'include' }),
+                    fetch('http://localhost:5049/api/GamesInShop'),
+                ]);
+                if (usersRes.ok) {
+                    const users = await usersRes.json() as UserWithId[];
+                    setUser(users.find((u) => u.name === userName));
+                }
+                if (gamesRes.ok) setGames(await gamesRes.json() as GameInShop[]);
+            } catch (error) {
+                console.log('Fetch user profile error:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        load();
+    }, [userName]);
+
+    // Everything this user actually owns/wished/authored — fetched once we know who
+    // the profile belongs to. Several entities (GamePost/GameGuide/Discussion) have no
+    // byauthorid endpoint on the backend yet, so those fetch the full list and filter
+    // client-side, same workaround used elsewhere in this app (e.g. User/byname).
+    useEffect(() => {
+        if (!user?.id || games.length === 0) return;
+        let cancelled = false;
+
+        async function loadProfileContent() {
+            try {
+                const [
+                    ownedRes, ownedDlcRes, wishedRes, screenshotsRes, videosRes,
+                    postsRes, guidesRes, discussionsRes, commentsRes, achievementLinksRes,
+                ] = await Promise.all([
+                    fetch(`http://localhost:5049/api/OwnedGame/byuserid/${user!.id}`, { credentials: 'include' }),
+                    fetch(`http://localhost:5049/api/OwnedDlc/byuserid/${user!.id}`, { credentials: 'include' }),
+                    fetch('http://localhost:5049/api/WishedGame', { credentials: 'include' }),
+                    fetch(`http://localhost:5049/api/Screenshot/byuserid/${user!.id}`, { credentials: 'include' }),
+                    fetch(`http://localhost:5049/api/Video/byuserid/${user!.id}`, { credentials: 'include' }),
+                    fetch('http://localhost:5049/api/GamePost', { credentials: 'include' }),
+                    fetch('http://localhost:5049/api/GameGuide', { credentials: 'include' }),
+                    fetch('http://localhost:5049/api/Discussion', { credentials: 'include' }),
+                    fetch(`http://localhost:5049/api/UserComment/byuserid/${user!.id}`, { credentials: 'include' }),
+                    fetch(`http://localhost:5049/api/AchievementByUser/byuserid/${user!.id}`, { credentials: 'include' }),
+                ]);
+
+                const gamesById = new Map(games.map((g) => [g.id, g]));
+
+                const ownedRows = ownedRes.ok ? await ownedRes.json() as OwnedGame[] : [];
+                const ownedGames = ownedRows.map((r) => gamesById.get(r.ownedGameId)).filter((g): g is GameInShop => !!g);
+
+                const ownedDlcRows = ownedDlcRes.ok ? await ownedDlcRes.json() as OwnedDlc[] : [];
+
+                const wishedRows = wishedRes.ok ? (await wishedRes.json() as WishedGame[]).filter((w) => w.userId === user!.id) : [];
+                const wishedGames = wishedRows.map((r) => gamesById.get(r.ownedGameId)).filter((g): g is GameInShop => !!g);
+
+                const screenshotRows = screenshotsRes.ok ? await screenshotsRes.json() as Screenshot[] : [];
+                const videoRows = videosRes.ok ? await videosRes.json() as Video[] : [];
+                const postRows = postsRes.ok ? (await postsRes.json() as GamePosts[]).filter((p) => p.authorId === user!.id) : [];
+                const guideRows = guidesRes.ok ? (await guidesRes.json() as GameGuide[]).filter((g) => g.authorId === user!.id) : [];
+                const discussionRows = discussionsRes.ok ? (await discussionsRes.json() as Discussion[]).filter((d) => d.authorId === user!.id) : [];
+                const commentRows = commentsRes.ok ? await commentsRes.json() as UserComment[] : [];
+                const achievementLinkRows = achievementLinksRes.ok ? await achievementLinksRes.json() as AchievementByUser[] : [];
+
+                // Branded by game (name/cover), matching how the rest of the app shows
+                // game-authored content — not by the viewed user, who authored all of it.
+                const toPostProps = (item: GameAuthoredItem): PostProps => {
+                    const game = gamesById.get(item.gameId);
+                    return {
+                        postAuthor: game?.name ?? '',
+                        postAuthorAvatarUrl: game?.previeImage,
+                        postTitle: item.title ?? '',
+                        postText: item.content || item.description,
+                        postMediaUrl: item.contentUrl,
+                        postDate: formatDate(item.createdAt),
+                        postLikes: item.likesCount,
+                        postComments: item.commentsCount ?? 0,
+                    };
+                };
+
+                const screenshots = screenshotRows
+                    .filter((s) => s.authorId === user!.id)
+                    .map((s) => toPostProps(s));
+                const videos = videoRows
+                    .filter((v) => v.authorId === user!.id)
+                    .map((v) => ({ ...toPostProps(v), postPosterUrl: v.previewImage }));
+                const discussionsPosts = postRows.map((p) => toPostProps(p));
+                const guides = guideRows.map((g) => toPostProps(g));
+
+                const reviews: ReviewProps[] = discussionRows.map((d) => {
+                    const game = gamesById.get(d.attachedId);
+                    return {
+                        gameName: game?.name ?? '',
+                        gamePictureUrl: game?.previeImage ?? '',
+                        reviewText: d.content,
+                        rating: d.rate,
+                        date: formatDate(d.createdAt),
+                        likes: d.likesCount,
+                        comments: 0,
+                    };
+                });
+
+                // Comments left ON this profile — resolve each commenter's name/avatar.
+                const commentAuthors = await Promise.all(commentRows.map(async (c) => {
+                    const r = await fetch(`http://localhost:5049/api/User/getbyuid/${c.authorId}`, { credentials: 'include' });
+                    return r.ok ? await r.json() as User : undefined;
+                }));
+                const comments: CommentEntry[] = commentRows.map((c, i) => ({
+                    userName: commentAuthors[i]?.name ?? t('shop.about.player'),
+                    userAvatar: commentAuthors[i]?.image ?? '',
+                    date: formatDate(c.createdAt),
+                    text: c.content,
+                }));
+
+                let achievements: AchievementEntry[] = [];
+                if (achievementLinkRows.length > 0) {
+                    const achievementIds = achievementLinkRows.map((a) => a.achievementId);
+                    const achievementsRes = await fetch('http://localhost:5049/api/Achievement/getall', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(achievementIds),
+                    });
+                    const achievementRows = achievementsRes.ok ? await achievementsRes.json() as Achievement[] : [];
+                    const achievementsById = new Map(achievementRows.map((a) => [a.id, a]));
+                    for (const link of achievementLinkRows) {
+                        const a = achievementsById.get(link.achievementId);
+                        if (!a) continue;
+                        achievements.push({
+                            name: a.description,
+                            description: '',
+                            points: a.amountOfExperience,
+                            imageUrl: a.urlForImage ?? '',
+                            complitionDate: link.awardTime ? formatDate(link.awardTime) : undefined,
+                        });
+                    }
+                }
+
+                if (!cancelled) {
+                    setProfileContent({
+                        ownedGames, wishedGames, dlcCount: ownedDlcRows.length,
+                        screenshots, videos, discussions: discussionsPosts, guides, reviews, comments, achievements,
+                    });
+                }
+            } catch (error) {
+                console.log('Fetch profile content error:', error);
+            }
+        }
+
+        loadProfileContent();
+        return () => { cancelled = true; };
+    }, [user?.id, games, t]);
+
+    // Stable reference — PageSwitcher's effect depends on this and must not re-fire just
+    // because content changed (it would reset content back to the active PageSwitcher tab).
+    const handleMoveContentToParent = useCallback((node: React.ReactNode) => {
         setContent(node);
-    };
+    }, []);
+
     return (
-        <>
-            <Head></Head>
-            <div className="max-w-7xl mx-auto bg-background grid grid-cols-4 grid-rows-2">
-                {userBackgroundUrl ? <img src={userBackgroundUrl} alt="User background" className="w-full h-full object-cover col-span-4 rounded-br-md" /> : <div className="w-full h-full bg-gradient-to-br from-primary via-negative to-accent col-span-4 rounded-br-md"></div>}
-                <UserHeader className='col-span-3 h-40' userAvatarUrl='https://i.pravatar.cc/600' userName='test username' isOnline={true} about='lorem ipsum dolor sit amet consectetur.'></UserHeader>
-                <div className='py-4 pl-4 row-span-12'>
-                    <div className='sticky top-1 z-9'>
-                        <UserMenu onMoveContentToParent={handleMoveContentToParent} levelPoints={1250} gamesCount={10} bagesCount={10} whishesCount={10} screenshotsCount={10} reviewsCount={10} videosCount={10} guidesCount={10} friends={[{ name: 'name', isOnline: true, levelPoints: 1750, avatarUrl: 'https://i.pravatar.cc/100' }, { name: 'name', isOnline: false, levelPoints: 5345, avatarUrl: 'https://i.pravatar.cc/200' }, { name: 'name', isOnline: true, levelPoints: 1250, avatarUrl: 'https://i.pravatar.cc/300' }, { name: 'name', isOnline: true, levelPoints: 65445, avatarUrl: 'https://i.pravatar.cc/400' }, { name: 'name', isOnline: false, levelPoints: 15000, avatarUrl: 'https://i.pravatar.cc/700' }]}></UserMenu>
+        <div className="relative bg-background">
+            <PageGlows glows={glows} />
+            <div className="relative">
+                <Head></Head>
+                {loading || !user ? (
+                    <div className='h-screen flex justify-center items-center text-heading-1 text-typography'>{loading ? t('common.loading') : t('user.notFound')}</div>
+                ) : (
+                    <div className="max-w-[1464px] mx-auto">
+                        <img src={user.backgroundImage || "/mock/games/duck-simulator.jpg"} alt="" className="w-full h-[320px] object-cover rounded-b-[20px]" />
+                        <div className="px-5">
+                            <UserHeader
+                                className="pt-5"
+                                userName={user.name}
+                                userAvatarUrl={user.image}
+                                about={user.description}
+                                isOnline={true}
+                                isOwnProfile={isAuthenticated && user.id === userId}
+                            />
+                            <div className="grid grid-cols-4 gap-6 py-6">
+                                <div className="col-span-3">{content}</div>
+                                <div className="col-span-1">
+                                    <UserMenu
+                                        onMoveContentToParent={handleMoveContentToParent}
+                                        levelPoints={user.amountOfXp}
+                                        friends={friends}
+                                        {...profileContent}
+                                    ></UserMenu>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className='col-span-3 pb-4 flex-grow'>{content}</div>
+                )}
+                <Footer></Footer>
             </div>
-            <Footer></Footer>
-        </>
+        </div>
     );
 };
 

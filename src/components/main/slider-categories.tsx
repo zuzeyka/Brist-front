@@ -1,5 +1,6 @@
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { ChevronRightIcon } from "@/components/ui/icons";
 import GameCard, { CardProps } from "./game-card";
 
@@ -12,12 +13,13 @@ interface CategoriesProps {
 }
 
 const SliderCategories: React.FC<CategoriesProps> = ({ cards, lable, vertical }) => {
+    const { t } = useTranslation();
     return (
         <section className="flex flex-col gap-6">
             <div className="flex justify-between items-center">
                 <h2 className="font-manrope font-bold text-heading-1 text-typography">{lable}</h2>
-                <Link className="flex items-center gap-px font-artifakt font-semibold text-button-1 text-typography hover:text-primaryHover" to="/below-100">
-                    Дивитись більше<ChevronRightIcon />
+                <Link className="text-typography hover:text-primaryHover" to="/catalog" aria-label={t('common.viewMore')}>
+                    <ChevronRightIcon />
                 </Link>
             </div>
 

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { LayoutGridIcon, ListIcon, ChevronDownIcon } from 'lucide-react';
 import Head from '../main/head';
 import Search from '../main/search';
@@ -17,16 +18,16 @@ const glows = [
     { left: 4, top: 1200, large: true },
 ];
 
-const sortOptions: { id: string; label: string; compare?: (a: GameInShop, b: GameInShop) => number }[] = [
-    { id: 'relevance', label: 'За релевантністю' },
-    { id: 'price-asc', label: 'Спочатку дешевші', compare: (a, b) => discountedPrice(a.price, a.discount) - discountedPrice(b.price, b.discount) },
-    { id: 'price-desc', label: 'Спочатку дорожчі', compare: (a, b) => discountedPrice(b.price, b.discount) - discountedPrice(a.price, a.discount) },
-    { id: 'discount', label: 'За розміром знижки', compare: (a, b) => b.discount - a.discount },
-    { id: 'newest', label: 'Спочатку новіші', compare: (a, b) => new Date(b.dateOfRelease).getTime() - new Date(a.dateOfRelease).getTime() },
-    { id: 'name', label: 'За назвою (А-Я)', compare: (a, b) => a.name.localeCompare(b.name, 'uk') },
-];
-
 const Category: React.FC = () => {
+    const { t } = useTranslation();
+    const sortOptions: { id: string; label: string; compare?: (a: GameInShop, b: GameInShop) => number }[] = [
+        { id: 'relevance', label: t('shop.category.sortRelevance') },
+        { id: 'price-asc', label: t('shop.category.sortPriceAsc'), compare: (a, b) => discountedPrice(a.price, a.discount) - discountedPrice(b.price, b.discount) },
+        { id: 'price-desc', label: t('shop.category.sortPriceDesc'), compare: (a, b) => discountedPrice(b.price, b.discount) - discountedPrice(a.price, a.discount) },
+        { id: 'discount', label: t('shop.category.sortDiscount'), compare: (a, b) => b.discount - a.discount },
+        { id: 'newest', label: t('shop.category.sortNewest'), compare: (a, b) => new Date(b.dateOfRelease).getTime() - new Date(a.dateOfRelease).getTime() },
+        { id: 'name', label: t('shop.category.sortName'), compare: (a, b) => a.name.localeCompare(b.name, 'uk') },
+    ];
     const [searchParams] = useSearchParams();
     const [games, setGames] = useState<GameInShop[]>([]);
     const [genres, setGenres] = useState<Categories[]>([]);
@@ -105,7 +106,7 @@ const Category: React.FC = () => {
         setSelectedEvents((current) => current.includes(id) ? current.filter((e) => e !== id) : [...current, id]);
     };
 
-    const tier = priceTiers.find((t) => t.id === priceTier)!;
+    const tier = priceTiers.find((pt) => pt.id === priceTier)!;
     const sort = sortOptions.find((s) => s.id === sortId)!;
     const visible = useMemo(() => {
         const filtered = games
@@ -126,7 +127,7 @@ const Category: React.FC = () => {
                 <div className="max-w-[1464px] mx-auto pb-[120px] text-typography">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2.5">
-                            <span className="font-artifakt text-block-2 text-typographySecondary">Сортування:</span>
+                            <span className="font-artifakt text-block-2 text-typographySecondary">{t('wishlist.sorting')}</span>
                             <DropdownMenu>
                                 <DropdownMenuTrigger className="flex items-center gap-1 font-artifakt font-semibold text-button-2 hover:text-primaryHover">
                                     {sort.label}<ChevronDownIcon className="size-4" />
@@ -145,9 +146,9 @@ const Category: React.FC = () => {
                             </DropdownMenu>
                         </div>
                         <div className="flex items-center gap-2">
-                            <span className="font-artifakt text-block-2 text-typographySecondary">Вид:</span>
-                            <button type="button" aria-label="Сітка" onClick={() => setIsList(false)} className={!isList ? 'text-primary' : 'text-typographySecondary hover:text-typography'}><LayoutGridIcon className="size-5" /></button>
-                            <button type="button" aria-label="Список" onClick={() => setIsList(true)} className={isList ? 'text-primary' : 'text-typographySecondary hover:text-typography'}><ListIcon className="size-5" /></button>
+                            <span className="font-artifakt text-block-2 text-typographySecondary">{t('shop.category.view')}</span>
+                            <button type="button" aria-label={t('shop.category.grid')} onClick={() => setIsList(false)} className={!isList ? 'text-primary' : 'text-typographySecondary hover:text-typography'}><LayoutGridIcon className="size-5" /></button>
+                            <button type="button" aria-label={t('shop.category.list')} onClick={() => setIsList(true)} className={isList ? 'text-primary' : 'text-typographySecondary hover:text-typography'}><ListIcon className="size-5" /></button>
                         </div>
                     </div>
                     <div className="flex gap-6 items-start">
@@ -168,9 +169,9 @@ const Category: React.FC = () => {
                         />
                         <div className="flex-1 min-w-0">
                             {loading ? (
-                                <div className="h-96 flex items-center justify-center text-heading-2 text-typographySecondary">Завантаження...</div>
+                                <div className="h-96 flex items-center justify-center text-heading-2 text-typographySecondary">{t('common.loading')}</div>
                             ) : visible.length === 0 ? (
-                                <p className="py-16 text-center font-artifakt text-block-1 text-typographySecondary">Нічого не знайдено</p>
+                                <p className="py-16 text-center font-artifakt text-block-1 text-typographySecondary">{t('settings.nothingFound')}</p>
                             ) : isList ? (
                                 <div className="flex flex-col gap-3">
                                     {visible.map((game) => (

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import DlcList from './dlc-list';
 import Payment from '../payment';
 import MediaPlayer from './media-player';
@@ -56,6 +57,7 @@ export const GameTitle: React.FC<{ name: string; rate: number }> = ({ name, rate
 );
 
 const AboutGame: React.FC<AboutGameProps> = (props) => {
+    const { t } = useTranslation();
     const [expanded, setExpanded] = useState(false);
     const tags = expanded ? props.gameCategorys : props.gameCategorys.slice(0, VISIBLE_TAGS);
 
@@ -70,7 +72,7 @@ const AboutGame: React.FC<AboutGameProps> = (props) => {
                             <span key={category} className={cn(tag, 'px-3 py-1')}>{category}</span>
                         ))}
                         {props.gameCategorys.length > VISIBLE_TAGS && (
-                            <button type="button" aria-label="Усі теги" onClick={() => setExpanded(!expanded)} className={cn(tag, 'px-2 py-1 text-typography')}>
+                            <button type="button" aria-label={t('shop.about.allTags')} onClick={() => setExpanded(!expanded)} className={cn(tag, 'px-2 py-1 text-typography')}>
                                 <TagExpandIcon className={cn('size-4 transition', expanded && 'rotate-180')} />
                             </button>
                         )}
@@ -79,13 +81,13 @@ const AboutGame: React.FC<AboutGameProps> = (props) => {
                         <p className={cn('font-artifakt text-block-1 tracking-[-0.01em] text-typography', !expanded && 'line-clamp-3')}>
                             {props.gameDescription}
                         </p>
-                        <button type="button" aria-label={expanded ? 'Згорнути' : 'Розгорнути'} onClick={() => setExpanded(!expanded)} className="text-typography hover:text-primaryHover">
+                        <button type="button" aria-label={expanded ? t('shop.about.collapse') : t('shop.about.expand')} onClick={() => setExpanded(!expanded)} className="text-typography hover:text-primaryHover">
                             <ChevronDownIcon className={cn('size-10 transition', expanded && 'rotate-180')} />
                         </button>
                     </div>
                     <div className="flex flex-col gap-8 mt-9">
                         <BundleList bundles={props.bundles} contents={props.bundleContents} discountEnd={props.discountEnd} />
-                        <DlcList dlc={props.DLC} />
+                        <DlcList dlc={props.DLC} gameName={props.gameName} />
                         <ReviewList userData={props.users} reviewData={props.reviews} />
                     </div>
                 </div>

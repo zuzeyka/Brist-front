@@ -1,26 +1,28 @@
 import { BadgePercent, Check, UsersRound, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import Avatar from "@/components/ui/avatar/avatar";
 import { Button } from "@/components/ui/button";
 
 const Notifications: React.FC = () => {
+    const { t } = useTranslation();
     return (
         <div className="flex flex-col p-5 mx-auto w-full bg-card2 rounded-3xl max-w-[480px] text-typography text-sign-3">
             <div className="flex gap-4 justify-between">
                 <div className="my-auto text-heading-2 font-medium text-typography font-manrope">
-                    Сповіщення
+                    {t('header.notifications')}
                 </div>
             </div>
             <div className="flex flex-col items-start p-3 mt-4 w-full rounded-3xl bg-card1">
                 <div className="flex gap-5 justify-between text-typographySecondary w-full">
                     <div className="flex gap-1.5">
                         <BadgePercent></BadgePercent>
-                        <div className="my-auto">Знижки на Бажане</div>
+                        <div className="my-auto">{t('popups.notif.wishlistSale')}</div>
                     </div>
                     <div className="my-auto">22.10.2022</div>
                 </div>
-                <div className="mt-3.5 font-bold text-subheading-2">Название игры</div>
+                <div className="mt-3.5 font-bold text-subheading-2">{t('popups.notif.gameNamePlaceholder')}</div>
                 <div className="flex gap-1.5 items-center mt-3 whitespace-nowrap">
                     <Badge className="justify-center font-bold px-3 py-1.5 text-sign-4 text-background rounded-3xl bg-accent">
                         -40%
@@ -35,15 +37,15 @@ const Notifications: React.FC = () => {
                 <div className="flex gap-5 justify-between w-full whitespace-nowrap text-typographySecondary">
                     <div className="flex gap-3">
                         <UsersRound></UsersRound>
-                        <div className="my-auto">Друзі</div>
+                        <div className="my-auto">{t('user.menu.friends')}</div>
                     </div>
                     <div className="my-auto">22.10.2022</div>
                 </div>
                 <div className="flex gap-3.5 mt-3.5 text-base">
                     <Avatar src="" alt="avatar" className="shrink-0 rounded-full bg-typographySecondary h-[45px] w-[45px]" />
                     <div className="flex flex-col flex-1 justify-between">
-                        <div className="font-bold text-subheading-2">Юзернейм</div>
-                        <div className="mt-2 text-sign-2">Новий запит на дружбу</div>
+                        <div className="font-bold text-subheading-2">{t('popups.notif.username')}</div>
+                        <div className="mt-2 text-sign-2">{t('popups.notif.newFriendRequest')}</div>
                     </div>
                 </div>
             </div>
@@ -51,17 +53,17 @@ const Notifications: React.FC = () => {
                 <div className="flex gap-5 justify-between w-full text-typographySecondary whitespace-nowrap">
                     <div className="flex gap-3">
                         <UsersRound></UsersRound>
-                        <div className="my-auto">Друзі</div>
+                        <div className="my-auto">{t('user.menu.friends')}</div>
                     </div>
                     <div className="my-auto">22.10.2022</div>
                 </div>
                 <div className="flex gap-3.5 mt-3.5 text-base">
                     <Avatar src="" alt="avatar" className="shrink-0 rounded-full bg-typographySecondary h-[45px] w-[45px]" />
                     <div className="flex flex-col flex-1 justify-between">
-                        <div className="font-bold text-subheading-2">Юзернейм</div>
+                        <div className="font-bold text-subheading-2">{t('popups.notif.username')}</div>
                         <div className="flex items-center">
                             <Check className="h-4"></Check>
-                            <div className="mt-2 text-sign-2 text-positive">Ваш запит на дружбу прийнято</div>
+                            <div className="mt-2 text-sign-2 text-positive">{t('popups.notif.requestAccepted')}</div>
                         </div>
                     </div>
                 </div>
@@ -70,34 +72,34 @@ const Notifications: React.FC = () => {
                 <div className="flex gap-5 justify-between w-full text-typographySecondary">
                     <div className="flex gap-1.5">
                         <BadgePercent></BadgePercent>
-                        <div className="my-auto">Великий розпродаж</div>
+                        <div className="my-auto">{t('settings.notif.bigSale')}</div>
                     </div>
                     <div className="my-auto">22.10.2022</div>
                 </div>
-                <div className="mt-3.5 font-bold text-subheading-2">Зимовий розпродаж 2024</div>
-                <div className="mt-1 text-block-2">Знижки на ігри до 80% до 22.10.2022 </div>
+                <div className="mt-3.5 font-bold text-subheading-2">{t('popups.notif.winterSale2024')}</div>
+                <div className="mt-1 text-block-2">{t('popups.notif.gamesUpTo80Off')}</div>
             </div>
             <div className="flex flex-col p-3 mt-2 w-full rounded-3xl bg-card1">
                 <div className="flex gap-5 justify-between w-full whitespace-nowrap text-typographySecondary">
                     <div className="flex gap-3">
                         <UsersRound></UsersRound>
-                        <div className="my-auto">Друзі</div>
+                        <div className="my-auto">{t('user.menu.friends')}</div>
                     </div>
                     <div className="my-auto">22.10.2022</div>
                 </div>
                 <div className="flex gap-3.5 mt-3.5 text-base">
                     <Avatar src="" alt="avatar" className="shrink-0 rounded-full bg-typographySecondary h-[45px] w-[45px]" />
                     <div className="flex flex-col flex-1 justify-between">
-                        <div className="font-bold text-subheading-2">Юзернейм</div>
+                        <div className="font-bold text-subheading-2">{t('popups.notif.username')}</div>
                         <div className="flex items-center">
                             <X className="h-4"></X>
-                            <div className="mt-2 text-sign-2 text-negative">Ваш запит на дружбу відхилено</div>
+                            <div className="mt-2 text-sign-2 text-negative">{t('popups.notif.requestDeclined')}</div>
                         </div>
                     </div>
                 </div>
             </div>
             <Button className="justify-center self-center px-7 py-2.5 mt-4 text-button-2 text-primary font-semibold hover:text-primaryHover rounded-3xl bg-transparent hover:bg-cardLight25">
-                Очистити усі
+                {t('popups.notif.clearAll')}
             </Button>
         </div>
     );

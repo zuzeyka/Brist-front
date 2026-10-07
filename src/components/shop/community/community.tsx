@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Filters from './filters';
 import { BellPlusIcon, MoreHorizontalIcon, PlusIcon } from 'lucide-react';
 import News from './news';
@@ -12,6 +13,9 @@ import { GameGuide, GameNews, GamePosts, Screenshot, User, Video } from '@/share
 import { formatDate } from '../about/review-list';
 
 interface CommunityContent {
+    gameId: string;
+    gameGroupId: string;
+    onPostCreated: () => void;
     gameName: string;
     subscribersCount: number;
     onlineCount: number;
@@ -54,6 +58,7 @@ const sorters: Record<string, (a: FeedItem, b: FeedItem) => number> = {
 const secondaryIconButton = 'p-3 rounded-[20px] bg-secondary hover:bg-secondaryHover text-typography';
 
 const Community: React.FC<CommunityContent> = (props) => {
+    const { t } = useTranslation();
     const [creating, setCreating] = useState(false);
     const [sort, setSort] = useState('popular');
     const [section, setSection] = useState('всі');
@@ -117,7 +122,13 @@ const Community: React.FC<CommunityContent> = (props) => {
     if (creating) {
         return (
             <div className='py-4'>
-                <CreatePost gameName={props.gameName} cancel={() => setCreating(false)} />
+                <CreatePost
+                    gameId={props.gameId}
+                    gameGroupId={props.gameGroupId}
+                    gameName={props.gameName}
+                    cancel={() => setCreating(false)}
+                    onCreated={() => { setCreating(false); props.onPostCreated(); }}
+                />
             </div>
         );
     }
@@ -128,10 +139,10 @@ const Community: React.FC<CommunityContent> = (props) => {
                 <GameStats gameName={props.gameName} subscribersCount={props.subscribersCount} onlineCount={props.onlineCount} />
                 <div className='w-[348px] flex gap-3'>
                     <button type="button" onClick={() => setCreating(true)} className='flex-1 flex items-center justify-center gap-3 pl-4 pr-[26px] py-3 rounded-[20px] bg-primary hover:bg-primaryHover text-background font-artifakt font-semibold text-button-1'>
-                        <PlusIcon className='size-6' />Створити пост
+                        <PlusIcon className='size-6' />{t('shop.community.createPost')}
                     </button>
-                    <button type="button" aria-label="Підписатися на сповіщення" className={secondaryIconButton}><BellPlusIcon className='size-6' /></button>
-                    <button type="button" aria-label="Більше" className={secondaryIconButton}><MoreHorizontalIcon className='size-6' /></button>
+                    <button type="button" aria-label={t('shop.community.subscribeNotifications')} className={secondaryIconButton}><BellPlusIcon className='size-6' /></button>
+                    <button type="button" aria-label={t('shop.about.more')} className={secondaryIconButton}><MoreHorizontalIcon className='size-6' /></button>
                 </div>
             </div>
             <div className='flex gap-6 items-start'>
@@ -151,7 +162,7 @@ const Community: React.FC<CommunityContent> = (props) => {
                             </div>
                         );
                     })}
-                    {!feed.length && <p className='py-16 text-center font-artifakt text-block-1 text-typographySecondary'>Тут поки нічого немає</p>}
+                    {!feed.length && <p className='py-16 text-center font-artifakt text-block-1 text-typographySecondary'>{t('shop.community.nothingYet')}</p>}
                 </div>
                 <aside className='w-[348px] shrink-0 sticky top-6'>
                     <Filters onCommandChange={setSection} onSelectChange={setSort} onSearchChange={setSearch} />

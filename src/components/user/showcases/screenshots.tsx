@@ -1,13 +1,15 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 
 
 const Screenshots: React.FC<{ screenshotsUrl: string[] }> = ({ screenshotsUrl }) => {
+    const { t } = useTranslation();
     if (screenshotsUrl.length >= 1) {
         return (
             <div className="bg-card2 rounded-2xl w-full p-4">
                 <div className="flex flex-col space-y-4">
-                    <h2 className="text-heading-1 font-bold font-manrope">Галерея скріншотів</h2>
+                    <h2 className="text-heading-1 font-bold font-manrope">{t('user.showcase.screenshotsGallery')}</h2>
                     <img className="w-full h-96 object-cover rounded-2xl" src={screenshotsUrl[0]} alt="Game screenshot"></img>
                     {screenshotsUrl.length == 2 ? (<img className="w-full h-96 object-cover rounded-2xl" src={screenshotsUrl[1]} alt="Game screenshot"></img>) : (
                         <div className="flex space-x-2">

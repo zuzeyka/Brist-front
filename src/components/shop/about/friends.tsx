@@ -1,5 +1,6 @@
 import Avatar from '@/components/ui/avatar/avatar';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { UserData } from './about-game';
 import { useAuth } from '@/components/authorization/auth-context';
 
@@ -31,12 +32,13 @@ const FriendsBox: React.FC<{ title: string; friends: UserData[] }> = ({ title, f
 };
 
 const Friends: React.FC<{ wishedFriends: UserData[], ownedFriends: UserData[] }> = ({ wishedFriends, ownedFriends }) => {
+    const { t } = useTranslation();
     const { isAuthenticated } = useAuth();
     if (!isAuthenticated) return null;
     return (
         <div className='flex flex-col gap-5'>
-            <FriendsBox title='Друзів бажають цю гру' friends={wishedFriends} />
-            <FriendsBox title='Друзів мають цю гру' friends={ownedFriends} />
+            <FriendsBox title={t('shop.about.friendsWish')} friends={wishedFriends} />
+            <FriendsBox title={t('shop.about.friendsOwn')} friends={ownedFriends} />
         </div>
     );
 };

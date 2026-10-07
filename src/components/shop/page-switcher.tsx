@@ -24,7 +24,7 @@ const PageSwitcher: React.FC<PageSwitcherProps> = (props) => {
     const pageContent = (<>{activePage.content}</>);
     useEffect(() => {
         props.onMoveContentToParent(props.pages[activePageIndex].content);
-    }, [activePageIndex, props.onMoveContentToParent]);
+    }, [activePageIndex, props.pages, props.onMoveContentToParent]);
     return (
         <>
             <ul className={props.vertical ? "flex flex-col space-y-2" : "flex gap-8"}>

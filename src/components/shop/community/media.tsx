@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { cardClass, isVideoUrl, PostProps, textClass } from './post';
 import PostHeader from './post-header';
 import PostFooter from './post-footer';
@@ -7,6 +8,7 @@ import { PlayIcon } from '@/components/ui/icons';
 // "Screenshot Card" / "Video Card": 480px media with the caption under it.
 // Videos show their poster with a play button until clicked.
 const Media: React.FC<PostProps> = (props) => {
+    const { t } = useTranslation();
     const [playing, setPlaying] = useState(false);
     const video = isVideoUrl(props.postMediaUrl);
 
@@ -19,7 +21,7 @@ const Media: React.FC<PostProps> = (props) => {
                         <video className='w-full h-[480px] rounded-2xl bg-black' src={props.postMediaUrl} poster={props.postPosterUrl} controls autoPlay />
                     )}
                     {video && !playing && (
-                        <button type="button" aria-label="Відтворити" onClick={(e) => { e.stopPropagation(); setPlaying(true); }} className='relative w-full h-[480px] rounded-2xl overflow-hidden bg-black'>
+                        <button type="button" aria-label={t('shop.community.play')} onClick={(e) => { e.stopPropagation(); setPlaying(true); }} className='relative w-full h-[480px] rounded-2xl overflow-hidden bg-black'>
                             {props.postPosterUrl
                                 ? <img className='size-full object-cover' src={props.postPosterUrl} alt="" />
                                 : <video className='size-full object-cover' src={props.postMediaUrl} preload="metadata" muted />}
@@ -33,7 +35,7 @@ const Media: React.FC<PostProps> = (props) => {
                     {props.postText && <p className={textClass}>{props.postText}</p>}
                 </div>
             </div>
-            <PostFooter postLikes={props.postLikes} postComments={props.postComments} isShared={true} />
+            <PostFooter postLikes={props.postLikes} postComments={props.postComments} postDate={props.postDate} isShared={props.isShared ?? true} />
         </article>
     );
 };

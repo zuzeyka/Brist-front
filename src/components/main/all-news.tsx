@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Head from './head';
 import Search from './search';
 import Footer from './footer';
@@ -16,6 +17,7 @@ const glows = [
 // for the top-nav "Новини" link (it only ever opened per-game or Library-home
 // news carousels before).
 const AllNews: React.FC = () => {
+    const { t } = useTranslation();
     const [news, setNews] = useState<GameNews[]>([]);
     const [games, setGames] = useState<GameInShop[]>([]);
     const [loading, setLoading] = useState(true);
@@ -52,11 +54,11 @@ const AllNews: React.FC = () => {
                 <Head />
                 <Search />
                 <div className="max-w-[1464px] mx-auto pb-[120px] text-typography">
-                    <h1 className="text-heading-1 font-manrope font-bold mb-6 px-2">Новини</h1>
+                    <h1 className="text-heading-1 font-manrope font-bold mb-6 px-2">{t('allNews.title')}</h1>
                     {loading ? (
-                        <p className="px-2 text-typographySecondary">Завантаження...</p>
+                        <p className="px-2 text-typographySecondary">{t('allNews.loading')}</p>
                     ) : sorted.length === 0 ? (
-                        <p className="px-2 text-typographySecondary">Новин поки немає.</p>
+                        <p className="px-2 text-typographySecondary">{t('allNews.empty')}</p>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {sorted.map((item) => {

@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from '@/App.tsx'
 import '@/index.css'
+import '@/shared/lib/i18n'
 import { installMockApi } from '@/shared/lib/mock-api'
 
 if (import.meta.env.VITE_USE_MOCK_API !== 'false') {

@@ -5,6 +5,7 @@ import Search from "./search";
 import TopDeals from "./top-deals";
 import SliderCategories from "./slider-categories";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { GameInShopModel } from "@/shared/lib/interfaces";
 import { discountedPrice } from "./game-price";
 import PageGlows, { Glow } from "@/components/ui/page-glows";
@@ -25,6 +26,7 @@ const formatDate = (value?: Date) => {
 };
 
 const Main: React.FC = () => {
+    const { t } = useTranslation();
     const [games, setGames] = useState<GameInShopModel[]>([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -88,13 +90,13 @@ const Main: React.FC = () => {
                             <TopDeals games={topDeals.map(toCard)} />
                         </div>
                         <div className="max-w-[1464px] mx-auto mt-16 pb-[200px] flex flex-col gap-16">
-                            <SliderCategories vertical={false} lable="Особливі пропозиції" cards={specialOffers.map(toCard)} />
-                            <SliderCategories vertical={true} lable="Рекомендовані вам" cards={recommended.map(toCard)} />
-                            <SliderCategories vertical={true} lable="До 100₴" cards={under100.map(toCard)} />
+                            <SliderCategories vertical={false} lable={t('main.specialOffers')} cards={specialOffers.map(toCard)} />
+                            <SliderCategories vertical={true} lable={t('main.recommended')} cards={recommended.map(toCard)} />
+                            <SliderCategories vertical={true} lable={t('main.under100')} cards={under100.map(toCard)} />
                             <div className="grid grid-cols-3 gap-6">
-                                <Categories lable="Хіти продажу" cards={bestSellers.map(toCard)} />
-                                <Categories lable="Нові релізи" cards={newestReleases.map(toCard)} />
-                                <Categories lable="Безкоштовні" cards={freeGames.map(toCard)} />
+                                <Categories lable={t('main.bestSellers')} cards={bestSellers.map(toCard)} />
+                                <Categories lable={t('main.newestReleases')} cards={newestReleases.map(toCard)} />
+                                <Categories lable={t('main.free')} cards={freeGames.map(toCard)} />
                             </div>
                         </div>
                     </>

@@ -1,36 +1,60 @@
-import { CircleEllipsisIcon, MailIcon, PencilLineIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { MailIcon, MoreHorizontalIcon, PencilLineIcon, UserPlusIcon } from "lucide-react";
 import Avatar from "@/components/ui/avatar/avatar";
 
 interface UserHeaderProps {
     className?: string;
     userName: string;
     userAvatarUrl?: string;
-    userBackgroundUrl?: string;
     about?: string;
     isOnline: boolean;
+    isOwnProfile: boolean;
 }
 
+const secondaryIconButton = 'p-3 rounded-[20px] bg-secondary hover:bg-secondaryHover text-typography';
+
+// No friend-request backend yet — cycles through the three Figma states locally (not persisted).
+type FriendStatus = 'none' | 'pending' | 'friends';
+
 const UserHeader: React.FC<UserHeaderProps> = (props) => {
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+    const [friendStatus, setFriendStatus] = useState<FriendStatus>('none');
+    const friendButton: Record<FriendStatus, { label: string; next: FriendStatus; className: string }> = {
+        none: { label: t('user.addFriend'), next: 'pending', className: 'bg-primary hover:bg-primaryHover text-background' },
+        pending: { label: t('user.cancelRequest'), next: 'none', className: 'bg-accent hover:bg-accentHover text-background' },
+        friends: { label: t('user.removeFriend'), next: 'none', className: 'bg-secondary hover:bg-secondaryHover text-typography' },
+    };
+    const friend = friendButton[friendStatus];
     return (
         <div className={props.className}>
-            <div className="flex space-x-4 relative -translate-x-1/2 -translate-y-1/2 left-1/2 top-0">
-                <Avatar src={props.userAvatarUrl} alt="User avatar" className="w-48 h-48"></Avatar>
-                <div className="flex justify-between w-full">
-                    <div className="flex flex-col justify-end mb-4 font-manrope">
+            <div className="flex items-end gap-4">
+                <Avatar src={props.userAvatarUrl} alt={t('settings.avatarAlt')} className="w-48 h-48 -mt-24 shrink-0 border-4 border-background rounded-full"></Avatar>
+                <div className="flex items-end justify-between w-full pb-4">
+                    <div className="flex flex-col font-manrope">
                         <h1 className="text-heading-2 font-bold">{props.userName}</h1>
-                        <p className="text-subheading-2 text-accent">{props.isOnline ? 'Online' : 'Offline'}</p>
+                        <p className="text-subheading-2 text-accent">{props.isOnline ? t('user.online') : t('user.offline')}</p>
                     </div>
-                    <div className="flex flex-col justify-end mb-4">
-                        {false ? (<div className="flex"> \\ to do
-                            <Button className="w-2xl rounded-2xl bg-primary text-black border border-black mx-2">Видалити з друзів</Button>
-                            <Button className="w-full rounded-2xl bg-gray-100 text-black border border-black mx-2"><MailIcon /></Button>
-                            <Button className="w-full rounded-2xl bg-gray-100 text-black border border-black"><CircleEllipsisIcon /></Button>
-                        </div>) : (<Button className="w-2xl rounded-2xl bg-card3 text-typography hover:bg-cardLight12 mx-2 space-x-2"><PencilLineIcon></PencilLineIcon><span>Редагувати профіль</span></Button>)}
+                    <div className="flex items-center gap-3">
+                        {props.isOwnProfile ? (
+                            <button type="button" onClick={() => navigate('/settings')} className="flex items-center gap-2 px-[26px] py-3 rounded-[20px] bg-card3 hover:bg-cardLight12 text-typography font-artifakt font-semibold text-button-1">
+                                <PencilLineIcon className="size-5" />{t('user.editProfile')}
+                            </button>
+                        ) : (
+                            <>
+                                <button type="button" onClick={() => setFriendStatus(friend.next)} className={`flex items-center gap-2 px-[26px] py-3 rounded-[20px] font-artifakt font-semibold text-button-1 ${friend.className}`}>
+                                    {friendStatus === 'none' && <UserPlusIcon className="size-5" />}{friend.label}
+                                </button>
+                                <button type="button" aria-label={t('user.sendMessage')} className={secondaryIconButton}><MailIcon className="size-6" /></button>
+                                <button type="button" aria-label={t('shop.about.more')} className={secondaryIconButton}><MoreHorizontalIcon className="size-6" /></button>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
-            <div className="relative -translate-x-1/2 -translate-y-1/2 left-1/2 bottom-16 text-block-2">{props.about}</div>
+            {props.about && <p className="mt-4 font-artifakt text-block-2 tracking-[-0.01em] text-typographySecondary">{props.about}</p>}
         </div>
     );
 };

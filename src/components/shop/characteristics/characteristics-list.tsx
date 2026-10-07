@@ -1,5 +1,6 @@
 import { SystemRequirement } from '@/shared/lib/interfaces';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface CharacteristicsListProps {
     className?: string;
@@ -9,13 +10,14 @@ interface CharacteristicsListProps {
 
 // One column of system requirements.
 const CharacteristicsList: React.FC<CharacteristicsListProps> = ({ className, title, data }) => {
+    const { t } = useTranslation();
     if (!data) return null;
     const rows = [
-        ['Версія системи', data.os],
+        [t('shop.characteristics.osVersion'), data.os],
         ['CPU', data.processor],
-        ['Пам’ять', data.ram],
+        [t('shop.characteristics.memory'), data.ram],
         ['GPU', data.video],
-        ['Обсяг пам’яті', data.freeDiskSpace],
+        [t('shop.characteristics.diskSpace'), data.freeDiskSpace],
     ];
     return (
         <div className={"flex flex-col gap-5 text-typography" + (className ? ' ' + className : '')}>

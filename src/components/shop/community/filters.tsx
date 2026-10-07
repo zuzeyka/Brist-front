@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface FiltersProps {
@@ -8,17 +9,21 @@ interface FiltersProps {
     onSearchChange?: (value: string) => void;
 }
 
-export const sections = [
-    { value: 'всі', label: 'Усі розділи' },
-    { value: 'пости', label: 'Форум' },
-    { value: 'скріншоти', label: 'Скріншоти' },
-    { value: 'відео', label: 'Відео' },
-    { value: 'гайди', label: 'Гайди' },
-    { value: 'новини', label: 'Новини' },
-];
+// `value` is a stable internal identifier shared with Community's Section type
+// for matching feed items — only `label` (the display text) is translated.
+export const sectionValues = ['всі', 'пости', 'скріншоти', 'відео', 'гайди', 'новини'] as const;
 
 // Sorting, search and section tabs ("Tabs lvl3") in the community sidebar.
 const Filters: React.FC<FiltersProps> = ({ className, onSelectChange, onCommandChange, onSearchChange }) => {
+    const { t } = useTranslation();
+    const sections = [
+        { value: 'всі', label: t('shop.community.allSections') },
+        { value: 'пости', label: t('shop.community.forum') },
+        { value: 'скріншоти', label: t('shop.community.screenshots') },
+        { value: 'відео', label: t('shop.community.videos') },
+        { value: 'гайди', label: t('shop.community.guides') },
+        { value: 'новини', label: t('shop.community.news') },
+    ];
     const [sort, setSort] = useState('popular');
     const [section, setSection] = useState('всі');
     const sectionLabel = sections.find((s) => s.value === section)!.label;
@@ -27,22 +32,22 @@ const Filters: React.FC<FiltersProps> = ({ className, onSelectChange, onCommandC
         <div className={"flex flex-col gap-4 p-5 bg-card2 rounded-[20px] font-artifakt text-typography" + (className ? ' ' + className : '')}>
             <div className='flex flex-col gap-2'>
                 <div className='flex items-center gap-2.5'>
-                    <span className="text-block-2 tracking-[-0.01em] text-typographySecondary">Сортування:</span>
+                    <span className="text-block-2 tracking-[-0.01em] text-typographySecondary">{t('wishlist.sorting')}</span>
                     <Select value={sort} onValueChange={(value) => { setSort(value); onSelectChange(value); }}>
                         <SelectTrigger className="w-auto h-auto p-0 gap-0.5 !bg-transparent border-0 !text-typography !text-button-2 font-semibold" id="sort">
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent className='!bg-card2 !text-typography !font-artifakt'>
-                            <SelectItem value="popular">Популярні</SelectItem>
-                            <SelectItem value="recent">Нові</SelectItem>
-                            <SelectItem value="old">Старі</SelectItem>
+                            <SelectItem value="popular">{t('shop.community.sortPopular')}</SelectItem>
+                            <SelectItem value="recent">{t('shop.community.sortRecent')}</SelectItem>
+                            <SelectItem value="old">{t('shop.community.sortOldItems')}</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
                 <input
                     type="search"
                     onChange={(e) => onSearchChange?.(e.target.value)}
-                    placeholder={`Пошук: ${sectionLabel}`}
+                    placeholder={t('shop.community.searchIn', { section: sectionLabel })}
                     className='w-full px-4 py-2.5 rounded-[22px] border border-secondary bg-background40 text-sign-2 tracking-[-0.01em] placeholder:text-typographySecondary focus:outline-none focus:border-primary'
                 />
             </div>

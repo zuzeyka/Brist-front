@@ -5,7 +5,7 @@ import "./level-icon.css";
 const Game: React.FC<{ levelPoints: number, small?: boolean }> = ({ levelPoints, small }) => {
     let imageName = '';
     let level = Math.floor(levelPoints / 100);
-    if (level >= 1 && level <= 19) {
+    if (level <= 19) {
         imageName = 'Polygon1-19';
     } else if (level >= 20 && level <= 39) {
         imageName = 'Polygon20-39';
@@ -23,14 +23,9 @@ const Game: React.FC<{ levelPoints: number, small?: boolean }> = ({ levelPoints,
         imageName = 'Polygon100';
     }
 
-    let imageUrl = `/src/assets/svg/${imageName}`;
-    if (small) {
-        imageUrl += 'mini';
-    }
-    imageUrl += '.svg';
-    console.log(imageUrl);
+    const className = small ? `${imageName}mini` : imageName;
     return (
-        <div className={`${imageName} ${level > 99 ? 'w-12' : 'w-11'} h-12 bg-center bg-cover bg-no-repeat flex justify-center items-center`}>
+        <div className={`${className} ${level > 99 ? 'w-12' : 'w-11'} h-12 bg-center bg-cover bg-no-repeat flex justify-center items-center`}>
             <span className="sign-1">{Math.floor(levelPoints / 100)}</span>
         </div>
     );

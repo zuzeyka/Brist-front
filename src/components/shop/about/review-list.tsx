@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Avatar from '@/components/ui/avatar/avatar';
 import { MoreHorizontalIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -30,17 +31,19 @@ export const formatDate = (value: Date | string) => {
 
 const chip = 'flex items-center gap-2 rounded-lg bg-cardLight12 px-2 py-1 font-artifakt font-semibold text-button-2 text-typographySecondary';
 
-const ReviewCard: React.FC<{ review: Discussion; user?: User }> = ({ review, user }) => (
+const ReviewCard: React.FC<{ review: Discussion; user?: User }> = ({ review, user }) => {
+    const { t } = useTranslation();
+    return (
     <article className='flex flex-col gap-[30px] bg-card1 p-5 rounded-[20px] text-typography'>
         <div className="flex items-start justify-between">
             <div className="flex items-center gap-4">
-                <Avatar alt="" src={user?.image} className='size-14' />
+                <Avatar alt="" src={user?.image} name={user?.name} className='size-14' />
                 <div className="flex flex-col gap-3">
-                    <p className="font-artifakt font-bold text-subheading-1">{user?.name ?? 'Гравець'}</p>
+                    <p className="font-artifakt font-bold text-subheading-1">{user?.name ?? t('shop.about.player')}</p>
                     <StarRating rate={review.rate} />
                 </div>
             </div>
-            <button type="button" aria-label="Більше" className="text-typography hover:text-primaryHover">
+            <button type="button" aria-label={t('shop.about.more')} className="text-typography hover:text-primaryHover">
                 <MoreHorizontalIcon className="size-6" />
             </button>
         </div>
@@ -53,9 +56,11 @@ const ReviewCard: React.FC<{ review: Discussion; user?: User }> = ({ review, use
             <p className="font-artifakt text-sign-2 tracking-[-0.01em] text-typographySecondary">{formatDate(review.createdAt)}</p>
         </div>
     </article>
-);
+    );
+};
 
 const ReviewList: React.FC<ReviewListProps> = (props) => {
+    const { t } = useTranslation();
     const [showMore, setShowMore] = useState(false);
     const [selectedSort, setSelectedSort] = useState<string>('popular');
 
@@ -70,24 +75,24 @@ const ReviewList: React.FC<ReviewListProps> = (props) => {
     return (
         <section className={"flex flex-col items-center gap-5" + (props.className ? ' ' + props.className : '')}>
             <div className='w-full flex items-center justify-between'>
-                <h2 className='font-manrope font-bold text-heading-1 text-typography'>Рецензії</h2>
+                <h2 className='font-manrope font-bold text-heading-1 text-typography'>{t('shop.about.reviews')}</h2>
                 <button type="button" className='h-10 px-5 rounded-[20px] bg-primary hover:bg-primaryHover text-background font-artifakt font-semibold text-button-2'>
-                    Написати рецензію
+                    {t('shop.about.writeReview')}
                 </button>
             </div>
             <div className='w-full flex flex-col gap-3'>
                 <div className='flex items-center gap-2.5'>
-                    <span className='font-artifakt text-block-2 tracking-[-0.01em] text-typographySecondary'>Сортування:</span>
+                    <span className='font-artifakt text-block-2 tracking-[-0.01em] text-typographySecondary'>{t('wishlist.sorting')}</span>
                     <Select value={selectedSort} onValueChange={setSelectedSort}>
                         <SelectTrigger className="w-auto h-auto p-0 gap-0.5 !bg-transparent border-0 !text-typography !text-button-2 !font-artifakt font-semibold" id="sort">
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent className='!bg-card2 !text-typography !font-artifakt'>
-                            <SelectItem value="popular">Спочатку популярні</SelectItem>
-                            <SelectItem value="new">Спочатку нові</SelectItem>
-                            <SelectItem value="old">Спочатку старі</SelectItem>
-                            <SelectItem value="positive">Спочатку позитивні</SelectItem>
-                            <SelectItem value="negative">Спочатку негативні</SelectItem>
+                            <SelectItem value="popular">{t('shop.about.sortPopular')}</SelectItem>
+                            <SelectItem value="new">{t('shop.about.sortNew')}</SelectItem>
+                            <SelectItem value="old">{t('shop.about.sortOld')}</SelectItem>
+                            <SelectItem value="positive">{t('shop.about.sortPositive')}</SelectItem>
+                            <SelectItem value="negative">{t('shop.about.sortNegative')}</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -100,7 +105,7 @@ const ReviewList: React.FC<ReviewListProps> = (props) => {
                 </div>
             </div>
             {!showMore && reviews.length > 4 && (
-                <button type="button" aria-label="Показати більше" onClick={() => setShowMore(true)} className="text-typography hover:text-primaryHover">
+                <button type="button" aria-label={t('shop.about.showMore')} onClick={() => setShowMore(true)} className="text-typography hover:text-primaryHover">
                     <ChevronDownIcon className="size-10" />
                 </button>
             )}

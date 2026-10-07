@@ -1,6 +1,7 @@
 import Avatar from "@/components/ui/avatar/avatar";
 import { BellIcon, SettingsIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from '@/components/authorization/auth-context';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Notifications from "../popups/notifications";
@@ -9,14 +10,15 @@ import { cn } from "@/shared/lib/utils";
 const iconButton = "bg-cardLight12 hover:bg-cardLight25 p-3.5 rounded-[20px] text-typography";
 
 const Head: React.FC = () => {
-    const { isAuthenticated } = useAuth();
+    const { t } = useTranslation();
+    const { isAuthenticated, userName, userAvatarUrl } = useAuth();
     const currentPage = window.location.pathname.split('/')[1];
     const section = currentPage === 'library' ? 'library' : currentPage === 'chat' ? 'chat' : 'shop';
 
     const tabs = [
-        { id: 'shop', label: 'Крамниця', to: '/' },
-        { id: 'library', label: 'Бібліотека', to: isAuthenticated ? '/library' : '/login' },
-        { id: 'chat', label: 'Чат', to: isAuthenticated ? '/chat' : '/login' },
+        { id: 'shop', label: t('header.store'), to: '/' },
+        { id: 'library', label: t('header.library'), to: isAuthenticated ? '/library' : '/login' },
+        { id: 'chat', label: t('header.chat'), to: isAuthenticated ? '/chat' : '/login' },
     ];
 
     return (
@@ -45,25 +47,25 @@ const Head: React.FC = () => {
                 </nav>
                 {isAuthenticated ? (
                     <div className="flex items-center gap-2">
-                        <Link className={iconButton} to="/settings" aria-label="Налаштування">
+                        <Link className={iconButton} to="/settings" aria-label={t('header.settings')}>
                             <SettingsIcon className="h-6 w-6" />
                         </Link>
                         <DropdownMenu>
-                            <DropdownMenuTrigger className={iconButton} aria-label="Сповіщення">
+                            <DropdownMenuTrigger className={iconButton} aria-label={t('header.notifications')}>
                                 <BellIcon className="h-6 w-6" />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-auto bg-card2">
                                 <Notifications />
                             </DropdownMenuContent>
                         </DropdownMenu>
-                        <Avatar alt="Профіль" src="" className="size-[52px]" />
+                        <Avatar alt={t('header.profile')} src={userAvatarUrl ?? ''} name={userName} className="size-[52px]" />
                     </div>
                 ) : (
                     <Link
                         to="/login"
                         className="bg-secondary hover:bg-secondaryHover rounded-[20px] px-6 py-3.5 font-artifakt font-semibold text-button-2 text-typography"
                     >
-                        Увійти
+                        {t('header.login')}
                     </Link>
                 )}
             </div>

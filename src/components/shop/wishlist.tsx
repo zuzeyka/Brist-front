@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Head from '../main/head';
 import Search from '../main/search';
 import Footer from '../main/footer';
@@ -14,6 +15,7 @@ const glows = [
 ];
 
 const Wishlist: React.FC = () => {
+    const { t } = useTranslation();
     const [games, setGames] = useState<GameInShop[]>([]);
     const [genres, setGenres] = useState<Categories[]>([]);
     const [categoriesForGame, setCategoriesForGame] = useState<CategoryForGame[]>([]);
@@ -79,7 +81,7 @@ const Wishlist: React.FC = () => {
         setSelectedEvents((current) => current.includes(id) ? current.filter((e) => e !== id) : [...current, id]);
     };
 
-    const tier = priceTiers.find((t) => t.id === priceTier)!;
+    const tier = priceTiers.find((pt) => pt.id === priceTier)!;
     const visible = useMemo(() => games
         .filter((g) => !search || g.name.toLowerCase().includes(search.trim().toLowerCase()))
         .filter((g) => tier.test(g.price))
@@ -107,7 +109,7 @@ const Wishlist: React.FC = () => {
                 <Head />
                 <Search />
                 <div className="max-w-[1464px] mx-auto pb-[120px] text-typography">
-                    <h1 className="font-manrope font-bold text-heading-1 mb-6">Мій список бажаного</h1>
+                    <h1 className="font-manrope font-bold text-heading-1 mb-6">{t('wishlist.title')}</h1>
                     <div className="flex gap-6 items-start">
                         <FilterSidebar
                             genres={genres}
@@ -129,18 +131,18 @@ const Wishlist: React.FC = () => {
                                 <input
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
-                                    placeholder="Пошук у Бажаному..."
+                                    placeholder={t('wishlist.searchPlaceholder')}
                                     className="flex-1 max-w-md px-4 py-2.5 rounded-[22px] border border-secondary bg-background40 text-sign-2 placeholder:text-typographySecondary focus:outline-none focus:border-primary"
                                 />
                                 <div className="flex items-center gap-2.5">
-                                    <span className="font-artifakt text-block-2 text-typographySecondary">Сортування:</span>
-                                    <span className="font-artifakt font-semibold text-button-2">Спочатку знижки</span>
+                                    <span className="font-artifakt text-block-2 text-typographySecondary">{t('wishlist.sorting')}</span>
+                                    <span className="font-artifakt font-semibold text-button-2">{t('wishlist.sortDiscountsFirst')}</span>
                                 </div>
                             </div>
                             {loading ? (
-                                <div className="h-96 flex items-center justify-center text-heading-2 text-typographySecondary">Завантаження...</div>
+                                <div className="h-96 flex items-center justify-center text-heading-2 text-typographySecondary">{t('common.loading')}</div>
                             ) : wishedGames.length === 0 ? (
-                                <p className="py-16 text-center font-artifakt text-block-1 text-typographySecondary">Нічого не знайдено</p>
+                                <p className="py-16 text-center font-artifakt text-block-1 text-typographySecondary">{t('settings.nothingFound')}</p>
                             ) : (
                                 <div className="flex flex-col gap-4">
                                     {wishedGames.map((game) => <Game key={game.name} game={game} />)}

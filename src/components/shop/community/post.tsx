@@ -15,6 +15,8 @@ export interface PostProps {
     postLikes: number;
     postComments: number;
     className?: string;
+    // Preview cards (Library home carousels) show the date instead of a share button.
+    isShared?: boolean;
 }
 
 export const isVideoUrl = (url?: string) => !!url && /\.(mp4|webm)(\?|$)/i.test(url);
@@ -36,7 +38,7 @@ const Post: React.FC<PostProps> = (props) => (
                 {isVideoUrl(props.postMediaUrl) && <video className='w-full h-[480px] rounded-2xl bg-black' src={props.postMediaUrl} poster={props.postPosterUrl} controls />}
             </div>
         </div>
-        <PostFooter postLikes={props.postLikes} postComments={props.postComments} isShared={true} />
+        <PostFooter postLikes={props.postLikes} postComments={props.postComments} postDate={props.postDate} isShared={props.isShared ?? true} />
     </article>
 );
 

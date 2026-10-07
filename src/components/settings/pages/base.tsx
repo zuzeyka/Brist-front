@@ -6,140 +6,252 @@ import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { InputField } from "@/components/ui/input-field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { setStoredLanguage } from "@/shared/lib/i18n";
 
-interface BaseProps {
-    avaterUrl?: string;
-    backgroundUrl?: string;
+interface LoadedUser {
     name: string;
     email: string;
-    about: string;
+    description: string;
+    image: string | null;
+    backgroundImage: string | null;
 }
 
-const Base: React.FC<BaseProps> = (props) => {
-    const [backgroundUrl, setBackgroundUrl] = useState(props.backgroundUrl);
-    const [avatarUrl, setAvatarUrl] = useState(props.avaterUrl);
+const Base: React.FC = () => {
+    const { t, i18n } = useTranslation();
+    const { userId, logout, refreshUser } = useAuth();
+    const [loaded, setLoaded] = useState<LoadedUser | null>(null);
+    const [backgroundUrl, setBackgroundUrl] = useState<string | undefined>(undefined);
+    const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [about, setAbout] = useState('');
     const [emailChanged, setEmailChanged] = useState(false);
-    const { logout } = useAuth();
+    const [saving, setSaving] = useState(false);
+    const [saveError, setSaveError] = useState('');
+    const [saved, setSaved] = useState(false);
+    const [avatarUploading, setAvatarUploading] = useState(false);
+    const [avatarError, setAvatarError] = useState('');
+    const [backgroundUploading, setBackgroundUploading] = useState(false);
+    const [backgroundError, setBackgroundError] = useState('');
 
-    const handleAvatarChange = (fileUrl: string) => {
-        setAvatarUrl(fileUrl);
+    useEffect(() => {
+        if (!userId) return;
+        let cancelled = false;
+        fetch(`http://localhost:5049/api/User/${userId}`, { credentials: 'include' })
+            .then((res) => (res.ok ? res.json() : undefined))
+            .then((data) => {
+                if (cancelled || !data) return;
+                const user: LoadedUser = { name: data.name ?? '', email: data.email ?? '', description: data.description ?? '', image: data.image ?? null, backgroundImage: data.backgroundImage ?? null };
+                setLoaded(user);
+                setName(user.name);
+                setEmail(user.email);
+                setAbout(user.description);
+                setAvatarUrl(user.image ?? undefined);
+                setBackgroundUrl(user.backgroundImage ?? undefined);
+            })
+            .catch(() => { });
+        return () => { cancelled = true; };
+    }, [userId]);
+
+    const handleAvatarFileSelected = async (file: File) => {
+        if (!userId) return;
+        setAvatarUploading(true);
+        setAvatarError('');
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            const response = await fetch(`http://localhost:5049/api/User/${userId}/avatar`, {
+                method: 'PUT',
+                credentials: 'include',
+                body: formData,
+            });
+            if (!response.ok) {
+                setAvatarError(t('settings.imageUploadError'));
+                return;
+            }
+            const updated = await response.json();
+            setAvatarUrl(updated.image ?? undefined);
+            setLoaded((prev) => (prev ? { ...prev, image: updated.image ?? null } : prev));
+            await refreshUser();
+        } catch {
+            setAvatarError(t('settings.imageUploadError'));
+        } finally {
+            setAvatarUploading(false);
+        }
     };
 
-    const handleBackgroundChange = (fileUrl: string) => {
-        setBackgroundUrl(fileUrl);
+    const handleBackgroundFileSelected = async (file: File) => {
+        if (!userId) return;
+        setBackgroundUploading(true);
+        setBackgroundError('');
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            const response = await fetch(`http://localhost:5049/api/User/${userId}/background`, {
+                method: 'PUT',
+                credentials: 'include',
+                body: formData,
+            });
+            if (!response.ok) {
+                setBackgroundError(t('settings.imageUploadError'));
+                return;
+            }
+            const updated = await response.json();
+            setBackgroundUrl(updated.backgroundImage ?? undefined);
+            setLoaded((prev) => (prev ? { ...prev, backgroundImage: updated.backgroundImage ?? null } : prev));
+        } catch {
+            setBackgroundError(t('settings.imageUploadError'));
+        } finally {
+            setBackgroundUploading(false);
+        }
     };
+
+    const handleDiscard = () => {
+        if (!loaded) return;
+        setName(loaded.name);
+        setEmail(loaded.email);
+        setAbout(loaded.description);
+        setAvatarUrl(loaded.image ?? undefined);
+        setBackgroundUrl(loaded.backgroundImage ?? undefined);
+        setSaveError('');
+        setSaved(false);
+    };
+
+    const handleSave = async () => {
+        if (!userId) return;
+        setSaving(true);
+        setSaveError('');
+        setSaved(false);
+        try {
+            // Avatar/background uploads go through their own endpoints and update
+            // `loaded` immediately — echo those back here so this save doesn't clobber them.
+            const response = await fetch(`http://localhost:5049/api/User/${userId}`, {
+                method: 'PUT',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, description: about, image: loaded?.image ?? null, backgroundImage: loaded?.backgroundImage ?? null }),
+            });
+            if (!response.ok) {
+                setSaveError(t('settings.saveError'));
+                return;
+            }
+            setLoaded({ name, email, description: about, image: loaded?.image ?? null, backgroundImage: loaded?.backgroundImage ?? null });
+            await refreshUser();
+            setSaved(true);
+        } catch {
+            setSaveError(t('settings.saveError'));
+        } finally {
+            setSaving(false);
+        }
+    };
+
     return (
         <div className="bg-card1 rounded-2xl w-full">
             <div className="flex flex-col pb-6 rounded-3xl bg-card1 gap-52">
                 <div>
                     <label htmlFor="background-upload" className="relative w-full h-72 bg-gradient-to-br from-gray-500 via-gray-700 to-gray-900 rounded-t-2xl flex items-center justify-center cursor-pointer">
-                        {!backgroundUrl ? (
-                            <img src={backgroundUrl} alt="User background" className="w-full h-full object-cover rounded-t-2xl" />
+                        {backgroundUrl ? (
+                            <img src={backgroundUrl} alt={t('settings.backgroundAlt')} className="w-full h-full object-cover rounded-t-2xl" />
                         ) : (
-                            <div className="flex items-center justify-center text-white rounded-t-2xl">
+                            <div className="flex items-center justify-center text-typography rounded-t-2xl">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                 </svg>
                             </div>
                         )}
-                        <input id="background-upload" type="file" className="hidden" onChange={(event) => {
-                            if (event.target.files && event.target.files[0]) {
-                                const reader = new FileReader();
-                                reader.onload = (file) => {
-                                    const fileUrl = file.target?.result as string;
-                                    if (fileUrl) {
-                                        handleBackgroundChange(fileUrl);
-                                    }
-                                };
-                                reader.readAsDataURL(event.target.files[0]);
-                            }
+                        {backgroundUploading && (
+                            <div className="absolute inset-0 flex items-center justify-center rounded-t-2xl bg-black/50 text-typography text-sign-2">{t('common.loading')}</div>
+                        )}
+                        <input id="background-upload" type="file" accept="image/*" className="hidden" onChange={(event) => {
+                            const file = event.target.files?.[0];
+                            if (file) handleBackgroundFileSelected(file);
                         }} />
                     </label>
+                    {backgroundError && <p className="mt-2 px-5 text-negative text-sign-2">{backgroundError}</p>}
                     <div className="self-center mt-6 px-5 w-full max-w-[1045px] max-md:max-w-full">
                         <div className="flex gap-5 max-md:flex-col max-md:gap-0">
                             <div className="flex flex-col w-[19%] max-md:ml-0 max-md:w-full">
                                 <div className="relative">
                                     {avatarUrl ? (
-                                        <Avatar className="h-[198px] rounded-[120px] w-[198px] max-md:mt-10" src="" alt="User avater" />
+                                        <Avatar className="h-[198px] rounded-[120px] w-[198px] max-md:mt-10" src={avatarUrl} alt={t('settings.avatarAlt')} />
                                     ) : (
-                                        <div className="flex flex-col items-center px-16 pt-20 mx-auto mt-3.5 bg-neutral-500 font-bold text-5xl h-[198px] rounded-[120px] w-[198px] max-md:mt-10">U</div>
+                                        <div className="flex flex-col items-center justify-center mx-auto mt-3.5 bg-card3 font-bold text-5xl h-[198px] rounded-[120px] w-[198px] max-md:mt-10">U</div>
+                                    )}
+                                    {avatarUploading && (
+                                        <div className="absolute inset-0 flex items-center justify-center rounded-[120px] bg-black/50 text-typography text-sign-2">{t('common.loading')}</div>
                                     )}
                                     <label htmlFor="avatar-upload" className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 transition-all cursor-pointer">
-                                        <input id="avatar-upload" type="file" className="hidden" onChange={(event) => {
-                                            if (event.target.files && event.target.files[0]) {
-                                                const reader = new FileReader();
-                                                reader.onload = (file) => {
-                                                    const fileUrl = file.target?.result as string;
-                                                    if (fileUrl) {
-                                                        handleAvatarChange(fileUrl);
-                                                    }
-                                                };
-                                                reader.readAsDataURL(event.target.files[0]);
-                                            }
+                                        <input id="avatar-upload" type="file" accept="image/*" className="hidden" onChange={(event) => {
+                                            const file = event.target.files?.[0];
+                                            if (file) handleAvatarFileSelected(file);
                                         }} />
                                     </label>
                                 </div>
+                                {avatarError && <p className="mt-2 text-negative text-sign-2 text-center">{avatarError}</p>}
                             </div>
                             <div className="flex flex-col ml-5 w-[81%] max-md:ml-0 max-md:w-full">
                                 <div className="flex flex-col gap-5 grow px-5 max-md:mt-7 max-md:max-w-full">
                                     <div className="flex gap-5 max-md:flex-wrap">
                                         <div className="flex flex-col">
                                             <div className="text-sign-2 font-bold">
-                                                Нікнейм
+                                                {t('settings.nickname')}
                                             </div>
                                             <div className="flex gap-2.5 mt-2">
-                                                <InputField placeholder={props.name} className="flex-1 justify-center items-start px-3.5 py-2.5 text-sign-2 whitespace-nowrap rounded-3xl placeholder:typographySecondary !bg-background40 border-1 border-secondary max-md:pr-5" />
+                                                <InputField value={name} onChange={(e) => setName(e.target.value)} className="flex-1 justify-center items-start px-3.5 py-2.5 text-sign-2 whitespace-nowrap rounded-3xl placeholder:typographySecondary !bg-background40 border border-secondary max-md:pr-5" />
                                             </div>
                                         </div>
                                         <div className="flex flex-col flex-1 text-base">
-                                            <div className="text-sign-2 font-bold">Ел. пошта</div>
-                                            <InputField placeholder={props.email} className="justify-center items-start px-3.5 py-2.5 mt-2 whitespace-nowrap rounded-3xl text-sign-2 placeholder:typographySecondary !bg-background40 border-1 border-secondary max-md:pr-5" />
+                                            <div className="text-sign-2 font-bold">{t('settings.email')}</div>
+                                            <InputField value={email} onChange={(e) => setEmail(e.target.value)} className="justify-center items-start px-3.5 py-2.5 mt-2 whitespace-nowrap rounded-3xl text-sign-2 placeholder:typographySecondary !bg-background40 border border-secondary max-md:pr-5" />
                                         </div>
                                     </div>
                                     <div>
                                         <div className="text-sign-2 font-bold max-md:max-w-full">
-                                            Про себе
+                                            {t('settings.about')}
                                         </div>
-                                        <Textarea placeholder={props.about} className="flex-1 text-sign-2 placeholder:typographySecondary !bg-background40 border-1 border-secondary mt-2 max-md:max-w-full">
+                                        <Textarea value={about} onChange={(e) => setAbout(e.target.value)} className="flex-1 text-sign-2 placeholder:typographySecondary !bg-background40 border border-secondary mt-2 max-md:max-w-full">
                                         </Textarea>
                                     </div>
                                     <div>
                                         <div className="text-sign-2 font-bold max-md:max-w-full">
-                                            Мова сайту
+                                            {t('settings.language')}
                                         </div>
-                                        <Select>
-                                            <SelectTrigger className="flex gap-2.5 justify-between px-3.5 py-2.5 mt-2 max-w-full !bg-background40 border-1 border-secondary whitespace-nowrap rounded-3xl w-[407px] bg-stone-300" id="sort">
-                                                <SelectValue placeholder="Українська" />
+                                        <Select value={i18n.language} onValueChange={(value) => setStoredLanguage(value)}>
+                                            <SelectTrigger className="flex gap-2.5 justify-between px-3.5 py-2.5 mt-2 max-w-full !bg-background40 border border-secondary whitespace-nowrap rounded-3xl w-[407px]" id="sort">
+                                                <SelectValue placeholder={t('settings.languageUkrainian')} />
                                             </SelectTrigger>
-                                            <SelectContent className="flex gap-2.5 justify-between px-3.5 py-2.5 mt-2 max-w-full whitespace-nowrap rounded-3xl w-[407px] !bg-background40 border-1 border-secondary">
-                                                <SelectItem className="hover:!bg-background40" value="Українська">Українська</SelectItem>
-                                                <SelectItem className="hover:!bg-background40" value="English">English</SelectItem>
+                                            <SelectContent className="flex gap-2.5 justify-between px-3.5 py-2.5 mt-2 max-w-full whitespace-nowrap rounded-3xl w-[407px] !bg-background40 border border-secondary">
+                                                <SelectItem className="hover:!bg-background40" value="uk">{t('settings.languageUkrainian')}</SelectItem>
+                                                <SelectItem className="hover:!bg-background40" value="en">{t('settings.languageEnglish')}</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
                                     <div className="flex justify-between">
                                         {!emailChanged ? (<Dialog>
                                             <DialogTrigger asChild>
-                                                <Button className="justify-center items-center px-9 py-3.5 text-negative rounded-3xl border-0 bg-accent text-button-2 max-md:px-5 hover:bg-cardLight25">Пiдтвердити пошту</Button>
+                                                <Button className="justify-center items-center px-9 py-3.5 text-negative rounded-3xl border-0 bg-accent text-button-2 max-md:px-5 hover:bg-cardLight25">{t('settings.confirmEmail')}</Button>
                                             </DialogTrigger>
                                             <DialogContent className="w-auto !bg-card2">
                                                 <EmailConfirmation emailChange={setEmailChanged} />
                                             </DialogContent>
                                         </Dialog>) : null}
-                                        <Button onClick={logout} className="justify-center items-center px-9 py-3.5 rounded-3xl border-0 bg-transparent text-button-2 max-md:px-5 hover:bg-negative">Вийти з акаунта</Button>
+                                        <Button onClick={logout} className="justify-center items-center px-9 py-3.5 rounded-3xl border-0 bg-transparent text-button-2 max-md:px-5 hover:bg-negative">{t('settings.logout')}</Button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="flex gap-5 justify-end px-5 self-end mr-6 max-w-full text-base whitespace-nowrap w-[472px] max-md:flex-wrap max-md:mt-10 max-md:mr-2.5">
-                    <Button className="justify-center items-center px-9 py-3.5 text-negative rounded-3xl border-0 bg-transparent text-button-2 max-md:px-5 hover:bg-cardLight25">
-                        Відхилити
+                <div className="flex items-center gap-5 justify-end px-5 self-end mr-6 max-w-full text-base max-md:flex-wrap max-md:mt-10 max-md:mr-2.5">
+                    {saveError && <span className="text-negative text-sign-2 whitespace-nowrap">{saveError}</span>}
+                    {saved && !saveError && <span className="text-accent text-sign-2 whitespace-nowrap">{t('settings.saved')}</span>}
+                    <Button onClick={handleDiscard} disabled={saving} className="justify-center items-center px-9 py-3.5 text-negative rounded-3xl border-0 bg-transparent text-button-2 whitespace-nowrap max-md:px-5 hover:bg-cardLight25">
+                        {t('settings.discard')}
                     </Button>
-                    <Button className="justify-center items-center px-9 py-3.5 !text-background rounded-3xl border-0 bg-primary text-button-2 hover:bg-primaryHover max-md:px-5">
-                        Зберегти
+                    <Button onClick={handleSave} disabled={saving} className="justify-center items-center px-9 py-3.5 !text-background rounded-3xl border-0 bg-primary text-button-2 whitespace-nowrap hover:bg-primaryHover max-md:px-5">
+                        {saving ? t('settings.saving') : t('settings.save')}
                     </Button>
                 </div>
             </div>

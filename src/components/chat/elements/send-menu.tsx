@@ -1,9 +1,11 @@
 import React, { useState, useRef } from "react";
 import { InputField } from "@/components/ui/input-field";
-import { Mic, Paperclip } from "lucide-react";
+import { Mic, Paperclip, Type } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 
 const SendMenu: React.FC = () => {
+    const { t } = useTranslation();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [isRecording, setIsRecording] = useState(false);
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -64,6 +66,9 @@ const SendMenu: React.FC = () => {
     return (
         <div className="flex gap-3 px-4 justify-center items-center rounded-3xl bg-card2 max-md:flex-wrap">
             <div className="flex flex-1 gap-3 items-center my-2 max-md:flex-wrap">
+                <Button aria-label={t('chat.textFormatting')} className="bg-transparent hover:bg-transparent hover:opacity-70 h-full p-0">
+                    <Type className="shrink-0 self-stretch my-auto w-6 aspect-square" />
+                </Button>
                 <Button onClick={handleFileUpload} className="bg-transparent hover:bg-transparent hover:opacity-70 h-full p-0">
                     <Paperclip className="shrink-0 self-stretch my-auto w-6 aspect-square"></Paperclip>
                 </Button>
@@ -77,7 +82,7 @@ const SendMenu: React.FC = () => {
                     <audio className="w-full" controls src={audioUrl} />
                 ) : (<InputField
                     className="flex-1 justify-center self-stretch px-4 py-2.5 rounded-3xl border border-secondary border-solid bg-background40 max-md:max-w-full placeholder:typographySecondary"
-                    placeholder="Ваше повідомлення..."
+                    placeholder={t('chat.yourMessage')}
                 />)}
             </div>
             <Button onClick={handleRecord} className="bg-transparent hover:bg-transparent hover:opacity-70 h-full p-0">

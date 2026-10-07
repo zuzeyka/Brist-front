@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const socials = [
     { href: 'https://uk-ua.facebook.com', icon: '/src/assets/svg/social-facebook.svg', label: 'Facebook' },
@@ -6,13 +7,13 @@ const socials = [
     { href: 'https://x.com', icon: '/src/assets/svg/social-twitter.svg', label: 'X' },
 ];
 
-const links = [
-    { to: '/terms', label: 'Умови використання' },
-    { to: '/privacy', label: 'Політика конфіденційності' },
-    { to: '/refund', label: 'Політика повернення коштів магазину' },
-];
-
 const Footer: React.FC = () => {
+    const { t } = useTranslation();
+    const links = [
+        { to: '/terms', label: t('footer.terms') },
+        { to: '/privacy', label: t('footer.privacy') },
+        { to: '/refund', label: t('footer.refund') },
+    ];
     return (
         <footer className="relative bg-card1 text-typography">
             <div className="max-w-[1464px] mx-auto pt-[52px] pb-12 flex flex-col">
