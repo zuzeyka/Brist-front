@@ -18,19 +18,26 @@ const Review: React.FC<{ info: ReviewProps }> = ({ info }) => {
                     <div className="flex flex-col space-y-2">
                         <div className="text-heading-2 font-manrope font-bold">{info.gameName}</div>
                         <div className="flex space-x-1">
-                            {[...Array(Math.round(info.rating))].map((_, i) => (
-                                <StarIcon
-                                    key={i}
-                                    className={`text-accent w-5 h-5`}
-                                    fill="currentColor"
-                                />
-                            ))}
-                            {[...Array(5 - Math.round(info.rating))].map((_, i) => (
-                                <StarIcon
-                                    key={5 + i}
-                                    className={`text-accent w-5 h-5`}
-                                />
-                            ))}
+                            {(() => {
+                                const filled = Math.min(5, Math.max(0, Math.round(info.rating)));
+                                return (
+                                    <>
+                                        {[...Array(filled)].map((_, i) => (
+                                            <StarIcon
+                                                key={i}
+                                                className={`text-accent w-5 h-5`}
+                                                fill="currentColor"
+                                            />
+                                        ))}
+                                        {[...Array(5 - filled)].map((_, i) => (
+                                            <StarIcon
+                                                key={5 + i}
+                                                className={`text-accent w-5 h-5`}
+                                            />
+                                        ))}
+                                    </>
+                                );
+                            })()}
                         </div>
                     </div>
                     <CircleEllipsisIcon></CircleEllipsisIcon>

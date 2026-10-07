@@ -10,7 +10,7 @@ interface PageSwitcherProps {
     pages: PageContent[];
     onMoveContentToParent: (node: React.ReactNode) => void;
     vertical?: boolean;
-    counts?: number[];
+    counts?: (number | undefined)[];
 }
 const PageSwitcher: React.FC<PageSwitcherProps> = (props) => {
     const [activePageIndex, setActivePageIndex] = useState(0);
@@ -48,7 +48,7 @@ const PageSwitcher: React.FC<PageSwitcherProps> = (props) => {
                                 <span className={`h-[3px] w-full rounded-sm bg-primary ${activePageIndex === index ? '' : 'opacity-0'}`} />
                             </button>
                         )}
-                        {props.counts && <div className="justify-center px-3 py-1 rounded-3xl bg-cardLight25 text-sign-2 font-bold text-typographySecondary">{props.counts[index]}</div>}
+                        {props.counts?.[index] !== undefined && <div className="justify-center px-3 py-1 rounded-3xl bg-cardLight25 text-sign-2 font-bold text-typographySecondary">{props.counts[index]}</div>}
                     </li>
                 ))}
             </ul>

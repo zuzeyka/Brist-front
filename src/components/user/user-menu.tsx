@@ -105,6 +105,18 @@ const UserMenu: React.FC<UserMenuProps> = (props) => {
         { title: t('shop.about.reviews'), content: <Reviews reviewInfo={props.reviews}></Reviews> },
     ], [t, props.ownedGames, props.wishedGames, props.dlcCount, props.levelPoints, props.achievements, props.discussions, props.screenshots, props.videos, props.guides, props.reviews, props.comments, wishes]);
 
+    const counts: (number | undefined)[] = useMemo(() => [
+        undefined,
+        props.achievements.length,
+        props.ownedGames.length,
+        props.wishedGames.length,
+        props.discussions.length,
+        props.screenshots.length,
+        props.videos.length,
+        props.guides.length,
+        props.reviews.length,
+    ], [props.achievements, props.ownedGames, props.wishedGames, props.discussions, props.screenshots, props.videos, props.guides, props.reviews]);
+
     return (
         <div className="flex flex-col space-y-4">
             <div className="flex flex-col bg-card2 p-4 rounded-2xl">
@@ -112,7 +124,7 @@ const UserMenu: React.FC<UserMenuProps> = (props) => {
                     <p className="text-heading-2 font-manrope font-bold">{t('user.menu.level')}</p>
                     <LevelIcon levelPoints={props.levelPoints}></LevelIcon>
                 </div>
-                <PageSwitcher onMoveContentToParent={props.onMoveContentToParent} vertical={true} pages={pages} counts={pages.map(() => 100)}></PageSwitcher>
+                <PageSwitcher onMoveContentToParent={props.onMoveContentToParent} vertical={true} pages={pages} counts={counts}></PageSwitcher>
             </div>
             {props.friends ? (
                 <div className="flex flex-col bg-card2 p-4 rounded-2xl">
