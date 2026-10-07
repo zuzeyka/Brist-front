@@ -9,6 +9,7 @@ import { GameTitle } from '../about/about-game';
 import { MacOsIcon, WindowsIcon } from '@/components/ui/icons';
 
 interface CharacteristicsProps {
+    gameId: string;
     gameName: string;
     price: number;
     discount?: number;
@@ -59,6 +60,7 @@ const Characteristics: React.FC<CharacteristicsProps> = (props) => {
                 </div>
                 <aside className='w-[348px] shrink-0 sticky top-6 flex flex-col gap-8'>
                     <Payment
+                        gameId={props.gameId}
                         gameName={props.gameName}
                         platforms={[<WindowsIcon />, <MacOsIcon />]}
                         developer={props.developer}

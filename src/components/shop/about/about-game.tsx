@@ -16,6 +16,7 @@ export interface UserData {
     avatarUrl?: string;
 }
 interface AboutGameProps {
+    gameId: string;
     gameName: string;
     gameDescription: string;
     previewUrl: string;
@@ -93,6 +94,7 @@ const AboutGame: React.FC<AboutGameProps> = (props) => {
                 </div>
                 <aside className='w-[348px] shrink-0 sticky top-6 flex flex-col gap-8'>
                     <Payment
+                        gameId={props.gameId}
                         gameName={props.gameName}
                         platforms={[<WindowsIcon />, <MacOsIcon />]}
                         developer={props.developer}

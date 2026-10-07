@@ -8,6 +8,7 @@ import FilterSidebar, { priceTiers } from './filter-sidebar';
 import Game from '../user/elements/game';
 import { GameProps } from '../user/pages/wished';
 import { Categories, CategoryForGame, GameEvent, GameEventForGame, GameInShop } from '@/shared/lib/interfaces';
+import { useWishlist } from './wishlist-context';
 
 const glows = [
     { left: 1472, top: 108, large: true },
@@ -16,6 +17,7 @@ const glows = [
 
 const Wishlist: React.FC = () => {
     const { t } = useTranslation();
+    const { isWished } = useWishlist();
     const [games, setGames] = useState<GameInShop[]>([]);
     const [genres, setGenres] = useState<Categories[]>([]);
     const [categoriesForGame, setCategoriesForGame] = useState<CategoryForGame[]>([]);
@@ -83,15 +85,17 @@ const Wishlist: React.FC = () => {
 
     const tier = priceTiers.find((pt) => pt.id === priceTier)!;
     const visible = useMemo(() => games
+        .filter((g) => isWished(g.id))
         .filter((g) => !search || g.name.toLowerCase().includes(search.trim().toLowerCase()))
         .filter((g) => tier.test(g.price))
         .filter((g) => !discountOnly || g.discount > 0)
         .filter((g) => selectedGenres.length === 0 || selectedGenres.some((id) => genreIdsByGame.get(g.id)?.has(id)))
         .filter((g) => selectedEvents.length === 0 || selectedEvents.some((id) => eventIdsByGame.get(g.id)?.has(id)))
         .sort((a, b) => (b.discount ?? 0) - (a.discount ?? 0)),
-    [games, search, tier, discountOnly, selectedGenres, genreIdsByGame, selectedEvents, eventIdsByGame]);
+    [games, isWished, search, tier, discountOnly, selectedGenres, genreIdsByGame, selectedEvents, eventIdsByGame]);
 
     const wishedGames: GameProps[] = visible.map((game) => ({
+        id: game.id,
         name: game.name,
         imageUrl: game.previeImage,
         rating: 4.5,

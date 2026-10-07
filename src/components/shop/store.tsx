@@ -374,6 +374,7 @@ const Store: React.FC = () => {
             title: t('shop.tabs.about'),
             content: (
                 <AboutGame
+                    gameId={game ? game.id : ''}
                     releaseDate={game && game.dateOfRelease ? getPostDate(game.dateOfRelease) : 'No release date'}
                     reviews={reviews ? reviews : []}
                     users={reviewUsers ? reviewUsers : []}
@@ -401,6 +402,7 @@ const Store: React.FC = () => {
             title: t('shop.tabs.characteristics'),
             content: (
                 <Characteristics
+                    gameId={game ? game.id : ''}
                     gameName={game ? game.name : t('shop.unknown')}
                     wishedFriends={wishedFriends}
                     ownedFriends={ownedFriends}

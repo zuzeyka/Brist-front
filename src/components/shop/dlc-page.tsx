@@ -182,6 +182,7 @@ const DlcPage: React.FC = () => {
                 </div>
                 <aside className='w-[348px] shrink-0 sticky top-6 flex flex-col gap-8'>
                     <Payment
+                        gameId={dlc.id}
                         gameName={dlc.name}
                         platforms={[<WindowsIcon />, <MacOsIcon />]}
                         developer={developer?.name ?? ''}
@@ -204,6 +205,7 @@ const DlcPage: React.FC = () => {
         {
             title: t('shop.tabs.characteristics'), content: (
                 <Characteristics
+                    gameId={dlc.id}
                     gameName={dlc.name}
                     wishedFriends={wishedFriends}
                     ownedFriends={ownedFriends}

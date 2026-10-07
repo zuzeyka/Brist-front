@@ -67,6 +67,7 @@ const UserMenu: React.FC<UserMenuProps> = (props) => {
     const { t } = useTranslation();
 
     const wishes: GameProps[] = useMemo(() => props.wishedGames.map((game) => ({
+        id: game.id,
         name: game.name,
         imageUrl: game.previeImage,
         rating: 0,

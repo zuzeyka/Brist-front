@@ -4,9 +4,11 @@ import { GameProps } from "../pages/wished";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { HeartIcon, StarIcon } from "lucide-react";
+import { useWishlist } from "@/components/shop/wishlist-context";
 
 const Game: React.FC<{ game: GameProps }> = ({ game }) => {
     const { t } = useTranslation();
+    const { toggleWishlist } = useWishlist();
     return (
         <div className="p-2 bg-card2 rounded-3xl max-md:max-w-full">
             <div className="flex gap-5 bg-card1 rounded-3xl p-5 max-md:flex-col max-md:gap-0">
@@ -18,9 +20,9 @@ const Game: React.FC<{ game: GameProps }> = ({ game }) => {
                                 {game.name}
                             </div>
                             {!game.isOwned && (
-                                <div className="flex justify-center items-center p-2.5 w-11 h-11 bg-secondaryHover rounded-3xl">
+                                <button type="button" aria-label={t('shop.payment.removeFromWishlist')} onClick={() => toggleWishlist(game.id)} className="flex justify-center items-center p-2.5 w-11 h-11 bg-secondaryHover rounded-3xl">
                                     <HeartIcon className="w-5 h-5 text-accent" fill="currentColor"></HeartIcon>
-                                </div>
+                                </button>
                             )}
                         </div>
                         <div className="flex gap-2.5 pr-10 mt-3.5 text-sm text-black max-md:flex-wrap max-md:pr-5">

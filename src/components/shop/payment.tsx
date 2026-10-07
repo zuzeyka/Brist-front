@@ -1,13 +1,15 @@
 import React from 'react';
-import { AlertOctagonIcon, ShareIcon } from 'lucide-react';
+import { AlertOctagonIcon, HeartIcon, ShareIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCart } from './cart/card-context';
+import { useWishlist } from './wishlist-context';
 import GamePrice from '@/components/main/game-price';
 import { HeartOutlineIcon } from '@/components/ui/icons';
 import { cn } from '@/shared/lib/utils';
 
 interface PaymentProps {
     className?: string;
+    gameId: string;
     gameName: string;
     previewUrl: string;
     price: number;
@@ -26,6 +28,8 @@ const button = 'rounded-[20px] font-artifakt font-semibold text-button-1';
 const Payment: React.FC<PaymentProps> = (props) => {
     const { t } = useTranslation();
     const { addToCart } = useCart();
+    const { isWished, toggleWishlist } = useWishlist();
+    const wished = isWished(props.gameId);
 
     const handleAddToCart = () => {
         addToCart({
@@ -53,7 +57,9 @@ const Payment: React.FC<PaymentProps> = (props) => {
                 <button type="button" className={cn(button, 'w-full px-[26px] py-3 bg-primary hover:bg-primaryHover text-background')}>{t('shop.payment.buy')}</button>
                 <div className='flex gap-3'>
                     <button type="button" onClick={handleAddToCart} className={cn(button, 'flex-1 px-[26px] py-3 bg-secondary hover:bg-secondaryHover')}>{t('shop.payment.addToCart')}</button>
-                    <button type="button" aria-label={t('shop.payment.addToWishlist')} className={cn(button, 'p-3 bg-secondary hover:bg-secondaryHover')}><HeartOutlineIcon /></button>
+                    <button type="button" onClick={() => toggleWishlist(props.gameId)} aria-label={t(wished ? 'shop.payment.removeFromWishlist' : 'shop.payment.addToWishlist')} className={cn(button, 'p-3 bg-secondary hover:bg-secondaryHover', wished && 'text-accent')}>
+                        {wished ? <HeartIcon fill="currentColor" /> : <HeartOutlineIcon />}
+                    </button>
                 </div>
                 <div className="flex gap-3">
                     <button type="button" className={cn(button, 'w-[136px] flex items-center justify-center gap-3 py-1.5 text-primary hover:text-primaryHover')}>

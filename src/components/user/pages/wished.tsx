@@ -8,6 +8,7 @@ import { ChevronsDown, ChevronsUp, FilterIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export interface GameProps {
+    id: string;
     name: string;
     imageUrl: string;
     rating: number;

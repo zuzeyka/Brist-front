@@ -5,6 +5,7 @@ import { GameInShop } from "@/shared/lib/interfaces";
 // Reuses the "Бажане" list item until this page gets its own pass against its Figma frame.
 const Games: React.FC<{ games: GameInShop[] }> = ({ games }) => (
     <Wished games={games.map((game) => ({
+        id: game.id,
         name: game.name,
         imageUrl: game.previeImage,
         rating: 0,
