@@ -7,7 +7,8 @@ import NewsList from './news-list';
 import Search from './search';
 import ListOfSmallGames from './list-of-small-games';
 import { GameInfo } from './small-game';
-import { GameGuide, GameInShop, GameNews, GamePosts, Screenshot, User, Video } from '@/shared/lib/interfaces';
+import { GameGuide, GameInShop, GameNews, GamePosts, OwnedGame, Screenshot, User, Video } from '@/shared/lib/interfaces';
+import { useAuth } from '../authorization/auth-context';
 import Post from '../shop/community/post';
 import Guide from '../shop/community/guide';
 import Media from '../shop/community/media';
@@ -29,9 +30,11 @@ const tabTriggerClass = 'shrink-0 bg-transparent data-[state=active]:bg-transpar
 
 const Library: React.FC = () => {
     const { t } = useTranslation();
+    const { userId } = useAuth();
     // Placeholder — the backend has no collections entity yet (see WORKLOG "Known gaps").
     const collections: string[] = [t('library.myCollection')];
     const [games, setGames] = useState<GameInShop[]>([]);
+    const [ownedGames, setOwnedGames] = useState<GameInShop[]>([]);
     const [isLoading, setLoading] = useState(true);
     const [isFilter, setIsFilter] = useState(false);
     const [news, setNews] = useState<GameNews[]>([]);
@@ -62,6 +65,34 @@ const Library: React.FC = () => {
 
         fetchData();
     }, []);
+
+    // Library should only show what the signed-in user actually owns, unlike the
+    // Store catalog this page's game data was previously (incorrectly) sourced from.
+    useEffect(() => {
+        if (!userId || games.length === 0) {
+            setOwnedGames([]);
+            return;
+        }
+        let cancelled = false;
+
+        async function fetchOwnedGames() {
+            try {
+                const res = await fetch(`http://localhost:5049/api/OwnedGame/byuserid/${userId}`, { credentials: 'include' });
+                if (!res.ok || cancelled) return;
+                const rows = await res.json() as OwnedGame[];
+                const gamesById = new Map(games.map((g) => [g.id, g]));
+                const owned = [...new Map(
+                    rows.map((r) => gamesById.get(r.ownedGameId)).filter((g): g is GameInShop => !!g).map((g) => [g.id, g])
+                ).values()];
+                if (!cancelled) setOwnedGames(owned);
+            } catch (error) {
+                console.log('Fetch owned games error:', error);
+            }
+        }
+
+        fetchOwnedGames();
+        return () => { cancelled = true; };
+    }, [userId, games]);
 
     const fetchGames = async () => {
         try {
@@ -167,7 +198,7 @@ const Library: React.FC = () => {
         setLoading(false);
     }, [videos, screenshots, guides, posts, news]);
 
-    const gamesInfo: GameInfo[] = games.map((game: GameInShop) => {
+    const gamesInfo: GameInfo[] = ownedGames.map((game: GameInShop) => {
         const { previeImage, name } = game;
         return {
             key: null,
@@ -245,9 +276,9 @@ const Library: React.FC = () => {
                                             <PlusIcon className="size-5" />
                                         </button>
                                     </div>
-                                    <TabsContent value="all"><AllGames list={isFilter} games={games}></AllGames></TabsContent>
-                                    <TabsContent value="favorites"><AllGames list={isFilter} games={games.slice(0, 5)}></AllGames></TabsContent>
-                                    <TabsContent value={collections[0]}><AllGames list={isFilter} games={games.slice(5, 15)}></AllGames></TabsContent>
+                                    <TabsContent value="all"><AllGames list={isFilter} games={ownedGames}></AllGames></TabsContent>
+                                    <TabsContent value="favorites"><AllGames list={isFilter} games={ownedGames.slice(0, 5)}></AllGames></TabsContent>
+                                    <TabsContent value={collections[0]}><AllGames list={isFilter} games={ownedGames.slice(5, 15)}></AllGames></TabsContent>
                                 </Tabs>
                             </div>
                         </ResizablePanel>
