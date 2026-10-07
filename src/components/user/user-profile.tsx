@@ -149,14 +149,15 @@ const UserProfile: React.FC = () => {
                 ]);
 
                 const gamesById = new Map(games.map((g) => [g.id, g]));
+                const dedupeById = <T extends { id: string }>(items: T[]): T[] => [...new Map(items.map((i) => [i.id, i])).values()];
 
                 const ownedRows = ownedRes.ok ? await ownedRes.json() as OwnedGame[] : [];
-                const ownedGames = ownedRows.map((r) => gamesById.get(r.ownedGameId)).filter((g): g is GameInShop => !!g);
+                const ownedGames = dedupeById(ownedRows.map((r) => gamesById.get(r.ownedGameId)).filter((g): g is GameInShop => !!g));
 
                 const ownedDlcRows = ownedDlcRes.ok ? await ownedDlcRes.json() as OwnedDlc[] : [];
 
                 const wishedRows = wishedRes.ok ? (await wishedRes.json() as WishedGame[]).filter((w) => w.userId === user!.id) : [];
-                const wishedGames = wishedRows.map((r) => gamesById.get(r.ownedGameId)).filter((g): g is GameInShop => !!g)
+                const wishedGames = dedupeById(wishedRows.map((r) => gamesById.get(r.ownedGameId)).filter((g): g is GameInShop => !!g))
                     .map((g) => ({ ...g, categorys: categoryNamesByGame.get(g.id) ?? [] }));
 
                 const screenshotRows = screenshotsRes.ok ? await screenshotsRes.json() as Screenshot[] : [];
