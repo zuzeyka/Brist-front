@@ -6,6 +6,7 @@ import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { InputField } from "@/components/ui/input-field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { XIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { setStoredLanguage } from "@/shared/lib/i18n";
@@ -108,6 +109,60 @@ const Base: React.FC = () => {
         }
     };
 
+    // Removing goes through the plain JSON update endpoint (image/backgroundImage
+    // accept null there) rather than the upload endpoints, which require a file.
+    // Sends loaded's name/email/description, not the live editable state, so this
+    // can't accidentally save an unrelated in-progress edit the user hasn't hit
+    // Save on yet.
+    const handleRemoveAvatar = async () => {
+        if (!userId || !loaded) return;
+        setAvatarUploading(true);
+        setAvatarError('');
+        try {
+            const response = await fetch(`http://localhost:5049/api/User/${userId}`, {
+                method: 'PUT',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: loaded.name, email: loaded.email, description: loaded.description, image: null, backgroundImage: loaded.backgroundImage }),
+            });
+            if (!response.ok) {
+                setAvatarError(t('settings.imageUploadError'));
+                return;
+            }
+            setAvatarUrl(undefined);
+            setLoaded((prev) => (prev ? { ...prev, image: null } : prev));
+            await refreshUser();
+        } catch {
+            setAvatarError(t('settings.imageUploadError'));
+        } finally {
+            setAvatarUploading(false);
+        }
+    };
+
+    const handleRemoveBackground = async () => {
+        if (!userId || !loaded) return;
+        setBackgroundUploading(true);
+        setBackgroundError('');
+        try {
+            const response = await fetch(`http://localhost:5049/api/User/${userId}`, {
+                method: 'PUT',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: loaded.name, email: loaded.email, description: loaded.description, image: loaded.image, backgroundImage: null }),
+            });
+            if (!response.ok) {
+                setBackgroundError(t('settings.imageUploadError'));
+                return;
+            }
+            setBackgroundUrl(undefined);
+            setLoaded((prev) => (prev ? { ...prev, backgroundImage: null } : prev));
+        } catch {
+            setBackgroundError(t('settings.imageUploadError'));
+        } finally {
+            setBackgroundUploading(false);
+        }
+    };
+
     const handleDiscard = () => {
         if (!loaded) return;
         setName(loaded.name);
@@ -168,6 +223,16 @@ const Base: React.FC = () => {
                             const file = event.target.files?.[0];
                             if (file) handleBackgroundFileSelected(file);
                         }} />
+                        {backgroundUrl && (
+                            <button
+                                type="button"
+                                onClick={(event) => { event.preventDefault(); handleRemoveBackground(); }}
+                                aria-label={t('settings.removeBackground')}
+                                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 hover:bg-black/70 text-typography"
+                            >
+                                <XIcon className="h-5 w-5" />
+                            </button>
+                        )}
                     </label>
                     {backgroundError && <p className="mt-2 px-5 text-negative text-sign-2">{backgroundError}</p>}
                     <div className="self-center mt-6 px-5 w-full max-w-[1045px] max-md:max-w-full">
@@ -188,6 +253,11 @@ const Base: React.FC = () => {
                                             if (file) handleAvatarFileSelected(file);
                                         }} />
                                     </label>
+                                    {avatarUrl && (
+                                        <button type="button" onClick={handleRemoveAvatar} aria-label={t('settings.removeAvatar')} className="absolute top-1 right-1 z-10 p-1.5 rounded-full bg-black/50 hover:bg-black/70 text-typography">
+                                            <XIcon className="h-4 w-4" />
+                                        </button>
+                                    )}
                                 </div>
                                 {avatarError && <p className="mt-2 text-negative text-sign-2 text-center">{avatarError}</p>}
                             </div>

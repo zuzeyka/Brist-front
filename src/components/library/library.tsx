@@ -8,7 +8,7 @@ import Search from './search';
 import ListOfSmallGames from './list-of-small-games';
 import { GameInfo } from './small-game';
 import { GameGuide, GameInShop, GameNews, GamePosts, OwnedGame, Screenshot, User, Video } from '@/shared/lib/interfaces';
-import { useAuth } from '../authorization/auth-context';
+import { useAuth, useRequireAuth } from '../authorization/auth-context';
 import Post from '../shop/community/post';
 import Guide from '../shop/community/guide';
 import Media from '../shop/community/media';
@@ -31,6 +31,7 @@ const tabTriggerClass = 'shrink-0 bg-transparent data-[state=active]:bg-transpar
 const Library: React.FC = () => {
     const { t } = useTranslation();
     const { userId } = useAuth();
+    const ready = useRequireAuth();
     // Placeholder — the backend has no collections entity yet (see WORKLOG "Known gaps").
     const collections: string[] = [t('library.myCollection')];
     const [games, setGames] = useState<GameInShop[]>([]);
@@ -242,6 +243,8 @@ const Library: React.FC = () => {
                     return null;
             }
         }).filter((content): content is JSX.Element => content !== null);
+
+    if (!ready) return null;
 
     return (
         <div className="relative bg-background">

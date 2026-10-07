@@ -10,6 +10,7 @@ import UserList from "./user-list";
 import ChatContent, { MessageProps } from "./chat-content";
 import InfoBar from "./info-bar";
 import { useParams } from "react-router-dom";
+import { useRequireAuth } from "../authorization/auth-context";
 
 const useChatData = (): { [key: string]: { messages: MessageProps[], info: { filesCount: number, photosCount: number, voicesCount: number, username: string, isOnline: boolean, avatarUrl: string } } } => {
     const { t } = useTranslation();
@@ -166,6 +167,7 @@ const useChatData = (): { [key: string]: { messages: MessageProps[], info: { fil
 
 const Chat: React.FC = () => {
     const { t } = useTranslation();
+    const ready = useRequireAuth();
     const chatData = useChatData();
     const { userName } = useParams<{ userName: string }>();
     const [selectedChat, setSelectedChat] = useState(userName || "MrsZubarikessa");
@@ -175,6 +177,8 @@ const Chat: React.FC = () => {
     };
 
     const selectedChatData = chatData[selectedChat];
+
+    if (!ready) return null;
 
     return (
         <div className="h-screen w-screen grid grid-rows-[auto_1fr]">

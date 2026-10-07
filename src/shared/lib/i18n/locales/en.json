@@ -60,6 +60,8 @@
     "saveError": "Failed to save changes. Please try again.",
     "backgroundAlt": "User profile background",
     "avatarAlt": "User avatar",
+    "removeBackground": "Remove background image",
+    "removeAvatar": "Remove avatar",
     "nickname": "Nickname",
     "email": "Email",
     "about": "About",

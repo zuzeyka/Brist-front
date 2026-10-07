@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useMemo, useCallback, ReactNode, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
     isAuthenticated: boolean;
@@ -123,4 +124,18 @@ export const useAuth = () => {
         throw new Error('useAuth must be used within an AuthProvider');
     }
     return context;
+};
+
+// For pages that require a session (Settings, Library, Chat, ...): redirects to
+// /login once it's confirmed there's truly no session, and renders nothing in the
+// interim -- callers should bail out (return null) while this is false.
+export const useRequireAuth = (): boolean => {
+    const { isAuthenticated, authReady } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (authReady && !isAuthenticated) navigate('/login');
+    }, [authReady, isAuthenticated, navigate]);
+
+    return authReady && isAuthenticated;
 };
