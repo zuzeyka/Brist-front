@@ -4,13 +4,14 @@ import { useTranslation } from 'react-i18next';
 import Footer from '../main/footer';
 import Head from '../main/head';
 import UserHeader from './user-header';
-import UserMenu, { AchievementEntry, CommentEntry, ReviewProps } from './user-menu';
+import UserMenu, { AchievementEntry, CommentEntry, Friend, ReviewProps } from './user-menu';
 import PageGlows from '@/components/ui/page-glows';
 import { useAuth } from '../authorization/auth-context';
 import {
     Achievement,
     AchievementByUser,
     Discussion,
+    Friends as FriendRow,
     GameGuide,
     GameInShop,
     GamePosts,
@@ -28,15 +29,6 @@ import { formatDate } from '../shop/about/review-list';
 const glows = [
     { left: 1472, top: 108, large: true },
     { left: 4, top: 1200, large: true },
-];
-
-// No "Друзі" backend endpoint yet — placeholder list matching the Figma sidebar.
-const friends = [
-    { name: 'GhostRogue', isOnline: true, levelPoints: 4000, avatarUrl: '/mock/games/duck-simulator.jpg' },
-    { name: 's1imerock', isOnline: true, levelPoints: 4000, avatarUrl: '/mock/games/duck-simulator.jpg' },
-    { name: 'NikaNii', isOnline: true, levelPoints: 4000, avatarUrl: '/mock/games/duck-simulator.jpg' },
-    { name: 'whysxugly', isOnline: true, levelPoints: 4000, avatarUrl: '/mock/games/duck-simulator.jpg' },
-    { name: 'zuzeyka', isOnline: true, levelPoints: 4000, avatarUrl: '/mock/games/duck-simulator.jpg' },
 ];
 
 type UserWithId = User & { id: string };
@@ -86,6 +78,7 @@ const UserProfile: React.FC = () => {
     const [games, setGames] = useState<GameInShop[]>([]);
     const [loading, setLoading] = useState(true);
     const [profileContent, setProfileContent] = useState<ProfileContent>(emptyProfileContent);
+    const [friends, setFriends] = useState<Friend[]>([]);
     const [content, setContent] = useState<React.ReactNode>(null);
 
     useEffect(() => {
@@ -243,6 +236,36 @@ const UserProfile: React.FC = () => {
         loadProfileContent();
         return () => { cancelled = true; };
     }, [user?.id, games, t]);
+
+    useEffect(() => {
+        if (!user?.id) return;
+        let cancelled = false;
+
+        async function loadFriends() {
+            try {
+                const res = await fetch(`http://localhost:5049/api/Friends/getbyuserid/${user!.id}`, { credentials: 'include' });
+                const rows = res.ok ? await res.json() as FriendRow[] : [];
+
+                const resolved = await Promise.all(rows.map(async (row) => {
+                    const r = await fetch(`http://localhost:5049/api/User/getbyuid/${row.friendId}`, { credentials: 'include' });
+                    return r.ok ? await r.json() as UserWithId : undefined;
+                }));
+
+                const friendEntries: Friend[] = [];
+                for (const u of resolved) {
+                    if (!u) continue;
+                    friendEntries.push({ name: u.name, avatarUrl: u.image, isOnline: true, levelPoints: u.amountOfXp });
+                }
+
+                if (!cancelled) setFriends(friendEntries);
+            } catch (error) {
+                console.log('Fetch friends error:', error);
+            }
+        }
+
+        loadFriends();
+        return () => { cancelled = true; };
+    }, [user?.id]);
 
     // Stable reference — PageSwitcher's effect depends on this and must not re-fire just
     // because content changed (it would reset content back to the active PageSwitcher tab).
