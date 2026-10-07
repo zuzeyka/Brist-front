@@ -10,6 +10,8 @@ import { useAuth } from '../authorization/auth-context';
 import {
     Achievement,
     AchievementByUser,
+    Categories,
+    CategoryForGame,
     Discussion,
     Friends as FriendRow,
     GameGuide,
@@ -46,7 +48,7 @@ interface GameAuthoredItem {
 
 interface ProfileContent {
     ownedGames: GameInShop[];
-    wishedGames: GameInShop[];
+    wishedGames: (GameInShop & { categorys?: string[] })[];
     dlcCount: number;
     screenshots: PostProps[];
     videos: PostProps[];
@@ -76,6 +78,7 @@ const UserProfile: React.FC = () => {
     const { isAuthenticated, userId } = useAuth();
     const [user, setUser] = useState<UserWithId>();
     const [games, setGames] = useState<GameInShop[]>([]);
+    const [categoryNamesByGame, setCategoryNamesByGame] = useState<Map<string, string[]>>(new Map());
     const [loading, setLoading] = useState(true);
     const [profileContent, setProfileContent] = useState<ProfileContent>(emptyProfileContent);
     const [friends, setFriends] = useState<Friend[]>([]);
@@ -85,15 +88,30 @@ const UserProfile: React.FC = () => {
         async function load() {
             setLoading(true);
             try {
-                const [usersRes, gamesRes] = await Promise.all([
+                const [usersRes, gamesRes, categoriesRes, categoriesForGameRes] = await Promise.all([
                     fetch('http://localhost:5049/api/User', { credentials: 'include' }),
                     fetch('http://localhost:5049/api/GamesInShop'),
+                    fetch('http://localhost:5049/api/Categories'),
+                    fetch('http://localhost:5049/api/CategoriesForGame'),
                 ]);
                 if (usersRes.ok) {
                     const users = await usersRes.json() as UserWithId[];
                     setUser(users.find((u) => u.name === userName));
                 }
                 if (gamesRes.ok) setGames(await gamesRes.json() as GameInShop[]);
+                if (categoriesRes.ok && categoriesForGameRes.ok) {
+                    const categories = await categoriesRes.json() as Categories[];
+                    const categoriesForGame = await categoriesForGameRes.json() as CategoryForGame[];
+                    const categoryNameById = new Map(categories.map((c) => [c.id, c.name]));
+                    const byGame = new Map<string, string[]>();
+                    for (const link of categoriesForGame) {
+                        const name = categoryNameById.get(link.categoryId);
+                        if (!name) continue;
+                        if (!byGame.has(link.gameId)) byGame.set(link.gameId, []);
+                        byGame.get(link.gameId)!.push(name);
+                    }
+                    setCategoryNamesByGame(byGame);
+                }
             } catch (error) {
                 console.log('Fetch user profile error:', error);
             } finally {
@@ -138,7 +156,8 @@ const UserProfile: React.FC = () => {
                 const ownedDlcRows = ownedDlcRes.ok ? await ownedDlcRes.json() as OwnedDlc[] : [];
 
                 const wishedRows = wishedRes.ok ? (await wishedRes.json() as WishedGame[]).filter((w) => w.userId === user!.id) : [];
-                const wishedGames = wishedRows.map((r) => gamesById.get(r.ownedGameId)).filter((g): g is GameInShop => !!g);
+                const wishedGames = wishedRows.map((r) => gamesById.get(r.ownedGameId)).filter((g): g is GameInShop => !!g)
+                    .map((g) => ({ ...g, categorys: categoryNamesByGame.get(g.id) ?? [] }));
 
                 const screenshotRows = screenshotsRes.ok ? await screenshotsRes.json() as Screenshot[] : [];
                 const videoRows = videosRes.ok ? await videosRes.json() as Video[] : [];
@@ -235,7 +254,7 @@ const UserProfile: React.FC = () => {
 
         loadProfileContent();
         return () => { cancelled = true; };
-    }, [user?.id, games, t]);
+    }, [user?.id, games, categoryNamesByGame, t]);
 
     useEffect(() => {
         if (!user?.id) return;

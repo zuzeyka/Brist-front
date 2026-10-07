@@ -18,7 +18,7 @@ import { GameInShop } from "@/shared/lib/interfaces";
 interface UserMenuProps {
     levelPoints: number;
     ownedGames: GameInShop[];
-    wishedGames: GameInShop[];
+    wishedGames: (GameInShop & { categorys?: string[] })[];
     dlcCount: number;
     screenshots: PostProps[];
     videos: PostProps[];
@@ -75,7 +75,7 @@ const UserMenu: React.FC<UserMenuProps> = (props) => {
         discount: game.discount,
         discountEnd: game.discountFinish ? new Date(game.discountFinish).toLocaleDateString('uk-UA') : undefined,
         isOwned: false,
-        categorys: [],
+        categorys: game.categorys ?? [],
     })), [props.wishedGames]);
 
     const pages = useMemo(() => [
