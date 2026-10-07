@@ -94,7 +94,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const logout = () => {
-        document.cookie = 'somedonuts=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        // The auth cookie is HttpOnly, so it can't be cleared from script -- only the
+        // server can do that, by replying with a Set-Cookie that expires it.
+        fetch('http://localhost:5049/api/User/logout', { method: 'POST', credentials: 'include' }).catch(() => { });
         setIsAuthenticated(false);
         setToken(undefined);
 

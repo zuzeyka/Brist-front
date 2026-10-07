@@ -177,7 +177,7 @@ const Base: React.FC = () => {
                                     {avatarUrl ? (
                                         <Avatar className="h-[198px] rounded-[120px] w-[198px] max-md:mt-10" src={avatarUrl} alt={t('settings.avatarAlt')} />
                                     ) : (
-                                        <div className="flex flex-col items-center justify-center mx-auto mt-3.5 bg-card3 font-bold text-5xl h-[198px] rounded-[120px] w-[198px] max-md:mt-10">U</div>
+                                        <div className="flex flex-col items-center justify-center mx-auto mt-3.5 bg-card3 font-bold text-5xl h-[198px] rounded-[120px] w-[198px] max-md:mt-10 select-none">U</div>
                                     )}
                                     {avatarUploading && (
                                         <div className="absolute inset-0 flex items-center justify-center rounded-[120px] bg-black/50 text-typography text-sign-2">{t('common.loading')}</div>
