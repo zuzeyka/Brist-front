@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 export interface CartItemProps {
+    itemId: string;
+    itemType: 'game' | 'dlc';
     gameName: string;
     gamePictureUrl: string;
     price: number;
@@ -11,7 +13,7 @@ export interface CartItemProps {
 interface CartContextProps {
     cart: CartItemProps[];
     addToCart: (item: CartItemProps) => void;
-    removeFromCart: (gameName: string) => void;
+    removeFromCart: (itemId: string) => void;
     removeAllFromCart: () => void;
 }
 
@@ -28,11 +30,11 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }, [cart]);
 
     const addToCart = (item: CartItemProps) => {
-        setCart((prevCart) => [...prevCart, item]);
+        setCart((prevCart) => prevCart.some((existing) => existing.itemId === item.itemId) ? prevCart : [...prevCart, item]);
     };
 
-    const removeFromCart = (gameName: string) => {
-        setCart((prevCart) => prevCart.filter(item => item.gameName !== gameName));
+    const removeFromCart = (itemId: string) => {
+        setCart((prevCart) => prevCart.filter(item => item.itemId !== itemId));
     };
 
     const removeAllFromCart = () => {

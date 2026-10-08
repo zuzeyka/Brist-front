@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCart } from "./card-context";
@@ -12,12 +12,44 @@ interface TotalProps {
 
 const Total: React.FC<TotalProps> = (props) => {
     const { t } = useTranslation();
-    const { removeAllFromCart } = useCart();
+    const { cart, removeAllFromCart } = useCart();
     const navigate = useNavigate();
+    const [submitting, setSubmitting] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
 
-    const handleBuy = () => {
-        removeAllFromCart();
+    const handleBuy = async () => {
+        setErrorMsg('');
+        setSubmitting(true);
+        try {
+            const res = await fetch('http://localhost:5049/api/Purchase/checkout', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(cart.map((item) => ({ itemId: item.itemId, itemType: item.itemType }))),
+            });
+
+            if (res.status === 402) {
+                setErrorMsg(t('cart.insufficientFunds'));
+                return;
+            }
+            if (res.status === 409) {
+                setErrorMsg(t('cart.alreadyOwned'));
+                return;
+            }
+            if (!res.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            removeAllFromCart();
+            navigate('/library');
+        } catch (error) {
+            console.error('Checkout error:', error);
+            setErrorMsg(t('cart.checkoutError'));
+        } finally {
+            setSubmitting(false);
+        }
     };
+
     return (
         <div className="flex flex-col px-5 pt-6 pb-5 rounded-3xl bg-card2 max-w-96">
             <div className="flex gap-5 justify-between">
@@ -34,8 +66,9 @@ const Total: React.FC<TotalProps> = (props) => {
             <div className="mt-4 text-block-2 text-typographySecondary">
                 {t('cart.taxNote')}
             </div>
-            <Button className="text-center px-7 py-6 mt-6 text-button-1 font-semibold rounded-2xl" onClick={handleBuy}>
-                {t('cart.checkout')}
+            {errorMsg && <div className="mt-4 text-sign-2 text-negative">{errorMsg}</div>}
+            <Button disabled={submitting} className="text-center px-7 py-6 mt-6 text-button-1 font-semibold rounded-2xl" onClick={handleBuy}>
+                {submitting ? t('cart.processing') : t('cart.checkout')}
             </Button>
             <Button className="text-center px-7 py-6 mt-3 text-button-1 font-semibold bg-secondary hover:bg-secondaryHover rounded-2xl" onClick={() => navigate('/')}>
                 {t('cart.continueShopping')}

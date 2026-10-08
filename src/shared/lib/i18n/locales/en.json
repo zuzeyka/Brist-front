@@ -166,7 +166,11 @@
     "taxNote": "If applicable, sales tax will be calculated at checkout.",
     "checkout": "Go to checkout",
     "continueShopping": "Continue shopping",
-    "clearCart": "Clear cart"
+    "clearCart": "Clear cart",
+    "processing": "Processing...",
+    "insufficientFunds": "You don't have enough balance to complete this purchase.",
+    "alreadyOwned": "One or more items in your cart are already in your library.",
+    "checkoutError": "Something went wrong while processing your purchase. Please try again."
   },
   "wishlist": {
     "title": "My wishlist",
