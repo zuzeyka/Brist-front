@@ -23,6 +23,7 @@ const CreatePost: React.FC<GameInfo> = ({ gameId, gameGroupId, gameName, cancel,
     const { userId } = useAuth();
     const [image, setImage] = useState<string | null>(null);
     const [videoSrc, setVideoSrc] = useState<string | null>(null);
+    const [videoFile, setVideoFile] = useState<File | null>(null);
     const [needImage, setNeedImage] = useState(false);
 
     const [postTitle, setPostTitle] = useState('');
@@ -56,6 +57,7 @@ const CreatePost: React.FC<GameInfo> = ({ gameId, gameGroupId, gameName, cancel,
         if (file) {
             const url = URL.createObjectURL(file);
             setVideoSrc(url);
+            setVideoFile(file);
         }
     };
 
@@ -85,6 +87,7 @@ const CreatePost: React.FC<GameInfo> = ({ gameId, gameGroupId, gameName, cancel,
         try {
             const res = await fetch(API_BASE + path, {
                 method: 'POST',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body),
             });
@@ -131,18 +134,60 @@ const CreatePost: React.FC<GameInfo> = ({ gameId, gameGroupId, gameName, cancel,
         });
     };
 
-    const submitVideo = () => {
-        if (!videoSrc) {
+    const submitVideo = async () => {
+        if (!videoFile) {
             setErrorMsg(t('shop.createPost.addVideo'));
             return;
         }
-        submitJson('Video', {
-            title: videoCaption,
-            likesCount: 0,
-            gameId,
-            authorId: userId,
-            contentUrl: null,
-        });
+        if (!userId) {
+            setErrorMsg(t('shop.createPost.needLogin'));
+            return;
+        }
+        setSubmitting(true);
+        setErrorMsg('');
+        try {
+            // Video has no file in its own body; it's created first with no content,
+            // then the file is attached via the dedicated upload endpoint below.
+            const createRes = await fetch(API_BASE + 'Video', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: videoCaption,
+                    likesCount: 0,
+                    gameId,
+                    authorId: userId,
+                    contentUrl: null,
+                }),
+            });
+            if (!createRes.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const created = await createRes.json();
+
+            const formData = new FormData();
+            formData.append('title', videoCaption);
+            formData.append('gameId', gameId);
+            formData.append('authorId', userId);
+            formData.append('likesCount', '0');
+            formData.append('file', videoFile);
+
+            const uploadRes = await fetch(API_BASE + 'Video/' + created.id, {
+                method: 'PUT',
+                credentials: 'include',
+                body: formData,
+            });
+            if (!uploadRes.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            onCreated();
+        } catch (error) {
+            console.error('Create video post error:', error);
+            setErrorMsg(t('shop.createPost.publishError'));
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     const submitGuide = () => {
@@ -303,7 +348,7 @@ const CreatePost: React.FC<GameInfo> = ({ gameId, gameGroupId, gameName, cancel,
                                             <source src={videoSrc} type="video/mp4" />
                                             {t('shop.createPost.noVideoSupport')}
                                         </video>
-                                        <XIcon onClick={() => setVideoSrc(null)} className="w-5 h-5 text-typographySecondary hover:text-accent absolute top-10 right-5" fill="currentColor"></XIcon>
+                                        <XIcon onClick={() => { setVideoSrc(null); setVideoFile(null); }} className="w-5 h-5 text-typographySecondary hover:text-accent absolute top-10 right-5" fill="currentColor"></XIcon>
                                     </div>
                                 ) : (
                                     <div className="flex justify-center items-center px-4 py-20 rounded-3xl border-2 border-secondary border-dashed bg-background40 max-md:px-5 max-md:max-w-full"
