@@ -1,31 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { useTranslation } from "react-i18next";
-import ChatPreviev, { ChatPrevievProps } from "./elements/chat-previev";
+import ChatPreviev from "./elements/chat-previev";
 
-interface UserListProps {
-    onSelectChat: (userName: string) => void;
+export interface ChatSummary {
+    chatId: string;
+    otherUserId: string;
+    otherUserName: string;
+    otherUserAvatar?: string;
 }
 
-const UserList: React.FC<UserListProps> = ({ onSelectChat }) => {
-    const { t } = useTranslation();
-    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-    const chats: ChatPrevievProps[] = [
-        { name: 'MrsZubarikessa', text: t('chat.preview.msg1'), time: t('chat.preview.date'), unreadCount: 2 },
-        { name: 'FirePhoenix', text: t('chat.preview.msg2'), time: t('chat.preview.date') },
-        { name: 'DragonSlayer', text: t('chat.preview.msg3'), time: t('chat.preview.date') },
-        { name: 'TitanCrusher', text: t('chat.preview.msg4'), time: t('chat.preview.date') },
-        { name: 'BlazingArrow', text: t('chat.preview.noMessages'), time: '' },
-        { name: 'sinichka_bez_egg', text: t('chat.preview.msg5'), time: t('chat.preview.date'), unreadCount: 2 },
-        { name: 'SilentAssassin', text: t('chat.preview.msg6'), time: t('chat.preview.date'), unreadCount: 2 },
-        { name: 'LunarMage', text: t('chat.preview.noMessages'), time: '' },
-        { name: 'TitanCrusher', text: t('chat.preview.msg7'), time: t('chat.preview.date'), unreadCount: 2 },
-    ];
+interface UserListProps {
+    chats: ChatSummary[];
+    selectedChatId: string | null;
+    onSelectChat: (chatId: string) => void;
+}
 
-    const handleSelect = (index: number) => {
-        setSelectedIndex(index);
-        onSelectChat(chats[index].name);
-    };
+const UserList: React.FC<UserListProps> = ({ chats, selectedChatId, onSelectChat }) => {
+    const { t } = useTranslation();
 
     return (
         <div className="flex flex-col mx-auto h-full w-full">
@@ -33,13 +25,13 @@ const UserList: React.FC<UserListProps> = ({ onSelectChat }) => {
                 <CommandInput placeholder={t('chat.searchChats')} />
                 <CommandList className="h-full w-full max-h-full bg-card2">
                     <CommandEmpty>{t('settings.nothingFound')}</CommandEmpty>
-                    {chats.map((chat, index) => (
+                    {chats.map((chat) => (
                         <CommandItem
-                            key={index}
-                            className={`bg-card2 ${index === selectedIndex ? '!bg-cardLight25' : ''}`}
-                            onSelect={() => handleSelect(index)}
+                            key={chat.chatId}
+                            className={`bg-card2 ${chat.chatId === selectedChatId ? '!bg-cardLight25' : ''}`}
+                            onSelect={() => onSelectChat(chat.chatId)}
                         >
-                            <ChatPreviev {...chat}></ChatPreviev>
+                            <ChatPreviev name={chat.otherUserName} avatar={chat.otherUserAvatar} />
                         </CommandItem>
                     ))}
                 </CommandList>
@@ -49,4 +41,3 @@ const UserList: React.FC<UserListProps> = ({ onSelectChat }) => {
 }
 
 export default UserList;
-

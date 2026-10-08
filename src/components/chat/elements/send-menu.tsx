@@ -4,14 +4,33 @@ import { Mic, Paperclip, Type } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 
-const SendMenu: React.FC = () => {
+interface SendMenuProps {
+    onSend: (text: string) => void;
+}
+
+const SendMenu: React.FC<SendMenuProps> = ({ onSend }) => {
     const { t } = useTranslation();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [isRecording, setIsRecording] = useState(false);
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
+    const [draft, setDraft] = useState('');
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
     const streamRef = useRef<MediaStream | null>(null);
+
+    const handleSend = () => {
+        const text = draft.trim();
+        if (!text) return;
+        onSend(text);
+        setDraft('');
+    };
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            handleSend();
+        }
+    };
 
     const handleFileUpload = () => {
         if (fileInputRef.current) {
@@ -83,6 +102,9 @@ const SendMenu: React.FC = () => {
                 ) : (<InputField
                     className="flex-1 justify-center self-stretch px-4 py-2.5 rounded-3xl border border-secondary border-solid bg-background40 max-md:max-w-full placeholder:typographySecondary"
                     placeholder={t('chat.yourMessage')}
+                    value={draft}
+                    onChange={(e) => setDraft(e.target.value)}
+                    onKeyDown={handleKeyDown}
                 />)}
             </div>
             <Button onClick={handleRecord} className="bg-transparent hover:bg-transparent hover:opacity-70 h-full p-0">

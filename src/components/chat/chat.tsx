@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Head from "../main/head";
 import {
@@ -6,177 +6,163 @@ import {
     ResizablePanel,
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import UserList from "./user-list";
+import UserList, { ChatSummary } from "./user-list";
 import ChatContent, { MessageProps } from "./chat-content";
 import InfoBar from "./info-bar";
 import { useParams } from "react-router-dom";
-import { useRequireAuth } from "../authorization/auth-context";
+import { useAuth, useRequireAuth } from "../authorization/auth-context";
 
-const useChatData = (): { [key: string]: { messages: MessageProps[], info: { filesCount: number, photosCount: number, voicesCount: number, username: string, isOnline: boolean, avatarUrl: string } } } => {
-    const { t } = useTranslation();
-    return {
-        MrsZubarikessa: {
-            messages: [
-                {
-                    fileName: "Slust.tsx",
-                    fileSize: "5 ZB",
-                    datetime: "10:30",
-                    isMyMessage: true,
-                    media: "https://i.imgur.com/ufBjnf8.png"
-                },
-                {
-                    isMyMessage: true,
-                    datetime: "10:30",
-                    text: t('chat.mock.mz1')
-                },
-                {
-                    isMyMessage: false,
-                    datetime: "10:30",
-                    text: t('chat.mock.mz2'),
-                    media: "https://i.imgur.com/7Kd964d.png"
-                },
+interface ChatDto {
+    id: string;
+    firstUser: string;
+    secondUser: string;
+    createdAt?: string;
+}
 
-                {
-                    isMyMessage: true,
-                    datetime: "10:30",
-                    text: t('chat.mock.mz3'),
-                    media: "https://i.imgur.com/Sqw9Z5u.png"
-                }
-            ],
-            info: { filesCount: 1, photosCount: 2, voicesCount: 0, username: "MrsZubarikessa", isOnline: true, avatarUrl: "https://i.pravatar.cc/400?user1" }
-        },
-        FirePhoenix: {
-            messages: [
-                {
-                    media: "https://i.imgur.com/ufBjnf8.png",
-                    text: t('chat.mock.fp1'),
-                    datetime: "10:30",
-                    isMyMessage: true
-                },
-                {
-                    isMyMessage: false,
-                    datetime: "10:30",
-                    text: t('chat.mock.fp2')
-                },
-                {
-                    isMyMessage: false,
-                    datetime: "10:30",
-                    text: t('chat.mock.fp3'),
-                    media: "https://i.imgur.com/5Hds4bh.png"
-                },
-                {
-                    isMyMessage: true,
-                    datetime: "10:30",
-                    text: t('chat.mock.fp4')
-                }
-            ],
-            info: { filesCount: 0, photosCount: 2, voicesCount: 0, username: "FirePhoenix", isOnline: false, avatarUrl: "https://i.pravatar.cc/400?user2" }
-        },
-        DragonSlayer: {
-            messages: [
-                {
-                    datetime: "10:30",
-                    isMyMessage: true,
-                    text: t('chat.mock.ds1')
-                },
-                {
-                    isMyMessage: true,
-                    datetime: "10:30",
-                    media: "https://s.muzrecord.com/files/eternxlkz-slay.mp3"
-                },
-                {
-                    datetime: "10:30",
-                    isMyMessage: false,
-                    text: t('chat.mock.ds2')
-                },
-                {
-                    datetime: "10:30",
-                    isMyMessage: true,
-                    text: t('chat.mock.ds3'),
-                    media: "https://i.imgur.com/zBGnWYS.png"
-                },
-                {
-                    datetime: "10:30",
-                    isMyMessage: false,
-                    text: "OMG"
-                },
-                {
-                    fileName: "my.png",
-                    fileSize: "15 MB",
-                    datetime: "10:30",
-                    isMyMessage: true,
-                    media: "https://i.imgur.com/ufBjnf8.png"
-                },
-                {
-                    datetime: "10:30",
-                    isMyMessage: true,
-                    text: t('chat.mock.ds4')
-                },
-                {
-                    datetime: "10:30",
-                    isMyMessage: false,
-                    text: t('chat.mock.ds5')
-                }
-            ],
-            info: { filesCount: 1, photosCount: 1, voicesCount: 1, username: "DragonSlayer", isOnline: true, avatarUrl: "https://i.pravatar.cc/400?user3" }
-        },
-        TitanCrusher: {
-            messages: [
-                {
-                    datetime: "10:30",
-                    isMyMessage: false,
-                    text: t('chat.mock.tc1')
-                },
-                {
-                    datetime: "10:30",
-                    isMyMessage: true,
-                    text: t('chat.mock.tc2')
-                }
-            ],
-            info: { filesCount: 0, photosCount: 0, voicesCount: 0, username: "TitanCrusher", isOnline: false, avatarUrl: "https://i.pravatar.cc/400?user4" }
-        },
-        BlazingArrow: {
-            messages: [
-                {
-                    media: "https://i.imgur.com/QBPxaVk.png",
-                    text: t('chat.mock.ba1'),
-                    datetime: "10:30",
-                    isMyMessage: false
-                },
-                {
-                    isMyMessage: true,
-                    datetime: "10:30",
-                    text: t('chat.mock.ba2')
-                },
-                {
-                    isMyMessage: false,
-                    datetime: "10:30",
-                    text: t('chat.mock.ba3')
-                },
-                {
-                    media: "https://i.imgur.com/HpZviAT.png",
-                    text: "nice",
-                    datetime: "10:30",
-                    isMyMessage: true
-                }
-            ],
-            info: { filesCount: 0, photosCount: 2, voicesCount: 0, username: "BlazingArrow", isOnline: false, avatarUrl: "https://i.pravatar.cc/400?user5" }
-        }
-    };
+interface MessageDto {
+    id: string;
+    chatId: string;
+    senderId: string;
+    content?: string;
+    createdAt?: string;
+}
+
+interface UserDto {
+    id: string;
+    name: string;
+    image?: string;
+}
+
+const formatTime = (value?: string) => {
+    if (!value) return '';
+    const date = new Date(value);
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
 };
 
 const Chat: React.FC = () => {
     const { t } = useTranslation();
     const ready = useRequireAuth();
-    const chatData = useChatData();
+    const { userId } = useAuth();
     const { userName } = useParams<{ userName: string }>();
-    const [selectedChat, setSelectedChat] = useState(userName || "MrsZubarikessa");
+    const [chats, setChats] = useState<ChatSummary[]>([]);
+    const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+    const [messages, setMessages] = useState<MessageProps[]>([]);
 
-    const handleSelectChat = (newUserName: string) => {
-        setSelectedChat(newUserName);
+    // Loads the caller's real chats and, if the route names a specific user,
+    // either selects the existing conversation with them or creates a new one.
+    useEffect(() => {
+        if (!userId) return;
+        let cancelled = false;
+
+        async function load() {
+            try {
+                const chatsRes = await fetch(`http://localhost:5049/api/Chat/byuserid/${userId}`, { credentials: 'include' });
+                const chatRows = chatsRes.ok ? await chatsRes.json() as ChatDto[] : [];
+
+                const summaries = await Promise.all(chatRows.map(async (c): Promise<ChatSummary> => {
+                    const otherUserId = c.firstUser === userId ? c.secondUser : c.firstUser;
+                    const r = await fetch(`http://localhost:5049/api/User/getbyuid/${otherUserId}`, { credentials: 'include' });
+                    const u = r.ok ? await r.json() as UserDto : undefined;
+                    return { chatId: c.id, otherUserId, otherUserName: u?.name ?? '', otherUserAvatar: u?.image };
+                }));
+
+                let finalChats = summaries;
+                let initialSelected = summaries[0]?.chatId ?? null;
+
+                if (userName) {
+                    const existing = summaries.find((s) => s.otherUserName === userName);
+                    if (existing) {
+                        initialSelected = existing.chatId;
+                    } else {
+                        const usersRes = await fetch('http://localhost:5049/api/User', { credentials: 'include' });
+                        const users = usersRes.ok ? await usersRes.json() as UserDto[] : [];
+                        const target = users.find((u) => u.name === userName);
+                        if (target && target.id !== userId) {
+                            const createRes = await fetch('http://localhost:5049/api/Chat', {
+                                method: 'POST',
+                                credentials: 'include',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ firstUser: userId, secondUser: target.id }),
+                            });
+                            if (createRes.ok) {
+                                const created = await createRes.json() as ChatDto;
+                                const newSummary: ChatSummary = {
+                                    chatId: created.id, otherUserId: target.id,
+                                    otherUserName: target.name, otherUserAvatar: target.image,
+                                };
+                                finalChats = [newSummary, ...summaries];
+                                initialSelected = created.id;
+                            }
+                        }
+                    }
+                }
+
+                if (!cancelled) {
+                    setChats(finalChats);
+                    setSelectedChatId(initialSelected);
+                }
+            } catch (error) {
+                console.log('Fetch chats error:', error);
+            }
+        }
+
+        load();
+        return () => { cancelled = true; };
+    }, [userId, userName]);
+
+    // Polls rather than pushing over a socket — simplest way to surface the
+    // other participant's replies without building real-time infrastructure.
+    useEffect(() => {
+        if (!selectedChatId) {
+            setMessages([]);
+            return;
+        }
+        let cancelled = false;
+
+        async function loadMessages() {
+            try {
+                const res = await fetch(`http://localhost:5049/api/Message/bychat/${selectedChatId}`, { credentials: 'include' });
+                if (!res.ok) return;
+                const rows = await res.json() as MessageDto[];
+                if (cancelled) return;
+                setMessages(rows.map((m) => ({
+                    datetime: formatTime(m.createdAt),
+                    text: m.content,
+                    isMyMessage: m.senderId === userId,
+                })));
+            } catch (error) {
+                console.log('Fetch messages error:', error);
+            }
+        }
+
+        loadMessages();
+        const interval = setInterval(loadMessages, 3000);
+        return () => { cancelled = true; clearInterval(interval); };
+    }, [selectedChatId, userId]);
+
+    const handleSend = async (text: string) => {
+        if (!selectedChatId || !userId) return;
+        try {
+            const res = await fetch('http://localhost:5049/api/Message', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chatId: selectedChatId, senderId: userId, content: text }),
+            });
+            if (!res.ok) throw new Error('Network response was not ok');
+            const created = await res.json() as MessageDto;
+            setMessages((prev) => [...prev, {
+                datetime: formatTime(created.createdAt),
+                text: created.content,
+                isMyMessage: true,
+            }]);
+        } catch (error) {
+            console.log('Send message error:', error);
+        }
     };
 
-    const selectedChatData = chatData[selectedChat];
+    const selectedChat = chats.find((c) => c.chatId === selectedChatId);
 
     if (!ready) return null;
 
@@ -188,13 +174,13 @@ const Chat: React.FC = () => {
                 className="flex h-full w-full"
             >
                 <ResizablePanel className="p-5 bg-card2" defaultSize={25}>
-                    <UserList onSelectChat={handleSelectChat} />
+                    <UserList chats={chats} selectedChatId={selectedChatId} onSelectChat={setSelectedChatId} />
                 </ResizablePanel>
                 <ResizableHandle />
                 <ResizablePanel defaultSize={50}>
                     <div className="flex flex-col justify-end h-full bg-blobs px-6">
-                        {selectedChatData ? (
-                            <ChatContent messages={selectedChatData.messages} />
+                        {selectedChat ? (
+                            <ChatContent messages={messages} onSend={handleSend} />
                         ) : (
                             <div>{t('chat.notFound')}</div>
                         )}
@@ -203,8 +189,15 @@ const Chat: React.FC = () => {
                 <ResizableHandle />
                 <ResizablePanel defaultSize={25}>
                     <div className="h-full p-6">
-                        {selectedChatData ? (
-                            <InfoBar {...selectedChatData.info} />
+                        {selectedChat ? (
+                            <InfoBar
+                                username={selectedChat.otherUserName}
+                                avatarUrl={selectedChat.otherUserAvatar}
+                                filesCount={0}
+                                photosCount={0}
+                                voicesCount={0}
+                                isOnline={false}
+                            />
                         ) : (
                             <div>{t('chat.infoNotFound')}</div>
                         )}

@@ -16,6 +16,7 @@ export interface MessageProps {
 
 interface ChatContentProps {
     messages: MessageProps[];
+    onSend: (text: string) => void;
 }
 
 const getFileExtension = (url: string | undefined): string => {
@@ -38,7 +39,7 @@ const renderMessage = (message: MessageProps, index: number) => {
     }
 };
 
-const ChatContent: React.FC<ChatContentProps> = ({ messages }) => {
+const ChatContent: React.FC<ChatContentProps> = ({ messages, onSend }) => {
     return (
         <div className="flex flex-col pb-5 mx-auto w-full h-full">
             <div className="h-[94%]">
@@ -49,7 +50,7 @@ const ChatContent: React.FC<ChatContentProps> = ({ messages }) => {
                 </ScrollArea>
             </div>
             <div className="sticky bottom-0 px-5 ">
-                <SendMenu />
+                <SendMenu onSend={onSend} />
             </div>
         </div>
     );
