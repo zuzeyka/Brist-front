@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TableView from './table-view';
 import EditForm from './edit-form';
 import InsertForm from './insert-form';
+import { useRequireAuth } from '../authorization/auth-context';
 
 interface TableRow {
     id: number;
@@ -25,6 +26,7 @@ const initialData: TableData = {
 };
 
 const AdminPanel: React.FC = () => {
+    const ready = useRequireAuth();
     const [data, setData] = useState<TableData>(initialData);
     const [selectedTable, setSelectedTable] = useState<keyof TableData>('users');
     const [editRow, setEditRow] = useState<TableRow | null>(null);
@@ -50,6 +52,8 @@ const AdminPanel: React.FC = () => {
         });
         setEditRow(null);
     };
+
+    if (!ready) return null;
 
     return (
         <div className="admin-panel flex flex-col justify-start h-screen bg-gray-100 space-y-4 p-4">
