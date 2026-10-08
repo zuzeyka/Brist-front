@@ -47,7 +47,7 @@ const UserHeader: React.FC<UserHeaderProps> = (props) => {
                                 <button type="button" onClick={() => setFriendStatus(friend.next)} className={`flex items-center gap-2 px-[26px] py-3 rounded-[20px] font-artifakt font-semibold text-button-1 ${friend.className}`}>
                                     {friendStatus === 'none' && <UserPlusIcon className="size-5" />}{friend.label}
                                 </button>
-                                <button type="button" aria-label={t('user.sendMessage')} className={secondaryIconButton}><MailIcon className="size-6" /></button>
+                                <button type="button" onClick={() => navigate('/chat/' + encodeURIComponent(props.userName))} aria-label={t('user.sendMessage')} className={secondaryIconButton}><MailIcon className="size-6" /></button>
                                 <button type="button" aria-label={t('shop.about.more')} className={secondaryIconButton}><MoreHorizontalIcon className="size-6" /></button>
                             </>
                         )}

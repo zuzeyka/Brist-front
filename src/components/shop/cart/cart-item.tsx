@@ -11,7 +11,7 @@ const CartItem: React.FC<CartItemProps> = (props) => {
     const { removeFromCart } = useCart();
 
     const handleRemoveFromCart = () => {
-        removeFromCart(props.gameName);
+        removeFromCart(props.itemId);
     };
     return (
         <div className="flex gap-5 rounded-3xl bg-card1 max-md:flex-col max-md:gap-0">

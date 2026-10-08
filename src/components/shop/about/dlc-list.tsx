@@ -4,11 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { ChevronRightIcon } from '@/components/ui/icons';
 import GamePrice, { discountedPrice, formatPrice } from '@/components/main/game-price';
 import { primaryButton } from './bundle-list';
+import { useCart } from '../cart/card-context';
 
 interface DlcInfo {
+    id: string;
     name: string;
     price: number;
     discount?: number;
+    previeImage?: string;
 }
 
 interface DlcProps {
@@ -21,8 +24,18 @@ interface DlcProps {
 // "Інші DLC": one "DLC Card" row per DLC and a button to add them all.
 const DlcList: React.FC<DlcProps> = (props) => {
     const { t } = useTranslation();
+    const { addToCart } = useCart();
     if (!props.dlc.length) return null;
     const total = props.dlc.reduce((sum, dlc) => sum + discountedPrice(dlc.price, dlc.discount ?? 0), 0);
+
+    const handleAddAllToCart = () => {
+        props.dlc.forEach((dlc) => addToCart({
+            itemId: dlc.id, itemType: 'dlc',
+            gameName: dlc.name, price: dlc.price, discount: dlc.discount,
+            gamePictureUrl: dlc.previeImage ?? '',
+        }));
+    };
+
     return (
         <section className={'flex flex-col items-end gap-5' + (props.className ? ' ' + props.className : '')}>
             <div className='w-full flex justify-between items-center'>
@@ -43,7 +56,7 @@ const DlcList: React.FC<DlcProps> = (props) => {
             </div>
             <div className='flex items-center gap-4'>
                 <p className="font-manrope font-bold text-heading-3 text-typography">{formatPrice(total)}</p>
-                <button type="button" className={primaryButton}>{t('shop.about.addAllDlcToCart')}</button>
+                <button type="button" onClick={handleAddAllToCart} className={primaryButton}>{t('shop.about.addAllDlcToCart')}</button>
             </div>
         </section>
     );

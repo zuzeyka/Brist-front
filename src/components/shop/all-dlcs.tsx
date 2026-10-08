@@ -8,6 +8,7 @@ import PageGlows from '@/components/ui/page-glows';
 import StarRating from '@/components/ui/star-rating';
 import GamePrice from '@/components/main/game-price';
 import { DlcInShop, GameInShop } from '@/shared/lib/interfaces';
+import { useCart } from './cart/card-context';
 
 const glows = [
     { left: 1472, top: 108, large: true },
@@ -16,6 +17,7 @@ const glows = [
 
 const AllDlcs: React.FC = () => {
     const { t } = useTranslation();
+    const { addToCart } = useCart();
     const { userName } = useParams<{ userName: string }>();
     const [game, setGame] = useState<GameInShop>();
     const [dlcs, setDlcs] = useState<DlcInShop[]>([]);
@@ -81,7 +83,21 @@ const AllDlcs: React.FC = () => {
                                                 <p className='font-artifakt text-block-2 text-typographySecondary line-clamp-3'>{dlc.description}</p>
                                                 <div className='flex items-center justify-between'>
                                                     <GamePrice price={dlc.price} discount={dlc.discount ?? 0} bold />
-                                                    <span className='rounded-[20px] bg-primary hover:bg-primaryHover px-[26px] py-3 font-artifakt font-semibold text-button-1 text-background'>{t('shop.toCart')}</span>
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            addToCart({
+                                                                itemId: dlc.id, itemType: 'dlc',
+                                                                gameName: dlc.name, price: dlc.price, discount: dlc.discount,
+                                                                gamePictureUrl: dlc.previeImage,
+                                                            });
+                                                        }}
+                                                        className='rounded-[20px] bg-primary hover:bg-primaryHover px-[26px] py-3 font-artifakt font-semibold text-button-1 text-background'
+                                                    >
+                                                        {t('shop.toCart')}
+                                                    </button>
                                                 </div>
                                             </div>
                                         </Link>

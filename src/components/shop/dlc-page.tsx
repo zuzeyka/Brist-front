@@ -199,6 +199,7 @@ const DlcPage: React.FC = () => {
                 <aside className='w-[348px] shrink-0 sticky top-6 flex flex-col gap-8'>
                     <Payment
                         gameId={dlc.id}
+                        itemType="dlc"
                         gameName={dlc.name}
                         platforms={[<WindowsIcon />, <MacOsIcon />]}
                         developer={developer?.name ?? ''}

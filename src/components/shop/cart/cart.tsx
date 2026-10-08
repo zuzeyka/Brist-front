@@ -7,6 +7,7 @@ import { useCart } from "./card-context";
 import CartItem from "./cart-item";
 import Total from "./total";
 import PageGlows from "@/components/ui/page-glows";
+import { useRequireAuth } from "@/components/authorization/auth-context";
 
 const glows = [
     { left: 1472, top: 108, large: true },
@@ -14,10 +15,12 @@ const glows = [
 ];
 
 const Card: React.FC = () => {
+    const ready = useRequireAuth();
     const { t } = useTranslation();
     const { cart } = useCart();
     const totalPrice = cart.reduce((sum, game) => sum + Math.round(game.price), 0);
     const totalDiscount = cart.reduce((sum, game) => sum + Math.round(game.price * (game.discount ?? 0) / 100), 0);
+    if (!ready) return null;
     return (
         <div className="relative bg-background">
             <PageGlows glows={glows} />
@@ -30,8 +33,10 @@ const Card: React.FC = () => {
                     {cart.length > 0 ? (
                         <div className="flex gap-6 items-start">
                             <div className="flex flex-col gap-4 flex-1 min-w-0">
-                                {cart.map((game, index) => (
-                                    <CartItem key={index}
+                                {cart.map((game) => (
+                                    <CartItem key={game.itemId}
+                                        itemId={game.itemId}
+                                        itemType={game.itemType}
                                         gameName={game.gameName}
                                         price={game.price}
                                         discount={game.discount}
