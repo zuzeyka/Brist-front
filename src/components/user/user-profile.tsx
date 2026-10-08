@@ -306,6 +306,7 @@ const UserProfile: React.FC = () => {
                         <div className="px-5">
                             <UserHeader
                                 className="pt-5"
+                                profileUserId={user.id}
                                 userName={user.name}
                                 userAvatarUrl={user.image}
                                 about={user.description}

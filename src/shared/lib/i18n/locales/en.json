@@ -333,6 +333,7 @@
     "offline": "offline",
     "addFriend": "Add friend",
     "cancelRequest": "Cancel request",
+    "acceptRequest": "Accept request",
     "removeFriend": "Remove friend",
     "editProfile": "Edit profile",
     "sendMessage": "Send a message",
