@@ -51,8 +51,6 @@
     "notifications": "Notifications",
     "wallet": "Wallet",
     "deleteAccount": "Delete account",
-    "walletSamplePurchase": "Some game everyone really liked",
-    "walletSampleTopUp": "Balance top-up",
     "searchPlaceholder": "Search settings...",
     "nothingFound": "Nothing found",
     "darkTheme": "Dark theme",
@@ -108,6 +106,8 @@
       "myBalance": "My balance",
       "amount": "Amount",
       "topUpButton": "Top up",
+      "topUpUnavailable": "Topping up isn't available yet.",
+      "unknownItem": "Unknown item",
       "history": "Transaction history",
       "name": "Name",
       "date": "Date"

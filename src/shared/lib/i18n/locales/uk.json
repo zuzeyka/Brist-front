@@ -51,8 +51,6 @@
     "notifications": "Сповіщення",
     "wallet": "Гаманець",
     "deleteAccount": "Видалення акаунта",
-    "walletSamplePurchase": "Якась гра, яка дуже всім сподобається",
-    "walletSampleTopUp": "Поповнення балансу",
     "searchPlaceholder": "Пошук налаштувань...",
     "nothingFound": "Нічого не знайдено",
     "darkTheme": "Темна тема",
@@ -108,6 +106,8 @@
       "myBalance": "Мій баланс",
       "amount": "Сума",
       "topUpButton": "Поповнити",
+      "topUpUnavailable": "Поповнення ще не доступне.",
+      "unknownItem": "Невідомий товар",
       "history": "Історія транзакцій",
       "name": "Найменування",
       "date": "Дата"

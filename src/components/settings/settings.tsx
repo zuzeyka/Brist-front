@@ -40,7 +40,7 @@ const Settings: React.FC = () => {
         { id: 'general', title: t('settings.general'), icon: <UserRoundCog className='w-5 h-5' />, content: <Base></Base> },
         { id: 'password', title: t('settings.password'), icon: <LockKeyhole className='w-5 h-5' />, content: <Password></Password> },
         { id: 'notifications', title: t('settings.notifications'), icon: <Bell />, content: <Notification isAcceptFriendRequest={true} isDeclineFriendRequest={true} isBigSale={true} isWishSale={true} isNewComment={true} isNewFriendRequest={true} isNewMessage={true} isNewMessageSound={true}></Notification> },
-        { id: 'wallet', title: t('settings.wallet'), icon: <WalletIcon className='w-5 h-5' />, content: <Wallet balance={1000} transactions={[{ type: t('settings.walletSamplePurchase'), amount: -1000, date: new Date(Date.now()).toLocaleDateString() }, { type: t('settings.walletSampleTopUp'), amount: 2000, date: new Date(Date.now() - 1000 * 60 * 60 * 48).toLocaleDateString() }]}></Wallet> },
+        { id: 'wallet', title: t('settings.wallet'), icon: <WalletIcon className='w-5 h-5' />, content: <Wallet /> },
         { id: 'delete', title: t('settings.deleteAccount'), icon: <UserRoundX />, content: <Delete></Delete> },
     ];
     const selectedPage = pages.find((page) => page.id === selectedPageId) ?? pages[0];
