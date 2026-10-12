@@ -491,7 +491,8 @@
       "requestDeclined": "Your friend request was declined",
       "winterSale2024": "Winter Sale 2024",
       "gamesUpTo80Off": "Games up to 80% off until 22.10.2022",
-      "clearAll": "Clear all"
+      "clearAll": "Clear all",
+      "noNotifications": "No notifications yet"
     },
     "newCollection": {
       "title": "New collection",
