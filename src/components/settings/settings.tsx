@@ -39,7 +39,7 @@ const Settings: React.FC = () => {
     const pages: PageContent[] = [
         { id: 'general', title: t('settings.general'), icon: <UserRoundCog className='w-5 h-5' />, content: <Base></Base> },
         { id: 'password', title: t('settings.password'), icon: <LockKeyhole className='w-5 h-5' />, content: <Password></Password> },
-        { id: 'notifications', title: t('settings.notifications'), icon: <Bell />, content: <Notification isAcceptFriendRequest={true} isDeclineFriendRequest={true} isBigSale={true} isWishSale={true} isNewComment={true} isNewFriendRequest={true} isNewMessage={true} isNewMessageSound={true}></Notification> },
+        { id: 'notifications', title: t('settings.notifications'), icon: <Bell />, content: <Notification /> },
         { id: 'wallet', title: t('settings.wallet'), icon: <WalletIcon className='w-5 h-5' />, content: <Wallet /> },
         { id: 'delete', title: t('settings.deleteAccount'), icon: <UserRoundX />, content: <Delete></Delete> },
     ];
